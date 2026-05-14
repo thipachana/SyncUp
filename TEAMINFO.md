@@ -14,8 +14,8 @@ Syncup
 |---|---|---|---|
 | Thipachana Clarian Kennady | WI B.Sc. | Projektleiterin | — |
 | Sarah Kosukous | WI B.Sc. | Software Architect | - |
-| David Cabas Canella | WI B.Sc. | Software Architect | 
-| Ilias Jelolli | WI B.Sc. | - | 
+| David Cabas Canella | WI B.Sc. | Spec/Requirements Lead | 
+| Ilias Jelolli | WI B.Sc. | Implementation Lead | 
 
 
 > **Spalte „Git-Handle" (optional):** Nur ausfüllen, wenn die Git-Commit-Identität nicht auf den Klarnamen gesetzt ist und Commits unter einem Plattform-Username (GitHub/GitLab) laufen. Damit bleibt die Zuordnung Commit → Person nachvollziehbar. Details und Alternativen: [`tutorials/git-identity.md`](tutorials/git-identity.md).
