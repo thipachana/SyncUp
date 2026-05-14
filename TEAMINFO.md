@@ -43,5 +43,6 @@ SyncUp ist ein intelligenter Terminplaner für Projektgruppen, Unternehmen und k
 
 ## Eingesetzte KI-Werkzeuge (vorläufige Planung)
 
-- ChatGPT
-- GitHub Copilot
+- z.B. GitHub Copilot für Code-Vervollständigung
+- z.B. Claude Code / ChatGPT für Refactoring und Doku-Entwürfe
+- …
