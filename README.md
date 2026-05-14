@@ -1,2 +1,2 @@
-# SyncUp
+# SyncUP
 Softwareprojekt - Wirtschaftsinformatik Seminar Projekt 
