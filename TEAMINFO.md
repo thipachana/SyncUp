@@ -14,7 +14,7 @@ Syncup
 |---|---|---|---|
 | Thipachana Clarian Kennady | WI B.Sc. | Projektleiterin | — |
 | Sarah Kosukous | WI B.Sc. | Software Architect | - |
-| David Cabas Canella | WI B.Sc. | - | 
+| David Cabas Canella | WI B.Sc. | Software Architect | 
 | Ilias Jelolli | WI B.Sc. | - | 
 
 
