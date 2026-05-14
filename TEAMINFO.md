@@ -2,7 +2,7 @@
 
 ## Projekttitel
 
-<Kurzer, prägnanter Titel des Projekts>
+Syncup
 
 ## Kurzbeschreibung
 
@@ -13,10 +13,10 @@
 | Name | Studiengang | Rolle | Git-Handle (optional) |
 |---|---|---|---|
 | Thipachana Clarian Kennady | WI B.Sc. | Projektleiterin | — |
-| Sarah Kosukous | WI B.Sc. | Software Architect | GitHub: `erika-m` |
-| David Cabas Canella | WI B.Sc. |  | GitHub:  
-| Ilias Jelolli | WI B.Sc. |  | GitHub:
-| … | … | … | … |
+| Sarah Kosukous | WI B.Sc. | Software Architect | - |
+| David Cabas Canella | WI B.Sc. | - | 
+| Ilias Jelolli | WI B.Sc. | - | 
+
 
 > **Spalte „Git-Handle" (optional):** Nur ausfüllen, wenn die Git-Commit-Identität nicht auf den Klarnamen gesetzt ist und Commits unter einem Plattform-Username (GitHub/GitLab) laufen. Damit bleibt die Zuordnung Commit → Person nachvollziehbar. Details und Alternativen: [`tutorials/git-identity.md`](tutorials/git-identity.md).
 
@@ -26,11 +26,13 @@
 
 ## Technologien (voraussichtlich)
 
-- **Sprache(n):** z.B. Java 21, TypeScript 5
-- **Frameworks:** z.B. Spring Boot, React, Vue
-- **Persistenz:** z.B. PostgreSQL, SQLite
-- **Build/Tooling:** z.B. Maven, Gradle, Vite
-- **Sonstiges:** z.B. Docker, Auth-Provider, externe APIs
+
+- **Sprache(n):** Java 21, TypeScript
+- **Frameworks:** Spring Boot, React
+- **Persistenz:** PostgreSQL
+- **Build/Tooling:** Maven, Vite
+- **Sonstiges:** Docker, GitHub, Authentifizierung über Hochschul-E-Mail
+
 
 > Diese Liste ist eine Momentaufnahme — Änderungen im Projektverlauf sind erlaubt und in der Architekturbeschreibung (M2) endgültig festzulegen.
 
@@ -39,8 +41,8 @@
 - **URL:** <https://github.com/…  bzw.  https://git.thm.de/…>
 - **Sichtbarkeit:** öffentlich · privat (Betreuer als Member: `carstenlucke` / `clucke`)
 
+
 ## Eingesetzte KI-Werkzeuge (vorläufige Planung)
 
-- z.B. GitHub Copilot für Code-Vervollständigung
-- z.B. Claude Code / ChatGPT für Refactoring und Doku-Entwürfe
-- …
+- ChatGPT
+- GitHub Copilot
