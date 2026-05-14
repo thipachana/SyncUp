@@ -6,7 +6,7 @@ Syncup
 
 ## Kurzbeschreibung
 
-<2–4 Sätze: Was soll die Software leisten? Für wen? Welches Problem löst sie?>
+SyncUp ist eine Webanwendung zur Organisation von Aufgaben, Terminen und Deadlines. Die Software hilft Nutzern dabei, ihren Alltag besser zu planen, Prioritäten zu setzen und Terminüberschneidungen zu vermeiden. Ziel ist es, Stress durch schlechte Zeitplanung und unübersichtliche Aufgabenverwaltung im Studium und Berufsalltag zu reduzieren.
 
 ## Team
 
