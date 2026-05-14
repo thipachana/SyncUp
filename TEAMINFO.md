@@ -2,7 +2,7 @@
 
 ## Projekttitel
 
-Syncup
+SyncUp
 
 ## Kurzbeschreibung
 
