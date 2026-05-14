@@ -6,7 +6,7 @@ SyncUp
 
 ## Kurzbeschreibung
 
-SyncUp ist eine Webanwendung zur Organisation von Aufgaben, Terminen und Deadlines. Die Software hilft Nutzern dabei, ihren Alltag besser zu planen, Prioritäten zu setzen und Terminüberschneidungen zu vermeiden. Ziel ist es, Stress durch schlechte Zeitplanung und unübersichtliche Aufgabenverwaltung im Studium und Berufsalltag zu reduzieren.
+SyncUp ist ein intelligenter Terminplaner für Projektgruppen, Unternehmen und kleine Teams. Die Software löst das Problem der aufwändigen Terminfindung, indem sie individuelle Kalender abgleicht und automatisch gemeinsame, freie Zeitslots für Meetings vorschlägt. Zusätzlich lassen sich bei der Terminerstellung direkt benötigte Ressourcen wie Räume buchen, um die gesamte Organisation zentral an einem Ort zu bündeln.
 
 ## Team
 
