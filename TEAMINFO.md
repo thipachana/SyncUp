@@ -37,12 +37,10 @@ SyncUp ist ein intelligenter Terminplaner für Projektgruppen, Unternehmen und k
 
 ## Repository
 
-- **URL:** <https://github.com/…  bzw.  https://git.thm.de/…>
-- **Sichtbarkeit:** öffentlich · privat (Betreuer als Member: `carstenlucke` / `clucke`)
+- **URL:** https://github.com/thipachana/SyncUp.git
+- **Sichtbarkeit:** öffentlich
 
 
 ## Eingesetzte KI-Werkzeuge (vorläufige Planung)
 
-- z.B. GitHub Copilot für Code-Vervollständigung
-- z.B. Claude Code / ChatGPT für Refactoring und Doku-Entwürfe
-- …
+- ChatGPT für Strukturierung und Dokumentationsentwürfe
