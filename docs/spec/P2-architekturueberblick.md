@@ -105,3 +105,12 @@ Die Architektur von SyncUp besteht aus drei Hauptkomponenten:
 - Terminen
 - Aufgaben
 - Ressourcen
+## Technische Annahmen
+
+Für die erste Version von SyncUp wird eine Webanwendung mit React, Spring Boot und PostgreSQL verwendet. Die Kommunikation zwischen Frontend und Backend erfolgt über eine REST-Schnittstelle.
+
+Die Synchronisierung bezieht sich zunächst auf die innerhalb von SyncUp gespeicherten Kalender- und Termindaten. Eine Anbindung an externe Kalenderdienste kann in einer späteren Version ergänzt werden.
+
+## Zusammenfassung
+
+Die geplante Architektur unterstützt alle wesentlichen Funktionen von SyncUp. Durch die Aufteilung in Frontend, Backend und Datenbank entsteht eine übersichtliche und erweiterbare Systemstruktur.
