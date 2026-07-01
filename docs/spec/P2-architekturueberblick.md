@@ -59,13 +59,11 @@ Das Frontend kommuniziert mit dem Backend über REST-Schnittstellen. Das Backend
 
 Vereinfacht dargestellt:
 
-
-Nutzer → Frontend → Backend → Datenbank
 ## Grober Systemaufbau
 
 Die Architektur von SyncUp besteht aus drei Hauptkomponenten:
 
-
+```text
                 Benutzer
                     │
                     ▼
@@ -73,7 +71,7 @@ Die Architektur von SyncUp besteht aus drei Hauptkomponenten:
         |  React Frontend      |
         +----------------------+
                     │
-              REST-Schnittstelle
+            REST-Schnittstelle
                     │
                     ▼
         +----------------------+
@@ -105,6 +103,7 @@ Die Architektur von SyncUp besteht aus drei Hauptkomponenten:
 - Terminen
 - Aufgaben
 - Ressourcen
+
 ## Technische Annahmen
 
 Für die erste Version von SyncUp wird eine Webanwendung mit React, Spring Boot und PostgreSQL verwendet. Die Kommunikation zwischen Frontend und Backend erfolgt über eine REST-Schnittstelle.
