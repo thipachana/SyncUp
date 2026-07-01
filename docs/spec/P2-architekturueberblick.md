@@ -61,3 +61,47 @@ Vereinfacht dargestellt:
 
 ```text
 Nutzer → Frontend → Backend → Datenbank
+## Grober Systemaufbau
+
+Die Architektur von SyncUp besteht aus drei Hauptkomponenten:
+
+```text
+                Benutzer
+                    │
+                    ▼
+        +----------------------+
+        |  React Frontend      |
+        +----------------------+
+                    │
+              REST-Schnittstelle
+                    │
+                    ▼
+        +----------------------+
+        | Spring Boot Backend  |
+        +----------------------+
+                    │
+                    ▼
+        +----------------------+
+        | PostgreSQL Datenbank |
+        +----------------------+
+```
+
+### Aufgaben der Komponenten
+
+**Frontend**
+- Benutzeroberfläche
+- Kalenderansicht
+- Terminverwaltung
+- Ressourcenübersicht
+
+**Backend**
+- Geschäftslogik
+- Berechnung gemeinsamer freier Termine
+- Benutzerverwaltung
+- REST-API
+
+**Datenbank**
+- Speicherung von Benutzern
+- Terminen
+- Aufgaben
+- Ressourcen
