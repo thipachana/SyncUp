@@ -25,6 +25,8 @@ CREATE TABLE termin (
 );
 CREATE TABLE terminanfrage (
     terminanfrage_id BIGSERIAL PRIMARY KEY,
+    titel VARCHAR(100) NOT NULL,
+    zeitraum VARCHAR(255) NOT NULL,
     dauer INTEGER NOT NULL,
     status VARCHAR(50) NOT NULL
 );
