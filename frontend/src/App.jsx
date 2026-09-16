@@ -1,3 +1,4 @@
+import './App.css'
 import { useState } from 'react'
 import TimeSlot from './components/TimeSlot'
 
@@ -38,8 +39,11 @@ function App() {
           type="datetime-local"
           value={end}
           onChange={(e) => setEnd(e.target.value)}
+        
         />
-
+<button type="button">
+  Terminanfrage erstellen
+</button>
         <h2>Freie Zeitfenster</h2>
 
         <TimeSlot
