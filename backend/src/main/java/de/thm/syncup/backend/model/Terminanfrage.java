@@ -11,6 +11,12 @@ public class Terminanfrage {
     @Column(name = "terminanfrage_id")
     private Long terminanfrageId;
 
+    @Column(nullable = false, length = 100)
+    private String titel;
+
+    @Column(nullable = false, length = 255)
+    private String zeitraum;
+
     @Column(nullable = false)
     private Integer dauer;
 
@@ -20,7 +26,9 @@ public class Terminanfrage {
     public Terminanfrage() {
     }
 
-    public Terminanfrage(Integer dauer, String status) {
+    public Terminanfrage(String titel, String zeitraum, Integer dauer, String status) {
+        this.titel = titel;
+        this.zeitraum = zeitraum;
         this.dauer = dauer;
         this.status = status;
     }
@@ -31,6 +39,22 @@ public class Terminanfrage {
 
     public void setTerminanfrageId(Long terminanfrageId) {
         this.terminanfrageId = terminanfrageId;
+    }
+
+    public String getTitel() {
+        return titel;
+    }
+
+    public void setTitel(String titel) {
+        this.titel = titel;
+    }
+
+    public String getZeitraum() {
+        return zeitraum;
+    }
+
+    public void setZeitraum(String zeitraum) {
+        this.zeitraum = zeitraum;
     }
 
     public Integer getDauer() {
