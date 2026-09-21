@@ -2,17 +2,26 @@
 
 ## Projektbeschreibung
 
-SyncUp ist eine intelligente Webanwendung zur gemeinsamen Planung und Organisation von Terminen, Aufgaben und Ressourcen in Unternehmen und Teams.
+SyncUp ist eine Webanwendung zur gemeinsamen Planung und Organisation von Terminen und Ressourcen in Teams.
 
-Die Software unterstützt Nutzer dabei, freie gemeinsame Zeitslots zu finden, Meetings effizient zu planen und Ressourcen wie Räume zentral zu verwalten.
+Die Anwendung unterstützt Nutzer dabei, gemeinsame freie Zeitfenster zu finden, Termine zu verwalten und Ressourcen wie Räume zentral zu reservieren.
 
-## Funktionen (geplant)
+## Aktuell umgesetzt
 
-- Benutzerverwaltung
-- Gemeinsame Kalender
-- Terminplanung
-- Automatische Zeitslot-Erkennung
-- Ressourcenverwaltung
+- Termin- und Terminanfragen verwalten
+- Automatische Berechnung gemeinsamer freier Zeitfenster
+- Ressourcen anzeigen
+- Ressourcen reservieren
+- Schutz vor überschneidenden Ressourcenbuchungen
+- Speicherung der Daten in PostgreSQL
+- Verbindung von React-Frontend, Spring-Boot-Backend und Datenbank
+
+## Weitere geplante Funktionen
+
+- Erweiterte Benutzerverwaltung
+- Erweiterte Kalenderverwaltung
+- Einladungen und Benachrichtigungen
+- Ressourcen freigeben
 - Aufgabenverwaltung
 
 ## Technologien

@@ -54,3 +54,33 @@ Dieser Abschnitt beschreibt die wichtigsten Funktionen der Webanwendung SyncUp.
 ## Nicht funktionale Hinweise
 
 Die technische Implementierung der Funktionen erfolgt in den späteren Meilensteinen M2 und M3.
+
+---
+
+## Aktueller Umsetzungsstand
+
+Stand: 21.09.2026
+
+### Umgesetzt
+
+- Gemeinsame freie Zeitfenster berechnen
+- Räume anzeigen
+- Räume reservieren
+- Überschneidende Ressourcenbuchungen verhindern
+- Termin- und Terminanfragen technisch mit dem Backend verarbeiten
+- Persistente Speicherung über PostgreSQL
+
+### Teilweise umgesetzt
+
+- Verfügbarkeit von Ressourcen prüfen
+- Kalender- und Terminverwaltung
+
+### Noch offen
+
+- Vollständige Benutzerverwaltung
+- Profil bearbeiten
+- Passwort ändern
+- Teilnehmer hinzufügen
+- Einladungen versenden
+- Ressourcen freigeben
+- Benachrichtigungen und Erinnerungen
