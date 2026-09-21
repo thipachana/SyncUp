@@ -12,8 +12,7 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/termine")
-@CrossOrigin(origins = "http://localhost:5173")
-public class TerminController {
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5175"})public class TerminController {
 
     private final TerminRepository terminRepository;
 

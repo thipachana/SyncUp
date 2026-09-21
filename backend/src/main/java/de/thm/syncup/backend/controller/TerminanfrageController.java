@@ -13,8 +13,7 @@ import java.util.Comparator;
 
 @RestController
 @RequestMapping("/api/terminanfragen")
-@CrossOrigin(origins = "http://localhost:5173")
-public class TerminanfrageController {
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:5175"})public class TerminanfrageController {
 
 private final TerminanfrageRepository terminanfrageRepository;
 private final TerminRepository terminRepository;
