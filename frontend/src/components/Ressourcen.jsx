@@ -25,6 +25,11 @@ function Ressourcen({ ressourcen }) {
         }
       )
 
+      if (response.status === 409) {
+        setMessage('Ressource ist in diesem Zeitraum bereits gebucht.')
+        return
+      }
+
       if (!response.ok) {
         throw new Error('Buchung fehlgeschlagen.')
       }
