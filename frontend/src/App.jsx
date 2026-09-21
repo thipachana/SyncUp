@@ -1,5 +1,5 @@
 import './App.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import TimeSlot from './components/TimeSlot'
 
 function App() {
@@ -7,6 +7,27 @@ function App() {
   const [start, setStart] = useState('')
   const [end, setEnd] = useState('')
   const [message, setMessage] = useState('')
+  const [appointmentRequests, setAppointmentRequests] = useState([])
+  useEffect(() => {
+  const loadAppointmentRequests = async () => {
+    try {
+      const response = await fetch(
+        'http://192.168.178.32:8080/api/terminanfragen'
+      )
+
+      if (!response.ok) {
+        throw new Error('Terminanfragen konnten nicht geladen werden.')
+      }
+
+      const data = await response.json()
+      setAppointmentRequests(data)
+    } catch (error) {
+      console.error('Fehler beim Laden der Terminanfragen:', error)
+    }
+  }
+
+  loadAppointmentRequests()
+}, [])
 
   const createAppointmentRequest = async () => {
     if (!title || !start || !end) {
@@ -50,6 +71,8 @@ function App() {
       }
 
       const savedRequest = await response.json()
+setAppointmentRequests((prev) => [...prev, savedRequest])
+
 
       setMessage(
         `Terminanfrage erstellt. ID: ${savedRequest.terminanfrageId}`
@@ -109,8 +132,23 @@ function App() {
 </button>
 
         {message && <p>{message}</p>}
+<h2>Offene Terminanfragen</h2>
+
+{appointmentRequests.length === 0 ? (
+  <p>Keine Terminanfragen vorhanden.</p>
+) : (
+  appointmentRequests.map((request) => (
+    <div key={request.terminanfrageId}>
+      <h3>{request.titel}</h3>
+      <p>Zeitraum: {request.zeitraum}</p>
+      <p>Dauer: {request.dauer} Minuten</p>
+      <p>Status: {request.status}</p>
+    </div>
+  ))
+)}
 
         <h2>Freie Zeitfenster</h2>
+
 
         <TimeSlot
           start="10:00"
