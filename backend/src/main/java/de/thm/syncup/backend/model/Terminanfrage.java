@@ -22,7 +22,13 @@ public class Terminanfrage {
 
     @Column(nullable = false, length = 50)
     private String status;
-
+@ManyToMany(fetch = FetchType.EAGER)
+@JoinTable(
+    name = "terminanfrage_benutzer",
+    joinColumns = @JoinColumn(name = "terminanfrage_id"),
+    inverseJoinColumns = @JoinColumn(name = "benutzer_id")
+)
+private java.util.List<Benutzer> benutzer = new java.util.ArrayList<>();
     public Terminanfrage() {
     }
 
@@ -72,4 +78,12 @@ public class Terminanfrage {
     public void setStatus(String status) {
         this.status = status;
     }
+   
+public java.util.List<Benutzer> getBenutzer() {
+    return benutzer;
+}
+
+public void setBenutzer(java.util.List<Benutzer> benutzer) {
+    this.benutzer = benutzer;
+}
 }
