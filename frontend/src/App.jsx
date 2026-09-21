@@ -12,7 +12,7 @@ function App() {
   const loadAppointmentRequests = async () => {
     try {
       const response = await fetch(
-        'http://192.168.178.32:8080/api/terminanfragen'
+        `${import.meta.env.VITE_API_URL}/api/terminanfragen`
       )
 
       if (!response.ok) {
@@ -56,7 +56,7 @@ function App() {
 
     try {
       const response = await fetch(
-        'http://192.168.178.32:8080/api/terminanfragen',
+        `${import.meta.env.VITE_API_URL}/api/terminanfragen`,
         {
           method: 'POST',
           headers: {
