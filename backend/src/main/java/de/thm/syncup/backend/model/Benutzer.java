@@ -1,6 +1,7 @@
 package de.thm.syncup.backend.model;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "benutzer")
@@ -15,6 +16,7 @@ public class Benutzer {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String passwort;
 
     private String rolle;
