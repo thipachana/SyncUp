@@ -30,4 +30,5 @@ public class TerminanfrageController {
 public Terminanfrage getTerminanfrage(@PathVariable Long id) {
     return terminanfrageRepository.findById(id).orElse(null);
 }
+@DeleteMapping("/{id}") public void loescheTerminanfrage(@PathVariable Long id) { terminanfrageRepository.deleteById(id); }
 }
