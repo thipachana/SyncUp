@@ -26,4 +26,8 @@ public class TerminanfrageController {
     public Terminanfrage erstelleTerminanfrage(@RequestBody Terminanfrage terminanfrage) {
         return terminanfrageRepository.save(terminanfrage);
     }
+    @GetMapping("/{id}")
+public Terminanfrage getTerminanfrage(@PathVariable Long id) {
+    return terminanfrageRepository.findById(id).orElse(null);
+}
 }
