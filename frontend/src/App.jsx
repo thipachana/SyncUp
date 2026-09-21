@@ -87,7 +87,26 @@ setAppointmentRequests((prev) => [...prev, savedRequest])
       )
     }
   }
+const deleteAppointmentRequest = async (id) => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/terminanfragen/${id}`,
+      {
+        method: 'DELETE',
+      }
+    )
 
+    if (!response.ok) {
+      throw new Error('Terminanfrage konnte nicht gelöscht werden.')
+    }
+
+    setAppointmentRequests((prev) =>
+      prev.filter((request) => request.terminanfrageId !== id)
+    )
+  } catch (error) {
+    console.error('Fehler beim Löschen:', error)
+  }
+}
   return (
     <main>
       <h1>SyncUp</h1>
@@ -143,7 +162,14 @@ setAppointmentRequests((prev) => [...prev, savedRequest])
       <p>Zeitraum: {request.zeitraum}</p>
       <p>Dauer: {request.dauer} Minuten</p>
       <p>Status: {request.status}</p>
+      <button
+  type="button"
+  onClick={() => deleteAppointmentRequest(request.terminanfrageId)}
+>
+  Löschen
+</button>
     </div>
+    
   ))
 )}
 
