@@ -3,11 +3,13 @@ import { useEffect, useState } from 'react'
 import TimeSlot from './components/TimeSlot'
 
 function App() {
+  
   const [title, setTitle] = useState('')
   const [start, setStart] = useState('')
   const [end, setEnd] = useState('')
   const [message, setMessage] = useState('')
   const [appointmentRequests, setAppointmentRequests] = useState([])
+  const [freeTimeSlots, setFreeTimeSlots] = useState([])
   useEffect(() => {
   const loadAppointmentRequests = async () => {
     try {
@@ -107,6 +109,22 @@ const deleteAppointmentRequest = async (id) => {
     console.error('Fehler beim Löschen:', error)
   }
 }
+const loadFreeTimeSlots = async (id) => {
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/terminanfragen/${id}/freie-zeitfenster`
+    )
+
+    if (!response.ok) {
+      throw new Error('Freie Zeitfenster konnten nicht geladen werden.')
+    }
+
+    const data = await response.json()
+    setFreeTimeSlots(data)
+  } catch (error) {
+    console.error('Fehler beim Laden der freien Zeitfenster:', error)
+  }
+}
   return (
     <main>
       <h1>SyncUp</h1>
@@ -164,23 +182,37 @@ const deleteAppointmentRequest = async (id) => {
       <p>Status: {request.status}</p>
       <button
   type="button"
+  onClick={() => loadFreeTimeSlots(request.terminanfrageId)}
+>
+  Freie Zeitfenster anzeigen
+</button>
+
+<button
+  type="button"
   onClick={() => deleteAppointmentRequest(request.terminanfrageId)}
 >
   Löschen
 </button>
     </div>
-    
+
   ))
 )}
 
-        <h2>Freie Zeitfenster</h2>
+   <h2>Freie Zeitfenster</h2>
 
-
-        <TimeSlot
-          start="10:00"
-          end="11:00"
-          available={true}
-        />
+{freeTimeSlots.length === 0 ? (
+  <p>Keine freien Zeitfenster angezeigt.</p>
+) : (
+  freeTimeSlots.map((slot, index) => (
+    <TimeSlot
+  key={index}
+  date={slot.start.slice(0, 10)}
+  startTime={slot.start.slice(11, 16)}
+  endTime={slot.ende.slice(11, 16)}
+  available={true}
+/>
+  ))
+)}
       </section>
     </main>
   )
