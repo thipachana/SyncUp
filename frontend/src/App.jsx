@@ -1,6 +1,7 @@
 import './App.css'
 import { useEffect, useState } from 'react'
 import TimeSlot from './components/TimeSlot'
+import Ressourcen from './components/Ressourcen'
 
 function App() {
   
@@ -10,6 +11,7 @@ function App() {
   const [message, setMessage] = useState('')
   const [appointmentRequests, setAppointmentRequests] = useState([])
   const [freeTimeSlots, setFreeTimeSlots] = useState([])
+  const [ressourcen, setRessourcen] = useState([])
   useEffect(() => {
   const loadAppointmentRequests = async () => {
     try {
@@ -30,6 +32,27 @@ function App() {
 
   loadAppointmentRequests()
 }, [])
+
+  useEffect(() => {
+    const loadRessourcen = async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/ressourcen`
+        )
+
+        if (!response.ok) {
+          throw new Error('Ressourcen konnten nicht geladen werden.')
+        }
+
+        const data = await response.json()
+        setRessourcen(data)
+      } catch (error) {
+        console.error('Fehler beim Laden der Ressourcen:', error)
+      }
+    }
+
+    loadRessourcen()
+  }, [])
 
   const createAppointmentRequest = async () => {
     if (!title || !start || !end) {
@@ -213,6 +236,7 @@ const loadFreeTimeSlots = async (id) => {
 />
   ))
 )}
+        <Ressourcen ressourcen={ressourcen} />
       </section>
     </main>
   )
