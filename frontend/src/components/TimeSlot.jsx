@@ -1,13 +1,29 @@
 function TimeSlot({ date, startTime, endTime, available }) {
   return (
-    <div className="time-slot">
-      <h3>{date}</h3>
+    <article className="time-slot">
+      <div className="time-slot-check">
+        ✓
+      </div>
 
-      <p>{startTime} – {endTime}</p>
+      <div className="time-slot-main">
+        <strong>
+          {startTime} – {endTime}
+        </strong>
 
-      <p>Status: {available ? "Verfügbar" : "Nicht verfügbar"}</p>
-    </div>
-  );
+        <span>{date}</span>
+      </div>
+
+      <span
+        className={
+          available
+            ? 'availability available'
+            : 'availability unavailable'
+        }
+      >
+        {available ? 'Verfügbar' : 'Nicht verfügbar'}
+      </span>
+    </article>
+  )
 }
 
-export default TimeSlot;
+export default TimeSlot
