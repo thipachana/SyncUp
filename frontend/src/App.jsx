@@ -338,6 +338,7 @@ function App() {
             <label>Teilnehmer</label>
 
             <button
+              className="participant-load-button"
               type="button"
               onClick={loadBenutzer}
             >
@@ -345,11 +346,11 @@ function App() {
             </button>
 
             {benutzerMessage && (
-              <small>{benutzerMessage}</small>
+              <small className="participant-message">{benutzerMessage}</small>
             )}
 
             {benutzer.map((person) => (
-              <label key={person.benutzerId}>
+              <label className="participant-option" key={person.benutzerId}>
                 <input
                   type="checkbox"
                   checked={selectedBenutzer.includes(person.benutzerId)}

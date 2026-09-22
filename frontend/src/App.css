@@ -1624,3 +1624,52 @@
   font-weight: 700;
   cursor: pointer;
 }
+
+/* TEILNEHMER */
+
+.participant-load-button {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border: 1px solid #0b7a5b;
+  border-radius: 8px;
+  background: white;
+  color: #0b7a5b;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.participant-load-button:hover {
+  background: #f1f8f5;
+}
+
+.form-group .participant-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0;
+  padding: 10px 12px;
+  border: 1px solid #e3e7eb;
+  border-radius: 8px;
+  background: #fafbfb;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.form-group .participant-option input[type="checkbox"] {
+  width: 16px;
+  min-height: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  accent-color: #0b7a5b;
+}
+
+.participant-message {
+  display: block;
+  margin: 6px 0 10px;
+  color: #7a8493;
+  font-size: 11px;
+}
+
