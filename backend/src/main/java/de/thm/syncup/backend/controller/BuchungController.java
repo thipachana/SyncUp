@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 @RestController
@@ -38,14 +39,30 @@ public class BuchungController {
 
     @PostMapping
     public Buchung erstelleBuchung(@RequestBody BuchungRequest request) {
-        Termin termin = terminRepository.findById(request.terminId()).orElseThrow();
-        Ressource ressource = ressourceRepository.findById(request.ressourcenId()).orElseThrow();
+
+        // Zeitraum zuerst validieren, bevor irgendetwas gespeichert wird.
+        pruefeZeitraum(request.zeitraum());
+
+        Termin termin = terminRepository.findById(request.terminId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Termin wurde nicht gefunden."
+                ));
+
+        Ressource ressource = ressourceRepository.findById(request.ressourcenId())
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Ressource wurde nicht gefunden."
+                ));
 
         boolean belegt = buchungRepository
                 .findByRessource_RessourcenId(request.ressourcenId())
                 .stream()
                 .anyMatch(buchung ->
-                        ueberschneidet(buchung.getZeitraum(), request.zeitraum())
+                        ueberschneidet(
+                                buchung.getZeitraum(),
+                                request.zeitraum()
+                        )
                 );
 
         if (belegt) {
@@ -64,7 +81,47 @@ public class BuchungController {
         return buchungRepository.save(buchung);
     }
 
+    private void pruefeZeitraum(String zeitraum) {
+
+        if (zeitraum == null || zeitraum.isBlank()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Ein Buchungszeitraum muss angegeben werden."
+            );
+        }
+
+        String[] teile = zeitraum.split(" bis ", -1);
+
+        if (teile.length != 2
+                || teile[0].isBlank()
+                || teile[1].isBlank()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Ungültiger Buchungszeitraum."
+            );
+        }
+
+        try {
+            LocalDateTime start = LocalDateTime.parse(teile[0]);
+            LocalDateTime ende = LocalDateTime.parse(teile[1]);
+
+            if (!ende.isAfter(start)) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST,
+                        "Das Ende muss nach dem Anfang liegen."
+                );
+            }
+
+        } catch (DateTimeParseException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Ungültiges Datumsformat im Buchungszeitraum."
+            );
+        }
+    }
+
     private boolean ueberschneidet(String zeitraum1, String zeitraum2) {
+
         String[] teile1 = zeitraum1.split(" bis ");
         String[] teile2 = zeitraum2.split(" bis ");
 
