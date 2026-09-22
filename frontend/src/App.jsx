@@ -13,6 +13,7 @@ function App() {
   const [appointmentRequests, setAppointmentRequests] = useState([])
   const [freeTimeSlots, setFreeTimeSlots] = useState([])
   const [ressourcen, setRessourcen] = useState([])
+  const [ressourcenFehler, setRessourcenFehler] = useState(false)
 
   useEffect(() => {
     const loadAppointmentRequests = async () => {
@@ -48,8 +49,10 @@ function App() {
 
         const data = await response.json()
         setRessourcen(data)
+        setRessourcenFehler(false)
       } catch (error) {
         console.error('Fehler beim Laden der Ressourcen:', error)
+        setRessourcenFehler(true)
       }
     }
 
@@ -131,12 +134,15 @@ function App() {
       setAppointmentRequests((prev) =>
         prev.filter((request) => request.terminanfrageId !== id)
       )
+      setFreeTimeSlots([])
     } catch (error) {
       console.error('Fehler beim Löschen:', error)
     }
   }
 
   const loadFreeTimeSlots = async (id) => {
+    setFreeTimeSlots([])
+
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/terminanfragen/${id}/freie-zeitfenster`
@@ -423,7 +429,10 @@ function App() {
         </section>
 
         <div id="ressourcen">
-          <Ressourcen ressourcen={ressourcen} />
+          <Ressourcen
+          ressourcen={ressourcen}
+          ladefehler={ressourcenFehler}
+        />
         </div>
       </div>
 

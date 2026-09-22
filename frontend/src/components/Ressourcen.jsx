@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-function Ressourcen({ ressourcen }) {
+function Ressourcen({ ressourcen, ladefehler }) {
   const [terminId, setTerminId] = useState('1')
 
   const [zeitraum, setZeitraum] = useState(
