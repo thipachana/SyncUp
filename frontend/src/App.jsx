@@ -2,6 +2,7 @@ import './App.css'
 import { useEffect, useState } from 'react'
 import TimeSlot from './components/TimeSlot'
 import Ressourcen from './components/Ressourcen'
+import AuthControl from './components/AuthControl'
 
 function App() {
   const [title, setTitle] = useState('')
@@ -207,9 +208,7 @@ function App() {
           </button>
         </nav>
 
-        <div className="login-placeholder">
-          Anmelden
-        </div>
+        <AuthControl />
       </header>
 
       <section className="hero">
