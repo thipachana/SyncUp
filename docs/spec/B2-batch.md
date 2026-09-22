@@ -1,4 +1,6 @@
-# B2. Batch
+# B2 Batch
+
+Stand: 22.09.2026
 
 ## Status
 
@@ -6,4 +8,8 @@ Nicht anwendbar.
 
 ## Begründung
 
-SyncUp ist eine interaktive Webanwendung. Alle Funktionen werden direkt durch Benutzer über die Benutzeroberfläche ausgelöst. Es sind keine Batch-Verarbeitungen oder zeitgesteuerten Hintergrundprozesse Bestandteil der ersten Version.
+SyncUp ist eine interaktive Webanwendung.
+
+Die vorhandenen Funktionen werden direkt durch den Benutzer über die Oberfläche ausgelöst.
+
+Batch-Verarbeitungen oder automatisch ausgeführte Hintergrundprozesse sind aktuell nicht Bestandteil von SyncUp.

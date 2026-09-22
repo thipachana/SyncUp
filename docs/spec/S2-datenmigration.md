@@ -1,11 +1,13 @@
-# S2. Datenmigration
+# S2 Datenmigration
+
+Stand: 22.09.2026
 
 ## Beschreibung
 
-Für die erste Version von SyncUp ist keine Datenmigration erforderlich.
+Für SyncUp ist aktuell keine Datenmigration notwendig.
 
-Alle Daten werden neu in der PostgreSQL-Datenbank angelegt und verwaltet.
+Alle benötigten Daten werden neu in der PostgreSQL-Datenbank angelegt und dort gespeichert.
 
 ## Begründung
 
-Da keine bestehende Anwendung ersetzt wird, müssen keine Daten aus anderen Systemen übernommen werden.
+SyncUp ersetzt keine bestehende Anwendung. Deshalb müssen keine vorhandenen Daten aus einem anderen System übernommen werden.

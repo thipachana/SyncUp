@@ -1,102 +1,280 @@
 # SyncUp – Installation und Inbetriebnahme
 
-## Voraussetzungen
+Stand: 22.09.2026
 
-Für die lokale Ausführung werden benötigt:
+## 1. Überblick
 
-- Java 21
-- PostgreSQL
-- Node.js und npm
+SyncUp besteht aus:
+
+- einem React-Frontend
+- einem Spring-Boot-Backend
+- einer PostgreSQL-Datenbank
+
+Diese Anleitung beschreibt, wie SyncUp lokal auf einem Mac gestartet werden kann.
+
+Die einzelnen Komponenten werden aktuell getrennt gestartet. Docker wird momentan noch nicht verwendet.
+
+## 2. Voraussetzungen
+
+Für die Ausführung werden benötigt:
+
 - Git
+- Java 21 oder eine kompatible neuere JDK-Version
+- Node.js und npm
+- PostgreSQL 17
+- ein aktueller Webbrowser
+- Homebrew für die Installation von PostgreSQL auf macOS
 
-Das Backend verwendet den im Projekt enthaltenen Maven Wrapper.
+Die konfigurierte Java-Zielversion des Projekts ist Java 21.
 
-## 1. Repository klonen
+Für das Backend wird der Maven Wrapper verwendet. Maven muss deshalb nicht zusätzlich installiert werden.
+
+Die installierten Versionen können mit folgenden Befehlen geprüft werden:
+
+```bash
+git --version
+java -version
+node --version
+npm --version
+```
+
+## 3. Projekt herunterladen
+
+Falls das Projekt noch nicht auf dem Computer vorhanden ist:
 
 ```bash
 git clone https://github.com/thipachana/SyncUp.git
 cd SyncUp
 ```
 
-## 2. PostgreSQL vorbereiten
+Falls das Projekt bereits vorhanden ist, kann direkt der vorhandene Projektordner geöffnet werden.
 
-SyncUp verwendet eine lokale PostgreSQL-Datenbank mit dem Namen `syncup`.
+## 4. PostgreSQL einrichten
 
-Die Datenbankverbindung lautet:
+Falls PostgreSQL 17 noch nicht installiert ist:
+
+```bash
+brew install postgresql@17
+```
+
+PostgreSQL starten:
+
+```bash
+brew services start postgresql@17
+```
+
+Falls die PostgreSQL-Befehle im Terminal nicht gefunden werden:
+
+```bash
+export PATH="$(brew --prefix postgresql@17)/bin:$PATH"
+```
+
+Anschließend kann geprüft werden, ob PostgreSQL läuft:
+
+```bash
+pg_isready -h localhost -p 5432
+```
+
+### Datenbank erstellen
+
+Das Backend verwendet aktuell:
+
+- Datenbank: `syncup`
+- Benutzer: `uni`
+- Port: `5432`
+
+Benutzer und Datenbank können bei der ersten Einrichtung mit folgenden Befehlen erstellt werden:
+
+```bash
+createuser --host=localhost uni
+createdb --host=localhost --owner=uni syncup
+```
+
+Falls Benutzer und Datenbank bereits vorhanden sind, müssen diese Befehle nicht erneut ausgeführt werden.
+
+Die Verbindung kann anschließend getestet werden:
+
+```bash
+psql --host=localhost --username=uni --dbname=syncup
+```
+
+Das Backend greift auf folgende Datenbank zu:
 
 ```text
 jdbc:postgresql://localhost:5432/syncup
 ```
 
-Der lokale PostgreSQL-Benutzer muss Zugriff auf diese Datenbank besitzen.
+Die Tabellen werden während der Entwicklung durch Hibernate erstellt beziehungsweise aktualisiert.
 
-## 3. Backend starten
+Persönliche Passwörter oder andere Zugangsdaten sollen nicht im Repository gespeichert werden.
+
+## 5. Frontend vorbereiten
+
+Im Projektordner:
+
+```bash
+cd frontend
+```
+
+Falls noch keine `.env`-Datei vorhanden ist:
+
+```bash
+cp .env.example .env
+```
+
+In der Datei muss die Adresse des Backends stehen:
+
+```text
+VITE_API_URL=http://localhost:8080
+```
+
+Danach die benötigten Pakete installieren:
+
+```bash
+npm install
+```
+
+## 6. Backend starten
+
+Ein Terminal im Projektordner öffnen:
 
 ```bash
 cd backend
 ./mvnw spring-boot:run
 ```
 
-Das Backend läuft standardmäßig unter:
+Das Backend läuft anschließend normalerweise unter:
 
 ```text
 http://localhost:8080
 ```
 
-## 4. Frontend konfigurieren
-
-Im Ordner `frontend` wird eine lokale `.env`-Datei verwendet.
-
-Beispiel:
+Zum Test kann zum Beispiel folgende Adresse im Browser geöffnet werden:
 
 ```text
-VITE_API_URL=http://localhost:8080
+http://localhost:8080/api/terminanfragen
 ```
 
-## 5. Frontend starten
+Wenn noch keine Terminanfragen vorhanden sind, kann dort eine leere Liste `[]` angezeigt werden.
+
+Das Terminal mit dem Backend muss während der Nutzung geöffnet bleiben.
+
+## 7. Frontend starten
+
+Ein zweites Terminal im Projektordner öffnen:
 
 ```bash
 cd frontend
-npm install
-npm run dev
+npm run dev -- --port 5173 --strictPort
 ```
 
-Vite zeigt anschließend die lokale Adresse des Frontends im Terminal an.
+Danach im Browser öffnen:
 
-## 6. Tests
+```text
+http://localhost:5173
+```
 
-Backend:
+Das Terminal mit dem Frontend muss ebenfalls geöffnet bleiben.
+
+## 8. Anwendung testen
+
+Nach dem Start sollte geprüft werden, ob:
+
+1. die SyncUp-Oberfläche geöffnet werden kann,
+2. das Frontend Daten vom Backend laden kann,
+3. Terminanfragen erstellt und angezeigt werden können,
+4. freie Zeitfenster berechnet werden können,
+5. Ressourcen angezeigt und gebucht werden können.
+
+Für einige Funktionen müssen bereits passende Daten in der Datenbank vorhanden sein.
+
+Dazu gehören zum Beispiel Benutzer, Kalender, Termine, Terminanfragen und Ressourcen.
+
+Für eine Ressourcenbuchung muss bereits ein Termin vorhanden sein.
+
+Weitere Tests sind in `docs/TESTING.md` beschrieben.
+
+## 9. Backend testen
+
+Vor dem Test sollte PostgreSQL gestartet sein und die Datenbankkonfiguration zum lokalen System passen.
+
+Im Projektordner:
 
 ```bash
 cd backend
 ./mvnw test
 ```
 
-Frontend:
+Wenn die Tests erfolgreich durchlaufen, wird am Ende `BUILD SUCCESS` angezeigt.
+
+Dieser Test prüft den technischen Start des Backends. Die einzelnen Funktionen werden zusätzlich über die Testdokumentation geprüft.
+
+## 10. Frontend prüfen
+
+Im Frontend-Ordner kann geprüft werden, ob das Frontend erfolgreich gebaut werden kann:
 
 ```bash
-cd frontend
 npm run build
 ```
 
-## 7. Funktionsprüfung
+Ein erfolgreicher Build zeigt, dass das Frontend ohne Build-Fehler erstellt werden kann.
 
-Nach dem Start können unter anderem folgende Funktionen geprüft werden:
+Die eigentlichen Funktionen werden zusätzlich über die Testdokumentation geprüft.
 
-- Termine und Terminanfragen anzeigen
-- gemeinsame freie Zeitfenster berechnen
-- Ressourcen anzeigen
-- Ressourcen reservieren
-- überschneidende Ressourcenbuchungen verhindern
-- Speicherung der Daten in PostgreSQL
-- Benutzerpasswörter werden nicht über die API ausgegeben
+## 11. Häufige Probleme
 
-## Architektur
+### Backend kann PostgreSQL nicht erreichen
 
-SyncUp verwendet eine Drei-Schichten-Architektur:
+Prüfen, ob PostgreSQL gestartet wurde:
 
-1. React-Frontend
-2. Spring-Boot-Backend mit REST-Schnittstellen
-3. PostgreSQL-Datenbank
+```bash
+pg_isready -h localhost -p 5432
+```
 
-Das Frontend kommuniziert über REST mit dem Backend. Ein direkter Zugriff des Frontends auf die Datenbank erfolgt nicht.
+### Frontend erreicht das Backend nicht
+
+Prüfen, ob:
+
+- das Backend läuft,
+- in `.env` die richtige Backend-Adresse steht,
+- das Frontend nach einer Änderung neu gestartet wurde.
+
+### Es werden keine Ressourcen angezeigt
+
+Prüfen, ob bereits Ressourcen in der Datenbank vorhanden sind.
+
+### Eine Ressourcenbuchung funktioniert nicht
+
+Prüfen, ob:
+
+- eine gültige Termin-ID verwendet wird,
+- die Ressource vorhanden ist,
+- der Zeitraum richtig eingegeben wurde,
+- die Ressource im angegebenen Zeitraum bereits gebucht ist.
+
+## 12. Anwendung beenden
+
+Frontend und Backend können im jeweiligen Terminal mit:
+
+```text
+Strg + C
+```
+
+beendet werden.
+
+PostgreSQL kann bei Bedarf ebenfalls beendet werden:
+
+```bash
+brew services stop postgresql@17
+```
+
+Vor dem nächsten Start des Backends muss PostgreSQL wieder gestartet werden.
+
+## 13. Weitere Dokumentation
+
+Weitere Informationen befinden sich in:
+
+- S3 „Inbetriebnahme“
+- `docs/TESTING.md`
+- `docs/DEMO.md`
+- F3 „Anwendungsfunktionen“

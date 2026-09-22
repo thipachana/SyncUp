@@ -2,36 +2,65 @@
 
 ## Projektbeschreibung
 
-SyncUp ist eine Webanwendung zur gemeinsamen Planung und Organisation von Terminen und Ressourcen in Teams.
+SyncUp ist eine Webanwendung zur gemeinsamen Planung von Terminen und Ressourcen in Teams.
 
-Die Anwendung unterstützt Nutzer dabei, gemeinsame freie Zeitfenster zu finden, Termine zu verwalten und Ressourcen wie Räume zentral zu reservieren.
+Die Anwendung soll dabei helfen, freie Zeitfenster zu finden und Ressourcen wie Räume für Termine zu reservieren.
 
 ## Aktuell umgesetzt
 
-- Termin- und Terminanfragen verwalten
-- Automatische Berechnung gemeinsamer freier Zeitfenster
+Aktuell sind unter anderem folgende Funktionen vorhanden:
+
+- Terminanfragen erstellen, anzeigen und löschen
+- Termine im Backend speichern und abrufen
+- freie Zeitfenster anhand vorhandener Termine berechnen
 - Ressourcen anzeigen
-- Ressourcen reservieren
-- Schutz vor überschneidenden Ressourcenbuchungen
-- Speicherung der Daten in PostgreSQL
-- Verbindung von React-Frontend, Spring-Boot-Backend und Datenbank
+- Ressourcen buchen
+- überschneidende Ressourcenbuchungen verhindern
+- Daten in PostgreSQL speichern
+- Verbindung zwischen React-Frontend, Spring-Boot-Backend und PostgreSQL
 
-## Weitere geplante Funktionen
+Einige Funktionen sind bisher nur teilweise umgesetzt. Der genaue Stand wird in der Spezifikation unter F3 „Anwendungsfunktionen“ beschrieben.
 
-- Erweiterte Benutzerverwaltung
-- Erweiterte Kalenderverwaltung
+## Noch nicht vollständig umgesetzt
+
+Dazu gehören unter anderem:
+
+- Registrierung und Anmeldung
+- vollständige Benutzerverwaltung
+- vollständige Kalender- und Terminverwaltung im Frontend
+- Teilnehmerverwaltung
 - Einladungen und Benachrichtigungen
 - Ressourcen freigeben
 - Aufgabenverwaltung
 
 ## Technologien
 
+SyncUp verwendet aktuell:
+
 - Java 21
 - Spring Boot
 - React
+- Vite
 - PostgreSQL
 - Maven
-- Docker
+- Git und GitHub
+
+Docker war ursprünglich für das Projekt vorgesehen, ist im aktuellen Stand aber noch nicht eingerichtet.
+
+## Installation
+
+Die Anleitung zur lokalen Installation und zum Start der Anwendung befindet sich in:
+
+`INSTALL.md`
+
+## Dokumentation
+
+Weitere Informationen befinden sich unter anderem in:
+
+- `docs/spec` – Spezifikation
+- `docs/TESTING.md` – Testdokumentation
+- `docs/DEMO.md` – Demoablauf
+- `docs/spec/arch` – Architekturdokumentation
 
 ## Team
 

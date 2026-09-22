@@ -1,14 +1,21 @@
-# E2. Glossar
+# E2 Glossar
+
+Stand: 22.09.2026
 
 | Begriff | Erklärung |
-|----------|-----------|
-| React | JavaScript-Bibliothek zur Entwicklung der Benutzeroberfläche. |
-| Spring Boot | Java-Framework zur Entwicklung des Backends. |
-| PostgreSQL | Relationale Datenbank zur Speicherung der Anwendungsdaten. |
-| REST | Architekturprinzip für die Kommunikation zwischen Frontend und Backend. |
-| API | Programmierschnittstelle zum Datenaustausch. |
-| Frontend | Benutzeroberfläche der Anwendung. |
-| Backend | Serverseitige Geschäftslogik der Anwendung. |
-| Repository | Git-Projekt zur Verwaltung des Quellcodes. |
-| Zeitslot | Freies gemeinsames Zeitfenster für einen Termin. |
-| Ressource | Buchbare Objekte wie Räume oder Arbeitsmittel. |
+| --- | --- |
+| React | JavaScript-Bibliothek für die Benutzeroberfläche. |
+| Vite | Werkzeug zum Starten und Erstellen des Frontends. |
+| Spring Boot | Java-Framework für das Backend. |
+| PostgreSQL | Datenbank zur Speicherung der Anwendungsdaten. |
+| REST | Art der Kommunikation zwischen Frontend und Backend. |
+| API | Schnittstelle zum Austausch von Daten zwischen verschiedenen Teilen der Anwendung. |
+| Frontend | Der Teil der Anwendung, den der Benutzer sieht und bedient. |
+| Backend | Der serverseitige Teil der Anwendung, der Daten verarbeitet und Geschäftslogik ausführt. |
+| Repository | Git-Projekt, in dem der Quellcode verwaltet wird. |
+| JPA | Java-Schnittstelle für den Zugriff auf Datenbanken. |
+| Hibernate | Wird im Backend verwendet, um Java-Objekte mit Datenbanktabellen zu verbinden. |
+| Terminanfrage | Anfrage zur Suche nach möglichen freien Zeitfenstern. |
+| Zeitslot | Ein möglicher freier Zeitraum für einen Termin. |
+| Ressource | Buchbares Objekt, zum Beispiel ein Raum. |
+| Buchung | Verbindet einen Termin mit einer Ressource und einem Zeitraum. |

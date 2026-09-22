@@ -1,88 +1,112 @@
 # D1 Datenmodell
 
+Stand: 22.09.2026
+
 ## Ziel
 
-Das Datenmodell beschreibt die wichtigsten Datenobjekte, die SyncUp für die Terminplanung, Kalenderabstimmung und Ressourcenbuchung benötigt.
+Das Datenmodell beschreibt die wichtigsten Daten, die SyncUp aktuell verwendet.
 
-## Zentrale Entitäten
+Die Daten werden in einer PostgreSQL-Datenbank gespeichert.
 
-### Benutzer
+## Benutzer
 
-Ein Benutzer ist eine Person, die SyncUp verwendet.
+Ein Benutzer stellt eine Person in SyncUp dar.
 
-Attribute:
+Wichtige Daten sind:
+
 - Benutzer-ID
 - Name
 - E-Mail-Adresse
 - Passwort
 - Rolle
 
-### Kalender
+Das Passwort wird bei API-Abfragen nicht zurückgegeben.
 
-Ein Kalender enthält Termine eines Benutzers oder eines Teams.
+Eine vollständige Registrierung und Anmeldung ist aktuell noch nicht umgesetzt.
 
-Attribute:
+## Kalender
+
+Ein Kalender wird verwendet, um Termine zu verwalten.
+
+Wichtige Daten sind:
+
 - Kalender-ID
 - Name
 - Besitzer
 - Beschreibung
 
-### Termin
+Ein Benutzer kann einen oder mehrere Kalender besitzen.
 
-Ein Termin beschreibt ein geplantes Ereignis.
+## Termin
 
-Attribute:
+Ein Termin beschreibt einen festgelegten Zeitraum.
+
+Wichtige Daten sind:
+
 - Termin-ID
 - Titel
 - Beschreibung
-- Datum
-- Startzeit
-- Endzeit
+- Beginn
+- Ende
 - Status
 
-### Terminabfrage
+Termine werden unter anderem für die Berechnung freier Zeitfenster und für Ressourcenbuchungen verwendet.
 
-Eine Terminabfrage wird erstellt, um gemeinsame freie Zeitfenster zu finden.
+## Terminanfrage
 
-Attribute:
-- Abfrage-ID
+Eine Terminanfrage wird verwendet, um mögliche freie Zeitfenster zu finden.
+
+Wichtige Daten sind:
+
+- Anfrage-ID
 - Titel
-- Zeitraum
-- Dauer
-- eingeladene Benutzer
-- Status
+- Beginn des Suchzeitraums
+- Ende des Suchzeitraums
+- zugeordnete Benutzer
 
-### Ressource
+Terminanfragen können über das Frontend erstellt, angezeigt und gelöscht werden.
 
-Eine Ressource ist zum Beispiel ein Besprechungsraum oder ein Arbeitsraum.
+## Ressource
 
-Attribute:
+Eine Ressource ist zum Beispiel ein Raum, der für einen Termin verwendet werden kann.
+
+Wichtige Daten sind:
+
 - Ressourcen-ID
 - Name
 - Typ
 - Kapazität
 - Verfügbarkeit
 
-### Buchung
+## Buchung
 
 Eine Buchung verbindet einen Termin mit einer Ressource.
 
-Attribute:
+Wichtige Daten sind:
+
 - Buchungs-ID
 - Termin
 - Ressource
 - Zeitraum
 - Status
 
+Bei einer neuen Buchung prüft das Backend, ob für dieselbe Ressource bereits eine Buchung im gewünschten Zeitraum vorhanden ist.
+
 ## Beziehungen
 
-- Ein Benutzer kann mehrere Kalender besitzen.
-- Ein Kalender kann mehrere Termine enthalten.
-- Ein Termin kann mehreren Benutzern zugeordnet sein.
-- Eine Terminabfrage kann mehrere Benutzer enthalten.
-- Eine Ressource kann für einen Termin gebucht werden.
-- Eine Buchung gehört zu genau einem Termin und genau einer Ressource.
+Die wichtigsten Beziehungen zwischen den Daten sind:
 
-## Nicht anwendbare Punkte
+- Benutzer können Kalender besitzen.
+- Kalender enthalten Termine.
+- Benutzer können Terminanfragen zugeordnet werden.
+- Eine Buchung gehört zu einem Termin.
+- Eine Buchung gehört zu einer Ressource.
+- Eine Ressource kann mehrere Buchungen haben.
 
-Ein detailliertes Datentypenverzeichnis wird für M1 noch nicht vollständig ausgearbeitet. Die genaue technische Umsetzung der Datentypen erfolgt später im Rahmen der Architektur und Implementierung.
+## Aktueller Stand
+
+Die wichtigsten Datenobjekte für Termine, Terminanfragen, Ressourcen und Buchungen sind bereits im Backend vorhanden.
+
+Einige ursprünglich geplante Funktionen, wie die vollständige Benutzerverwaltung und Teilnehmerverwaltung, sind noch nicht vollständig umgesetzt.
+
+Die genauen technischen Datentypen und Felder werden zusätzlich in D2 beschrieben.

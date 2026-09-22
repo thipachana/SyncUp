@@ -1,111 +1,144 @@
 # P2 Architekturüberblick
 
-## Ziel des Architekturüberblicks
+Stand: 22.09.2026
 
-Dieser Abschnitt beschreibt den geplanten technischen Aufbau von SyncUp auf einer groben Ebene. Der Architekturüberblick dient dazu, die wichtigsten Systembestandteile und deren Zusammenspiel verständlich darzustellen. Eine detaillierte Architekturbeschreibung erfolgt später im Meilenstein M2.
+## Ziel
 
-## Geplante Systemstruktur
+Dieser Abschnitt gibt einen Überblick über den technischen Aufbau von SyncUp und zeigt, wie die wichtigsten Teile des Systems zusammenarbeiten.
 
-SyncUp soll als Webanwendung umgesetzt werden. Das System besteht aus einem Frontend, einem Backend und einer Datenbank.
+Eine ausführlichere Beschreibung der Architektur befindet sich in der separaten arc42-Dokumentation.
 
-Das Frontend stellt die Benutzeroberfläche bereit. Über diese können Nutzer Termine, Aufgaben und Ressourcen verwalten.
+## Systemstruktur
 
-Das Backend verarbeitet die Anfragen des Frontends, enthält die Geschäftslogik und stellt Schnittstellen für die Kommunikation bereit.
+SyncUp besteht aus drei Hauptbereichen:
 
-Die Datenbank speichert die benötigten Informationen dauerhaft, zum Beispiel Benutzer, Termine, Aufgaben, Kalender und Ressourcen.
+- **Frontend:** Benutzeroberfläche der Anwendung
+- **Backend:** Verarbeitung der Anfragen und Geschäftslogik
+- **Datenbank:** Speicherung der Daten
+
+Das Frontend kommuniziert über REST-Schnittstellen mit dem Backend. Die Daten werden dabei im JSON-Format übertragen.
+
+Das Backend greift über Spring Data JPA und Hibernate auf die PostgreSQL-Datenbank zu.
+
+Das Frontend hat keinen direkten Zugriff auf die Datenbank.
 
 ## Frontend
 
-Das Frontend soll mit React umgesetzt werden. Es ist für die Darstellung der Oberfläche und die Interaktion mit den Nutzern zuständig.
+Das Frontend wurde mit React und JavaScript/JSX entwickelt. Für die Entwicklungsumgebung und den Build wird Vite verwendet.
 
-Geplante Bereiche im Frontend sind:
+Aktuell können über das Frontend unter anderem folgende Funktionen genutzt werden:
 
-- Login und Registrierung
+- Terminanfragen erstellen, anzeigen und löschen
+- freie Zeitfenster berechnen und anzeigen
+- vorhandene Ressourcen anzeigen
+- Ressourcen für einen vorhandenen Termin buchen
+- Rückmeldungen bei erfolgreichen oder nicht möglichen Buchungen anzeigen
+
+Für eine Ressourcenbuchung wird aktuell die ID eines vorhandenen Termins eingegeben. Eine direkte Auswahl aus einer Terminliste gibt es noch nicht.
+
+Noch nicht vollständig umgesetzt sind unter anderem:
+
+- Anmeldung und Registrierung
 - Dashboard
-- Kalenderansicht
-- Terminplanung
-- Aufgabenübersicht
-- Ressourcenübersicht
+- vollständige Kalender- und Terminverwaltung
+- Teilnehmerauswahl
+- Aufgabenverwaltung
+- Einladungen und Benachrichtigungen
 
 ## Backend
 
-Das Backend soll mit Spring Boot umgesetzt werden. Es verarbeitet die fachliche Logik der Anwendung.
+Das Backend wurde mit Spring Boot umgesetzt. Das Projekt verwendet Java 21 als Zielversion.
 
-Zu den geplanten Aufgaben des Backends gehören:
+Der Aufbau besteht hauptsächlich aus:
 
-- Verwaltung von Benutzern
-- Verwaltung von Terminen
-- Abgleich von Kalendern
-- Berechnung gemeinsamer freier Zeitslots
-- Verwaltung von Ressourcen wie Räumen
-- Bereitstellung von REST-Schnittstellen für das Frontend
+- **Controllern:** Verarbeiten Anfragen des Frontends und stellen die REST-Schnittstellen bereit.
+- **Repositories:** Werden verwendet, um Daten aus der Datenbank zu lesen und zu speichern.
+- **Entity-Klassen:** Stellen die Datenobjekte der Anwendung dar.
+
+Eine eigene Service-Schicht ist aktuell noch nicht vorhanden. Ein Teil der Geschäftslogik befindet sich deshalb direkt in den Controllern.
+
+Das Backend ermöglicht aktuell unter anderem:
+
+- Termine anlegen und abrufen
+- Terminanfragen anlegen, abrufen und löschen
+- freie Zeitfenster berechnen
+- Ressourcen anlegen und abrufen
+- Ressourcenbuchungen anlegen und abrufen
+- Überschneidungen bei Ressourcenbuchungen prüfen
+
+Benutzer und Kalender sind bereits als Datenmodelle vorhanden. Eine vollständige Benutzerverwaltung mit Anmeldung und Registrierung ist noch nicht umgesetzt.
 
 ## Datenbank
 
-Für die Speicherung der Daten ist PostgreSQL vorgesehen.
+Für die Speicherung der Daten verwendet SyncUp PostgreSQL.
 
-Gespeichert werden voraussichtlich:
+Aktuell werden unter anderem folgende Daten gespeichert:
 
 - Benutzer
 - Kalender
 - Termine
-- Aufgaben
+- Terminanfragen
 - Ressourcen
 - Buchungen
 
-## Kommunikation der Komponenten
+Benutzer können außerdem Terminanfragen zugeordnet werden.
 
-Das Frontend kommuniziert mit dem Backend über REST-Schnittstellen. Das Backend greift auf die Datenbank zu, um Daten zu lesen, zu speichern oder zu ändern.
+Für die geplante Aufgabenverwaltung gibt es aktuell noch kein vollständiges Datenmodell.
 
-Vereinfacht dargestellt:
+Hibernate erstellt beziehungsweise aktualisiert die benötigten Tabellen während der Entwicklung anhand der Entity-Klassen.
 
-## Grober Systemaufbau
+Das Datenmodell wird zusätzlich in D1 und D2 beschrieben.
 
-Die Architektur von SyncUp besteht aus drei Hauptkomponenten:
+## Zusammenspiel der Komponenten
 
-```text
-                Benutzer
-                    │
-                    ▼
-        +----------------------+
-        |  React Frontend      |
-        +----------------------+
-                    │
-            REST-Schnittstelle
-                    │
-                    ▼
-        +----------------------+
-        | Spring Boot Backend  |
-        +----------------------+
-                    │
-                    ▼
-        +----------------------+
-        | PostgreSQL Datenbank |
-        +----------------------+
-```
+### Freie Zeitfenster berechnen
 
-### Aufgaben der Komponenten
+1. Eine Terminanfrage wird über das Frontend erstellt.
+2. Das Frontend sendet die Daten an das Backend.
+3. Die Terminanfrage wird in PostgreSQL gespeichert.
+4. Die Berechnung der freien Zeitfenster wird angefordert.
+5. Das Backend berücksichtigt bereits vorhandene Termine.
+6. Mögliche freie Zeitfenster werden berechnet.
+7. Das Ergebnis wird an das Frontend zurückgegeben und dort angezeigt.
 
-**Frontend**
-- Benutzeroberfläche
-- Kalenderansicht
-- Terminverwaltung
-- Ressourcenübersicht
+Die vollständige Teilnehmerauswahl ist aktuell noch nicht über das Frontend umgesetzt.
 
-**Backend**
-- Geschäftslogik
-- Berechnung gemeinsamer freier Termine
-- Benutzerverwaltung
-- REST-API
+### Ressource buchen
 
-**Datenbank**
-- Speicherung von Benutzern
-- Terminen
-- Aufgaben
-- Ressourcen
+1. Das Frontend lädt die vorhandenen Ressourcen.
+2. Der Benutzer wählt eine Ressource aus und gibt eine Termin-ID sowie einen Zeitraum an.
+3. Die Buchungsanfrage wird an das Backend geschickt.
+4. Das Backend prüft, ob sich der Zeitraum mit einer vorhandenen Buchung derselben Ressource überschneidet.
+5. Wenn keine Überschneidung besteht, wird die Buchung gespeichert.
+6. Bei einer Überschneidung lehnt das Backend die Buchung mit dem HTTP-Status 409 ab.
+7. Das Frontend zeigt eine entsprechende Meldung an.
 
-## Technische Annahmen
+## Lokale Ausführung
 
-Für die erste Version von SyncUp wird eine Webanwendung mit React, Spring Boot und PostgreSQL verwendet. Die Kommunikation zwischen Frontend und Backend erfolgt über eine REST-Schnittstelle.
+Frontend, Backend und Datenbank werden während der Entwicklung lokal ausgeführt.
 
-Die Synchronisierung bezieht sich zunächst auf die innerhalb von SyncUp gespeicherten Kalender- und Termindaten. Eine Anbindung an externe Kalenderdienste kann in einer späteren Version ergänzt werden.
+Standardmäßig werden folgende Adressen beziehungsweise Ports verwendet:
+
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:8080`
+- PostgreSQL: `localhost:5432`
+
+Die Adresse des Backends kann im Frontend über `VITE_API_URL` eingestellt werden.
+
+Weitere Informationen zur Installation und zum Start der Anwendung befinden sich in S3 „Inbetriebnahme“ und in `INSTALL.md`.
+
+## Geplante Erweiterungen
+
+Einige ursprünglich geplante Funktionen sind aktuell noch nicht vollständig umgesetzt.
+
+Dazu gehören insbesondere:
+
+- Anmeldung und Registrierung
+- Zugriffskontrolle
+- vollständige Kalender- und Terminverwaltung
+- Teilnehmerverwaltung
+- Aufgabenverwaltung
+- Einladungen und Benachrichtigungen
+- Anbindung externer Kalenderdienste
+
+Diese Funktionen können in einer späteren Version von SyncUp ergänzt werden.

@@ -1,21 +1,21 @@
 # F3 Anwendungsfunktionen
 
+Stand: 22.09.2026
+
 ## Ziel
 
-Dieser Abschnitt beschreibt die wichtigsten Funktionen der Webanwendung SyncUp.
+Dieser Abschnitt zeigt, welche Funktionen für SyncUp geplant sind und was davon aktuell bereits umgesetzt ist.
 
----
+## Geplante Funktionen
 
-## Benutzerverwaltung
+### Benutzerverwaltung
 
 - Benutzer registrieren
 - Benutzer anmelden
 - Profil bearbeiten
 - Passwort ändern
 
----
-
-## Kalenderverwaltung
+### Kalenderverwaltung
 
 - Eigenen Kalender anzeigen
 - Termine erstellen
@@ -23,60 +23,47 @@ Dieser Abschnitt beschreibt die wichtigsten Funktionen der Webanwendung SyncUp.
 - Termine löschen
 - Termine durchsuchen
 
----
-
-## Terminplanung
+### Terminplanung
 
 - Teilnehmer hinzufügen
 - Gemeinsame freie Zeitfenster berechnen
 - Termine bestätigen
 - Einladungen versenden
 
----
-
-## Ressourcenverwaltung
+### Ressourcenverwaltung
 
 - Räume anzeigen
 - Räume reservieren
 - Ressourcen freigeben
 - Verfügbarkeit prüfen
 
----
-
-## Benachrichtigungen
+### Benachrichtigungen
 
 - Termineinladungen senden
 - Terminänderungen anzeigen
 - Erinnerungen versenden
 
----
-
-## Nicht funktionale Hinweise
-
-Die technische Implementierung der Funktionen erfolgt in den späteren Meilensteinen M2 und M3.
-
----
-
 ## Aktueller Umsetzungsstand
-
-Stand: 21.09.2026
 
 ### Umgesetzt
 
+- Terminanfragen erstellen, anzeigen und löschen
+- Termine im Backend speichern und abrufen
 - Gemeinsame freie Zeitfenster berechnen
-- Räume anzeigen
-- Räume reservieren
+- Räume beziehungsweise Ressourcen anzeigen
+- Ressourcen reservieren
 - Überschneidende Ressourcenbuchungen verhindern
-- Termin- und Terminanfragen technisch mit dem Backend verarbeiten
-- Persistente Speicherung über PostgreSQL
+- Daten in PostgreSQL speichern
 
 ### Teilweise umgesetzt
 
 - Verfügbarkeit von Ressourcen prüfen
 - Kalender- und Terminverwaltung
+- Gemeinsame Terminplanung
 
-### Noch offen
+### Noch nicht vollständig umgesetzt
 
+- Registrierung und Anmeldung
 - Vollständige Benutzerverwaltung
 - Profil bearbeiten
 - Passwort ändern
@@ -84,3 +71,4 @@ Stand: 21.09.2026
 - Einladungen versenden
 - Ressourcen freigeben
 - Benachrichtigungen und Erinnerungen
+- Aufgabenverwaltung

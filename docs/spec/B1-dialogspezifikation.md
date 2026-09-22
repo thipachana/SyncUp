@@ -1,41 +1,81 @@
 # B1 Dialogspezifikation
 
+Stand: 22.09.2026
+
 ## Ziel
 
-Die Dialogspezifikation beschreibt die wichtigsten Benutzeroberflächen von SyncUp. Sie dient als Grundlage für die spätere Umsetzung des Frontends.
+Dieser Abschnitt beschreibt die wichtigsten Benutzeroberflächen von SyncUp und den aktuellen Stand des Frontends.
 
-## Geplante Ansichten
+## Login und Registrierung
 
-### Login und Registrierung
+Eine Anmeldung und Registrierung ist für SyncUp vorgesehen.
 
-Nutzer können sich anmelden oder ein neues Konto erstellen. Für die erste Version ist eine Registrierung mit E-Mail-Adresse und Passwort vorgesehen.
+Benutzer sollen sich mit ihrer E-Mail-Adresse und einem Passwort anmelden oder ein neues Konto erstellen können.
 
-### Dashboard
+Diese Funktionen sind aktuell noch nicht umgesetzt.
 
-Das Dashboard zeigt eine Übersicht über anstehende Termine, offene Aufgaben und relevante Benachrichtigungen.
+## Dashboard
 
-### Kalenderansicht
+Ein Dashboard mit einer Übersicht über Termine, Aufgaben und Benachrichtigungen ist geplant.
 
-In der Kalenderansicht können Nutzer eigene Termine sehen und neue Termine erstellen. Außerdem sollen freie und belegte Zeiträume übersichtlich dargestellt werden.
+Diese Ansicht ist aktuell noch nicht umgesetzt.
 
-### Terminplanung
+## Termine und Terminanfragen
 
-In dieser Ansicht kann ein Nutzer eine neue Terminabfrage erstellen. Dabei werden Titel, Zeitraum, Dauer und eingeladene Personen angegeben. SyncUp soll daraus mögliche gemeinsame freie Zeitfenster ableiten.
+Terminanfragen können im Frontend angezeigt, erstellt und gelöscht werden.
 
-### Ressourcenübersicht
+Termine werden aktuell hauptsächlich über das Backend verwaltet.
 
-Die Ressourcenübersicht zeigt verfügbare Räume oder andere Ressourcen. Bei der Erstellung eines Termins kann eine passende Ressource ausgewählt und reserviert werden.
+Für Terminanfragen können freie Zeitfenster berechnet und im Frontend angezeigt werden.
 
-### Aufgabenübersicht
+## Terminplanung
 
-In der Aufgabenübersicht können Nutzer Aufgaben anlegen, bearbeiten und als erledigt markieren.
+Für eine Terminanfrage wird ein Zeitraum festgelegt.
 
-## Wichtige Bedienabläufe
+Das Backend berücksichtigt bereits vorhandene Termine und berechnet daraus mögliche freie Zeitfenster.
 
-1. Nutzer meldet sich an.
-2. Nutzer öffnet die Kalenderansicht.
-3. Nutzer erstellt eine Terminabfrage.
-4. System zeigt mögliche freie Zeitfenster.
-5. Nutzer wählt einen Vorschlag aus.
-6. Nutzer reserviert optional eine Ressource.
-7. Termin wird gespeichert
+Die Ergebnisse werden im Frontend angezeigt.
+
+Noch nicht vollständig umgesetzt sind:
+
+- Teilnehmerauswahl
+- vollständiger Abgleich mehrerer Teilnehmer über das Frontend
+- Einladungen
+- Bestätigung eines freien Zeitfensters als neuer Termin
+
+## Ressourcen
+
+Vorhandene Ressourcen wie Räume können im Frontend angezeigt werden.
+
+Für eine Ressource kann eine Buchung mit einer vorhandenen Termin-ID und einem Zeitraum erstellt werden.
+
+Das Backend prüft, ob für dieselbe Ressource bereits eine Buchung im gewünschten Zeitraum vorhanden ist.
+
+Bei einer Überschneidung wird die Buchung abgelehnt und das Frontend zeigt eine Fehlermeldung an.
+
+## Aufgaben
+
+Eine Aufgabenverwaltung ist geplant.
+
+Das Anlegen, Bearbeiten und Abschließen von Aufgaben ist aktuell noch nicht umgesetzt.
+
+## Aktuell mögliche Bedienabläufe
+
+Aktuell können unter anderem folgende Abläufe über die Oberfläche durchgeführt werden:
+
+1. Terminanfragen anzeigen, erstellen und löschen.
+2. Freie Zeitfenster für eine Terminanfrage berechnen und anzeigen.
+3. Vorhandene Ressourcen anzeigen.
+4. Eine Ressource für einen vorhandenen Termin buchen.
+5. Eine Fehlermeldung anzeigen, wenn eine Ressource im gewünschten Zeitraum bereits gebucht ist.
+
+## Noch nicht vollständig umgesetzt
+
+- Anmeldung und Registrierung
+- Profil- und Passwortverwaltung
+- vollständige Terminverwaltung im Frontend
+- Teilnehmerverwaltung
+- Einladungen
+- Aufgabenverwaltung
+- Benachrichtigungen und Erinnerungen
+- Freigabe bereits gebuchter Ressourcen

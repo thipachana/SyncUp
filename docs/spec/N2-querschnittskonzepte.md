@@ -1,21 +1,46 @@
-# N2. Querschnittskonzepte
+# N2 Querschnittskonzepte
+
+Stand: 22.09.2026
 
 ## Fehlerbehandlung
 
-Fehlerhafte Eingaben werden durch das Backend geprüft. Dem Benutzer werden verständliche Fehlermeldungen angezeigt.
+Das Backend prüft Anfragen und kann bei Fehlern eine entsprechende Fehlermeldung zurückgeben.
+
+Zum Beispiel wird eine Ressourcenbuchung abgelehnt, wenn die Ressource im gleichen Zeitraum bereits gebucht ist. Das Frontend zeigt dem Benutzer dann eine Fehlermeldung an.
 
 ## Sicherheit
 
-Die Kommunikation zwischen Frontend und Backend erfolgt über REST-Schnittstellen. Für eine produktive Bereitstellung ist eine verschlüsselte HTTPS-Verbindung vorgesehen. Benutzer authentifizieren sich mit ihren Zugangsdaten.
+Frontend und Backend kommunizieren über REST-Schnittstellen.
+
+Passwörter werden bei API-Abfragen nicht an das Frontend zurückgegeben.
+
+Eine vollständige Anmeldung und Zugriffskontrolle ist aktuell noch nicht umgesetzt.
+
+Für eine spätere produktive Nutzung sollte die Verbindung zusätzlich über HTTPS abgesichert werden.
 
 ## Datenhaltung
 
-Alle Daten werden in einer PostgreSQL-Datenbank gespeichert. Dazu gehören Benutzer, Kalender, Termine und Ressourcen.
+Die Daten werden in einer PostgreSQL-Datenbank gespeichert.
+
+Dazu gehören aktuell unter anderem:
+
+- Benutzer
+- Kalender
+- Termine
+- Terminanfragen
+- Ressourcen
+- Buchungen
+
+Für den Zugriff auf die Daten verwendet das Backend Spring Data JPA und Hibernate.
 
 ## Kommunikation
 
-Das Frontend kommuniziert über REST mit dem Backend. Die Daten werden im JSON-Format übertragen.
+Das Frontend kommuniziert über REST mit dem Backend.
+
+Die Daten werden dabei im JSON-Format übertragen.
 
 ## Protokollierung
 
-Anwendungsfehler und Systemereignisse können serverseitig protokolliert werden, um Fehler einfacher zu analysieren.
+Spring Boot gibt beim Start und während der Ausführung Informationen und Fehlermeldungen im Backend-Terminal aus.
+
+Eine eigene Protokollierungsfunktion innerhalb von SyncUp wurde bisher nicht umgesetzt.

@@ -1,9 +1,15 @@
-# S1. Nachbarsysteme
+# S1 Nachbarsysteme
+
+Stand: 22.09.2026
 
 ## Beschreibung
 
-In der ersten Version von SyncUp werden keine externen Nachbarsysteme verwendet. Die Verwaltung von Benutzern, Kalendern, Terminen und Ressourcen erfolgt vollständig innerhalb der Anwendung.
+SyncUp verwendet aktuell keine externen Systeme.
 
-## Zukünftige Erweiterungen
+Benutzer, Kalender, Termine, Terminanfragen und Ressourcen werden innerhalb von SyncUp verwaltet und in der eigenen PostgreSQL-Datenbank gespeichert.
 
-Eine spätere Anbindung an externe Kalenderdienste wie Google Calendar oder Microsoft Outlook ist möglich, gehört jedoch nicht zum Umfang der ersten Version.
+## Mögliche Erweiterungen
+
+In Zukunft könnte SyncUp mit externen Kalenderdiensten wie Google Calendar oder Microsoft Outlook verbunden werden.
+
+Diese Anbindungen sind aktuell nicht umgesetzt und gehören nicht zur aktuellen Version von SyncUp.

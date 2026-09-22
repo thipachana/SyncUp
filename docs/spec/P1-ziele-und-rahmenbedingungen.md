@@ -1,53 +1,105 @@
 # P1 Ziele und Rahmenbedingungen
 
-# Projektziel
+Stand: 22.09.2026
 
-SyncUp ist eine Webanwendung zur gemeinsamen Planung und Organisation von Terminen, Aufgaben und Ressourcen. Ziel ist es, die Abstimmung innerhalb von Teams zu vereinfachen und automatische Vorschläge für gemeinsame freie Zeitfenster bereitzustellen.
+## Projektziel
 
-# Problemstellung
+SyncUp ist eine Webanwendung, die Teams bei der gemeinsamen Planung von Terminen und Ressourcen unterstützen soll.
 
-Viele Termine werden heute über Messenger, E-Mail oder verschiedene Kalender organisiert. Dadurch entstehen Terminüberschneidungen, lange Abstimmungen und organisatorischer Aufwand.
+Das Ziel ist es, die Terminabstimmung einfacher zu machen. Nutzer sollen gemeinsame freie Zeitfenster finden und Ressourcen wie zum Beispiel Besprechungsräume für Termine reservieren können.
 
-# Projektumfang
+## Problemstellung
 
-Das System unterstützt folgende Funktionen:
+Die Abstimmung von Terminen findet häufig über verschiedene Wege wie Messenger, E-Mail oder Kalender statt. Dadurch kann die Planung schnell unübersichtlich werden und es können Terminüberschneidungen entstehen.
 
-- Benutzerverwaltung
-- Gemeinsame Kalender
-- Terminplanung
-- Automatische Erkennung freier Zeitfenster
-- Ressourcenverwaltung
+SyncUp soll die wichtigsten Informationen an einer Stelle zusammenführen und dadurch die gemeinsame Terminplanung vereinfachen.
+
+## Geplanter Projektumfang
+
+Für SyncUp wurden folgende Funktionsbereiche geplant:
+
+- Benutzerverwaltung mit Registrierung und Anmeldung
+- Kalender- und Terminverwaltung
+- Berechnung gemeinsamer freier Zeitfenster
+- Ressourcenverwaltung und Ressourcenbuchung
 - Aufgabenverwaltung
+- Einladungen und Benachrichtigungen
 
-Nicht Bestandteil des Projekts sind:
+Nicht alle ursprünglich geplanten Funktionen sind im aktuellen Stand bereits vollständig umgesetzt. Der genaue Umsetzungsstand wird in F3 „Anwendungsfunktionen“ beschrieben.
+
+Nicht zum Projekt gehören:
 
 - Zahlungsfunktionen
 - Rechnungsverwaltung
 - Warenwirtschaft
 - Buchhaltung
 
-# Zielgruppe
+Eine Verbindung zu externen Kalenderdiensten wie Google Calendar oder Microsoft Outlook wäre eine mögliche spätere Erweiterung und gehört nicht zur aktuellen Version.
 
-Die Anwendung richtet sich an:
+## Aktueller Entwicklungsstand
+
+Der aktuelle Stand von SyncUp besteht aus einem React-Frontend, einem Spring-Boot-Backend und einer PostgreSQL-Datenbank.
+
+Bereits umgesetzt sind unter anderem:
+
+- Terminanfragen erstellen, anzeigen und löschen
+- Vorhandene Ressourcen anzeigen
+- Ressourcen für einen vorhandenen Termin buchen
+- Überschneidende Buchungen derselben Ressource verhindern
+- Daten dauerhaft in PostgreSQL speichern
+- Termine über das Backend anlegen und abrufen
+
+Die gemeinsame Terminfindung ist teilweise umgesetzt. Das Backend kann anhand vorhandener Termine freie Zeitfenster berechnen. Diese können anschließend im Frontend angezeigt werden.
+
+Für einen vollständigen Ablauf fehlen aktuell noch Funktionen wie die Teilnehmerauswahl und eine vollständige Terminverwaltung über das Frontend.
+
+Noch nicht vollständig umgesetzt sind unter anderem:
+
+- Registrierung und Anmeldung
+- Zugriffskontrolle
+- vollständige Kalender- und Terminverwaltung im Frontend
+- Aufgabenverwaltung
+- Einladungen und Benachrichtigungen
+- Freigabe bereits gebuchter Ressourcen
+
+Der aktuelle Stand der einzelnen Funktionen wird zusätzlich in F3 „Anwendungsfunktionen“ dokumentiert.
+
+## Zielgruppe
+
+SyncUp richtet sich hauptsächlich an:
 
 - Studierende
 - Projektgruppen
-- Unternehmen
+- kleine Teams
 - Vereine
-- Teams
+- Teams innerhalb von Unternehmen
 
-# Rahmenbedingungen
+## Rahmenbedingungen
 
-- Webanwendung
-- Mehrbenutzerfähig
-- Moderne Browser werden unterstützt
-- Daten werden zentral gespeichert
-- Benutzer melden sich mit einem Konto an
+- SyncUp wird als browserbasierte Webanwendung entwickelt.
+- Das System besteht aus Frontend, Backend und Datenbank.
+- Die Daten werden in PostgreSQL gespeichert.
+- Die Anwendung wird aktuell lokal ausgeführt.
+- Frontend und Backend kommunizieren über REST-Schnittstellen.
+- Eine vollständige Benutzeranmeldung und Zugriffskontrolle ist aktuell noch nicht umgesetzt.
+- Die Installation und der Start der Anwendung werden in S3 „Inbetriebnahme“ und in der Installationsanleitung beschrieben.
 
-# Erfolgsziele
+## Erfolgsziele
 
-- Weniger Abstimmungsaufwand
-- Schnellere Terminfindung
-- Bessere Teamorganisation
-- Einfache Bedienung
-- Zentrale Verwaltung aller Termine und Ressourcen
+Mit SyncUp sollen vor allem folgende Ziele erreicht werden:
+
+- Weniger Aufwand bei der gemeinsamen Terminfindung
+- Freie Zeitfenster übersichtlich anzeigen
+- Termine und Ressourcen zentral verwalten
+- Überschneidende Ressourcenbuchungen verhindern
+- Eine möglichst einfache und verständliche Bedienung
+
+Ob die bereits umgesetzten Funktionen korrekt funktionieren, wird anhand der Testdokumentation überprüft.
+
+## Abgrenzung des aktuellen Umfangs
+
+Während der Entwicklung wurde der geplante Funktionsumfang an den aktuellen Projektstand angepasst.
+
+Funktionen, die bis zur Abgabe nicht vollständig umgesetzt werden, werden weiterhin dokumentiert, aber klar als noch offen oder nur teilweise umgesetzt gekennzeichnet.
+
+Der genaue Stand der einzelnen Funktionen ist in F3 „Anwendungsfunktionen“ festgehalten.

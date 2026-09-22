@@ -1,34 +1,90 @@
 # SyncUp – Demo-Ablauf
 
+Stand: 22.09.2026
+
 ## 1. Anwendung starten
-- PostgreSQL starten
-- Spring-Boot-Backend starten
-- React-Frontend starten
 
-## 2. Terminplanung zeigen
-- Vorhandene Termine anzeigen
-- Terminanfragen anzeigen
-- Automatische Berechnung freier Zeitfenster demonstrieren
-- Zeigen, dass bereits belegte Zeiten nicht als frei angezeigt werden
+Für die Demo werden nacheinander gestartet:
 
-## 3. Ressourcenverwaltung zeigen
-- Raum A101 anzeigen
-- Typ und Kapazität erklären
-- Ressource für einen Termin buchen
+- PostgreSQL
+- Spring-Boot-Backend
+- React-Frontend
+
+Anschließend wird SyncUp im Browser geöffnet.
+
+## 2. Terminanfragen zeigen
+
+- Vorhandene Terminanfragen anzeigen
+- Neue Terminanfrage erstellen
+- Terminanfrage nach dem Speichern anzeigen
+- Terminanfrage bei Bedarf wieder löschen
+
+## 3. Freie Zeitfenster zeigen
+
+- Für eine Terminanfrage freie Zeitfenster berechnen
+- Ergebnis im Frontend anzeigen
+- Zeigen, dass bereits belegte Zeiten bei der Berechnung berücksichtigt werden
+
+Die vollständige Teilnehmerauswahl ist aktuell noch nicht über das Frontend umgesetzt.
+
+## 4. Ressourcen zeigen
+
+- Vorhandene Ressourcen anzeigen
+- Name, Typ und Kapazität einer Ressource erklären
+- Ressource für einen vorhandenen Termin buchen
 - Erfolgreiche Buchung zeigen
 
-## 4. Doppelbuchung testen
-- Dieselbe Ressource für einen überschneidenden Zeitraum erneut buchen
-- SyncUp verhindert die Buchung
-- Frontend zeigt die Meldung:
-  "Ressource ist in diesem Zeitraum bereits gebucht."
+## 5. Doppelbuchung testen
 
-## 5. Datenbank / Backend erklären
-- Termine, Benutzer, Ressourcen und Buchungen werden in PostgreSQL gespeichert
-- React kommuniziert über REST mit dem Spring-Boot-Backend
+Anschließend wird dieselbe Ressource für einen überschneidenden Zeitraum erneut gebucht.
 
-## 6. Sicherheit zeigen
-- Benutzerpasswort wird nicht über die API ausgegeben
+Erwartetes Ergebnis:
+
+- Die zweite Buchung wird nicht gespeichert
+- Das Backend antwortet mit HTTP 409
+- Das Frontend zeigt die Meldung:
+
+`Ressource ist in diesem Zeitraum bereits gebucht.`
+
+## 6. Backend und Datenbank erklären
+
+Während der Demo kann kurz erklärt werden:
+
+- Daten werden in PostgreSQL gespeichert
+- Das Frontend kommuniziert über REST mit dem Spring-Boot-Backend
+- Das Backend verarbeitet die Anfragen und greift auf die Datenbank zu
+
+Zu den gespeicherten Daten gehören unter anderem:
+
+- Benutzer
+- Kalender
+- Termine
+- Terminanfragen
+- Ressourcen
+- Buchungen
+
+## 7. Sicherheit zeigen
+
+Über eine API-Abfrage kann gezeigt werden, dass das Passwort eines Benutzers nicht ausgegeben wird.
+
+Eine vollständige Anmeldung und Zugriffskontrolle ist aktuell noch nicht umgesetzt.
 
 ## Aktueller Stand
-SyncUp unterstützt aktuell die Terminplanung, automatische Zeitslot-Erkennung und Ressourcenreservierung. Weitere Funktionen wie Benachrichtigungen und vollständige Benutzerverwaltung sind noch vorgesehen.
+
+Aktuell sind unter anderem folgende Funktionen vorhanden:
+
+- Terminanfragen erstellen, anzeigen und löschen
+- freie Zeitfenster berechnen
+- Ressourcen anzeigen
+- Ressourcen buchen
+- überschneidende Ressourcenbuchungen verhindern
+- Speicherung der Daten in PostgreSQL
+
+Noch nicht vollständig umgesetzt sind unter anderem:
+
+- Anmeldung und Registrierung
+- Teilnehmerverwaltung
+- vollständige Terminverwaltung im Frontend
+- Einladungen und Benachrichtigungen
+- Aufgabenverwaltung
+- Freigabe von Ressourcen

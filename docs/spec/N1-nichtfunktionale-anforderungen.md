@@ -1,21 +1,35 @@
-# N1. Nichtfunktionale Anforderungen
+# N1 Nichtfunktionale Anforderungen
+
+Stand: 22.09.2026
 
 ## Benutzerfreundlichkeit
 
-Die Anwendung soll einfach verständlich und ohne lange Einarbeitung nutzbar sein.
+SyncUp soll einfach aufgebaut und ohne lange Einarbeitung nutzbar sein.
+
+Die wichtigsten Funktionen sollen für den Benutzer verständlich dargestellt werden.
 
 ## Performance
 
-Die Antwortzeit für das Laden von Kalendern und Terminen soll im Normalfall unter zwei Sekunden liegen.
+Die Anwendung soll bei normaler Nutzung möglichst schnell auf Anfragen reagieren.
+
+Das Laden und Speichern von Daten soll ohne unnötig lange Wartezeiten möglich sein.
 
 ## Sicherheit
 
-Benutzerdaten dürfen nur für berechtigte Benutzer zugänglich sein. Passwörter werden verschlüsselt gespeichert.
+Benutzerdaten und Passwörter sollen geschützt verarbeitet werden.
+
+Passwörter werden bei API-Abfragen nicht an das Frontend zurückgegeben.
+
+Eine vollständige Anmeldung und Zugriffskontrolle sowie eine sichere Passwortspeicherung sind aktuell noch nicht umgesetzt.
 
 ## Wartbarkeit
 
-Die Anwendung wird in Frontend, Backend und Datenbank getrennt entwickelt, sodass Erweiterungen einfacher möglich sind.
+SyncUp ist in Frontend, Backend und Datenbank aufgeteilt.
+
+Dadurch können die einzelnen Bereiche getrennt bearbeitet und erweitert werden.
 
 ## Verfügbarkeit
 
-Die Anwendung soll während des regulären Betriebs zuverlässig erreichbar sein.
+Die Anwendung soll während der Nutzung stabil laufen.
+
+Da SyncUp aktuell lokal ausgeführt wird, hängt die Verfügbarkeit auch davon ab, ob Frontend, Backend und Datenbank gestartet sind.
