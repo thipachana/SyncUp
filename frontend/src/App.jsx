@@ -64,22 +64,36 @@ function App() {
 
   const createAppointmentRequest = async () => {
     if (!title || !start || !end || !duration) {
-      setMessage('Bitte Titel, Von und Bis ausfüllen.')
+      setMessage('Bitte Titel, Von, Bis und Dauer ausfüllen.')
       return
     }
 
     const startDate = new Date(start)
     const endDate = new Date(end)
+    const durationNumber = Number(duration)
 
     if (endDate <= startDate) {
       setMessage('Das Enddatum muss nach dem Startdatum liegen.')
       return
     }
 
+    if (durationNumber <= 0) {
+      setMessage('Die gewünschte Dauer muss größer als 0 Minuten sein.')
+      return
+    }
+
+    const searchWindowMinutes =
+      (endDate.getTime() - startDate.getTime()) / 60000
+
+    if (durationNumber > searchWindowMinutes) {
+      setMessage('Die gewünschte Dauer darf nicht länger als der Suchzeitraum sein.')
+      return
+    }
+
     const request = {
       titel: title,
       zeitraum: `${start} bis ${end}`,
-      dauer: Number(duration),
+      dauer: durationNumber,
       status: 'OFFEN',
     }
 
