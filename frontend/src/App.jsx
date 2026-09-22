@@ -90,11 +90,19 @@ function App() {
       return
     }
 
+    if (selectedBenutzer.length === 0) {
+      setMessage('Bitte mindestens einen Teilnehmer auswählen.')
+      return
+    }
+
     const request = {
       titel: title,
       zeitraum: `${start} bis ${end}`,
       dauer: durationNumber,
       status: 'OFFEN',
+      benutzer: selectedBenutzer.map((id) => ({
+        benutzerId: id,
+      })),
     }
 
     try {
@@ -125,6 +133,7 @@ function App() {
       setStart('')
       setEnd('')
       setDuration('60')
+      setSelectedBenutzer([])
     } catch (error) {
       setMessage(
         'Fehler beim Erstellen. Läuft das Backend auf Port 8080?'
@@ -323,6 +332,38 @@ function App() {
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
             />
+          </div>
+
+          <div className="form-group">
+            <label>Teilnehmer</label>
+
+            <button
+              type="button"
+              onClick={loadBenutzer}
+            >
+              Teilnehmer laden
+            </button>
+
+            {benutzerMessage && (
+              <small>{benutzerMessage}</small>
+            )}
+
+            {benutzer.map((person) => (
+              <label key={person.benutzerId}>
+                <input
+                  type="checkbox"
+                  checked={selectedBenutzer.includes(person.benutzerId)}
+                  onChange={() => {
+                    setSelectedBenutzer((prev) =>
+                      prev.includes(person.benutzerId)
+                        ? prev.filter((id) => id !== person.benutzerId)
+                        : [...prev, person.benutzerId]
+                    )
+                  }}
+                />
+                {person.name} ({person.email})
+              </label>
+            ))}
           </div>
 
           <button
