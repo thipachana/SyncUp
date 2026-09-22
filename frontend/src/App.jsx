@@ -9,6 +9,7 @@ function App() {
   const [title, setTitle] = useState('')
   const [start, setStart] = useState('')
   const [end, setEnd] = useState('')
+  const [duration, setDuration] = useState('60')
   const [message, setMessage] = useState('')
 
   const [appointmentRequests, setAppointmentRequests] = useState([])
@@ -62,7 +63,7 @@ function App() {
   }, [])
 
   const createAppointmentRequest = async () => {
-    if (!title || !start || !end) {
+    if (!title || !start || !end || !duration) {
       setMessage('Bitte Titel, Von und Bis ausfüllen.')
       return
     }
@@ -75,14 +76,10 @@ function App() {
       return
     }
 
-    const duration = Math.round(
-      (endDate.getTime() - startDate.getTime()) / 60000
-    )
-
     const request = {
       titel: title,
       zeitraum: `${start} bis ${end}`,
-      dauer: duration,
+      dauer: Number(duration),
       status: 'OFFEN',
     }
 
@@ -113,6 +110,7 @@ function App() {
       setTitle('')
       setStart('')
       setEnd('')
+      setDuration('60')
     } catch (error) {
       setMessage(
         'Fehler beim Erstellen. Läuft das Backend auf Port 8080?'
