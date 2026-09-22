@@ -1514,3 +1514,113 @@
     padding: 25px 20px;
   }
 }
+/* Persönlicher Monatskalender */
+
+.calendar-page {
+  max-width: 1200px;
+  margin: 40px auto 70px;
+  padding: 0 24px;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.calendar-header h2 {
+  margin: 0;
+  text-transform: capitalize;
+  font-size: 28px;
+}
+
+.calendar-header button {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 12px;
+  background: #eef6f1;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.month-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.month-calendar-grid > strong {
+  text-align: center;
+  padding: 12px 4px;
+}
+
+.calendar-day {
+  min-height: 110px;
+  padding: 10px;
+  border: 1px solid #e2e8e4;
+  border-radius: 12px;
+  background: white;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.calendar-day:hover {
+  border-color: #69977c;
+  background: #f7faf8;
+}
+
+.calendar-day.selected {
+  border: 2px solid #69977c;
+  background: #eef6f1;
+}
+
+.calendar-day span {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.calendar-day small {
+  display: block;
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: #e7f2eb;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.calendar-form {
+  margin-top: 28px;
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid #e2e8e4;
+  display: grid;
+  gap: 14px;
+}
+
+.calendar-form h3 {
+  margin: 0 0 6px;
+}
+
+.calendar-form input {
+  padding: 12px;
+  border: 1px solid #d6ddd8;
+  border-radius: 9px;
+  font: inherit;
+}
+
+.calendar-form button {
+  padding: 12px 18px;
+  border: none;
+  border-radius: 9px;
+  background: #547f65;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import TimeSlot from './components/TimeSlot'
 import Ressourcen from './components/Ressourcen'
 import AuthControl from './components/AuthControl'
+import MeinKalender from './components/MeinKalender'
 
 function App() {
   const [title, setTitle] = useState('')
@@ -14,6 +15,7 @@ function App() {
   const [freeTimeSlots, setFreeTimeSlots] = useState([])
   const [ressourcen, setRessourcen] = useState([])
   const [ressourcenFehler, setRessourcenFehler] = useState(false)
+  const [activePage, setActivePage] = useState('home')
 
   useEffect(() => {
     const loadAppointmentRequests = async () => {
@@ -184,39 +186,29 @@ function App() {
             <p>Plan. Share. Achieve.</p>
           </div>
         </div>
-
         <nav className="nav">
           <button
-            className="nav-item active"
+            className={`nav-item ${activePage === 'home' ? 'active' : ''}`}
             type="button"
-            onClick={() => window.scrollTo({
-              top: 0,
-              behavior: 'smooth',
-            })}
+            onClick={() => setActivePage('home')}
           >
             ⌂ Home
           </button>
 
           <button
-            className="nav-item"
+            className={`nav-item ${activePage === 'calendar' ? 'active' : ''}`}
             type="button"
-            onClick={() => scrollTo('terminplanung')}
+            onClick={() => setActivePage('calendar')}
           >
-            ▣ Termine
-          </button>
-
-          <button
-            className="nav-item"
-            type="button"
-            onClick={() => scrollTo('ressourcen')}
-          >
-            ◆ Ressourcen
+            ▣ Mein Kalender
           </button>
         </nav>
 
         <AuthControl />
       </header>
 
+      {activePage === 'home' ? (
+        <>
       <section className="hero">
         <div className="hero-content">
           <h2>
@@ -470,6 +462,11 @@ function App() {
           Stay in sync.
         </div>
       </section>
+
+        </>
+      ) : (
+        <MeinKalender />
+      )}
 
       <footer className="footer">
         <strong>SyncUp</strong>
