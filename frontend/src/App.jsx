@@ -314,6 +314,17 @@ function App() {
             </div>
           </div>
 
+          <div className="form-group">
+            <label htmlFor="duration">Gewünschte Dauer in Minuten</label>
+            <input
+              id="duration"
+              type="number"
+              min="1"
+              value={duration}
+              onChange={(e) => setDuration(e.target.value)}
+            />
+          </div>
+
           <button
             className="primary-button"
             type="button"
