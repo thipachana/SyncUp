@@ -4,10 +4,9 @@ Stand: 22.09.2026
 
 | Datentyp | Beschreibung |
 | --- | --- |
-| Benutzer | Enthält die Daten eines Benutzers, zum Beispiel Name, E-Mail-Adresse und Rolle. |
-| Kalender | Enthält die zugehörigen Termine. |
-| Termin | Beschreibt einen geplanten Termin mit Beginn, Ende und Status. |
-| Terminanfrage | Beschreibt eine Anfrage zur Suche nach möglichen freien Zeitfenstern. |
-| Ressource | Beschreibt eine buchbare Ressource, zum Beispiel einen Raum. |
-| Buchung | Verbindet einen Termin mit einer Ressource und einem bestimmten Zeitraum. |
-| Zeitslot | Beschreibt einen möglichen freien Zeitraum für einen Termin. |
+| Benutzer | Enthält Benutzer-ID, Name, E-Mail-Adresse, Passwort und Rolle. |
+| Kalender | Enthält Kalender-ID, Name, Beschreibung und Besitzer. |
+| Termin | Enthält Termin-ID, Titel, Beschreibung, Datum, Startzeit, Endzeit, Status und den zugehörigen Kalender. |
+| Terminanfrage | Enthält Terminanfrage-ID, Titel, Zeitraum, Dauer, Status und zugeordnete Benutzer. |
+| Ressource | Enthält Ressourcen-ID, Name, Typ, Kapazität und Verfügbarkeit. |
+| Buchung | Verbindet einen Termin mit einer Ressource und enthält zusätzlich Zeitraum und Status. |

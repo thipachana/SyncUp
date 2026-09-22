@@ -46,9 +46,11 @@ Wichtige Daten sind:
 - Termin-ID
 - Titel
 - Beschreibung
-- Beginn
-- Ende
+- Datum
+- Startzeit
+- Endzeit
 - Status
+- Kalender
 
 Termine werden unter anderem für die Berechnung freier Zeitfenster und für Ressourcenbuchungen verwendet.
 
@@ -58,10 +60,11 @@ Eine Terminanfrage wird verwendet, um mögliche freie Zeitfenster zu finden.
 
 Wichtige Daten sind:
 
-- Anfrage-ID
+- Terminanfrage-ID
 - Titel
-- Beginn des Suchzeitraums
-- Ende des Suchzeitraums
+- Zeitraum
+- Dauer
+- Status
 - zugeordnete Benutzer
 
 Terminanfragen können über das Frontend erstellt, angezeigt und gelöscht werden.
