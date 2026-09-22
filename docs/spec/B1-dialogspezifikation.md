@@ -8,9 +8,9 @@ Dieser Abschnitt beschreibt die wichtigsten Benutzeroberflächen von SyncUp und 
 
 ## Login und Registrierung
 
-Eine Anmeldung und Registrierung ist für SyncUp vorgesehen.
+Eine Anmeldung und Registrierung ist in SyncUp umgesetzt.
 
-Benutzer sollen sich mit ihrer E-Mail-Adresse und einem Passwort anmelden oder ein neues Konto erstellen können.
+Benutzer können sich mit ihrer E-Mail-Adresse und einem Passwort anmelden oder ein neues Konto erstellen.
 
 Diese Funktionen sind aktuell noch nicht umgesetzt.
 

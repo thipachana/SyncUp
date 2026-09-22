@@ -14,7 +14,7 @@ Frontend und Backend kommunizieren über REST-Schnittstellen.
 
 Passwörter werden bei API-Abfragen nicht an das Frontend zurückgegeben.
 
-Eine vollständige Anmeldung und Zugriffskontrolle ist aktuell noch nicht umgesetzt.
+Registrierung und Anmeldung mit serverseitiger Session sind umgesetzt. Eine weitergehende Zugriffskontrolle ist aktuell noch nicht umgesetzt.
 
 Für eine spätere produktive Nutzung sollte die Verbindung zusätzlich über HTTPS abgesichert werden.
 

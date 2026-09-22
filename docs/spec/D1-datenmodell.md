@@ -22,7 +22,7 @@ Wichtige Daten sind:
 
 Das Passwort wird bei API-Abfragen nicht zurückgegeben.
 
-Eine vollständige Registrierung und Anmeldung ist aktuell noch nicht umgesetzt.
+Registrierung und Anmeldung sind umgesetzt. Passwörter werden mit BCrypt gehasht und nicht in API-Antworten ausgegeben. Eine weitergehende Zugriffskontrolle ist aktuell noch nicht umgesetzt.
 
 ## Kalender
 

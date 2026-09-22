@@ -20,7 +20,7 @@ Benutzerdaten und Passwörter sollen geschützt verarbeitet werden.
 
 Passwörter werden bei API-Abfragen nicht an das Frontend zurückgegeben.
 
-Eine vollständige Anmeldung und Zugriffskontrolle sowie eine sichere Passwortspeicherung sind aktuell noch nicht umgesetzt.
+Registrierung und Anmeldung sowie eine sichere Passwortspeicherung mit BCrypt sind umgesetzt. Eine weitergehende Zugriffskontrolle ist aktuell noch nicht umgesetzt.
 
 ## Wartbarkeit
 

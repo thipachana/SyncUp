@@ -35,7 +35,7 @@ Diese Checkliste wird verwendet, um die wichtigsten Funktionen von SyncUp vor de
 
 - [ ] Passwörter werden bei API-Abfragen nicht ausgegeben
 
-Eine vollständige Anmeldung und Zugriffskontrolle ist aktuell noch nicht umgesetzt.
+Registrierung, Anmeldung, Session-Erhalt und Abmeldung wurden erfolgreich getestet. Eine weitergehende Zugriffskontrolle ist aktuell noch nicht umgesetzt.
 
 ## 5. Frontend
 

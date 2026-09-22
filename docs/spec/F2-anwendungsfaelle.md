@@ -22,11 +22,11 @@ Da sich einige Funktionen noch in der Entwicklung befinden, wird bei jedem Anwen
 
 ### Aktueller Stand
 
-Die Registrierung und Anmeldung sind aktuell noch nicht umgesetzt.
+Die Registrierung und Anmeldung sind umgesetzt.
 
 Ein Datenmodell für Benutzer ist bereits vorhanden. Das Passwort wird bei API-Abfragen nicht ausgegeben.
 
-Eine sichere Passwortspeicherung sowie eine vollständige Anmeldung und Zugriffskontrolle müssen noch umgesetzt werden.
+Die Passwörter werden mit BCrypt gehasht. Eine weitergehende Zugriffskontrolle ist noch nicht umgesetzt.
 
 ---
 

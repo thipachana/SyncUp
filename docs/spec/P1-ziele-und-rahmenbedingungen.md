@@ -81,7 +81,7 @@ SyncUp richtet sich hauptsächlich an:
 - Die Daten werden in PostgreSQL gespeichert.
 - Die Anwendung wird aktuell lokal ausgeführt.
 - Frontend und Backend kommunizieren über REST-Schnittstellen.
-- Eine vollständige Benutzeranmeldung und Zugriffskontrolle ist aktuell noch nicht umgesetzt.
+- Registrierung und Anmeldung sind umgesetzt. Eine weitergehende Zugriffskontrolle ist aktuell noch nicht umgesetzt.
 - Die Installation und der Start der Anwendung werden in S3 „Inbetriebnahme“ und in der Installationsanleitung beschrieben.
 
 ## Erfolgsziele

@@ -66,7 +66,7 @@ Das Backend ermöglicht aktuell unter anderem:
 - Ressourcenbuchungen anlegen und abrufen
 - Überschneidungen bei Ressourcenbuchungen prüfen
 
-Benutzer und Kalender sind bereits als Datenmodelle vorhanden. Eine vollständige Benutzerverwaltung mit Anmeldung und Registrierung ist noch nicht umgesetzt.
+Benutzer und Kalender sind als Datenmodelle vorhanden. Registrierung und Anmeldung sind umgesetzt. Eine weitergehende Zugriffskontrolle ist noch nicht umgesetzt.
 
 ## Datenbank
 

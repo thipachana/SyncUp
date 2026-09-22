@@ -67,7 +67,7 @@ Zu den gespeicherten Daten gehören unter anderem:
 
 Über eine API-Abfrage kann gezeigt werden, dass das Passwort eines Benutzers nicht ausgegeben wird.
 
-Eine vollständige Anmeldung und Zugriffskontrolle ist aktuell noch nicht umgesetzt.
+Registrierung, Anmeldung und Abmeldung sind umgesetzt. Eine weitergehende Zugriffskontrolle ist aktuell noch nicht umgesetzt.
 
 ## Aktueller Stand
 

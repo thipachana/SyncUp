@@ -16,7 +16,7 @@ Das Frontend greift nicht direkt auf die PostgreSQL-Datenbank zu.
 
 Benutzerdaten können im Backend verarbeitet und in der Datenbank gespeichert werden.
 
-Eine vollständige Benutzerverwaltung mit Anmeldung, Registrierung, Profilverwaltung und Zugriffskontrolle ist im aktuellen Entwicklungsstand noch nicht vollständig umgesetzt.
+Registrierung und Anmeldung mit serverseitiger Session sind umgesetzt. Profilverwaltung und eine weitergehende Zugriffskontrolle sind im aktuellen Entwicklungsstand noch nicht umgesetzt.
 
 ## Datenhaltung
 
@@ -39,7 +39,7 @@ Das Passwortfeld eines Benutzers wird nicht in den JSON-Antworten der REST-Schni
 
 Dadurch wird verhindert, dass gespeicherte Passwörter bei normalen API-Abfragen an das Frontend übertragen werden.
 
-Eine weitergehende Authentifizierung und sichere Passwortverarbeitung ist als Erweiterung vorgesehen.
+Passwörter werden mit BCrypt gehasht. Eine weitergehende Autorisierung und Zugriffskontrolle ist als Erweiterung vorgesehen.
 
 ## Konfiguration
 
