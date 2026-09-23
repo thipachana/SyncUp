@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useSession } from '../session-context'
 import { api, errorMessage } from '../api'
-function Ressourcen({ ressourcen, ladefehler, onRefresh }) {
+function Ressourcen({
+  ressourcen,
+  ladefehler,
+  onRefresh,
+  preselectedTerminId,
+}) {
   const { currentUser } = useSession()
   const [termine, setTermine] = useState([])
   const [terminId, setTerminId] = useState('')
@@ -23,6 +28,34 @@ function Ressourcen({ ressourcen, ladefehler, onRefresh }) {
       .finally(() => { if (active) setTermsLoading(false) })
     return () => { active = false }
   }, [currentUser, refresh])
+  useEffect(() => {
+  if (
+    !preselectedTerminId ||
+    termine.length === 0
+  ) {
+    return
+  }
+
+  const term = termine.find(
+    (item) =>
+      item.terminId ===
+      Number(preselectedTerminId)
+  )
+
+  if (!term) return
+
+  setTerminId(
+    String(term.terminId)
+  )
+
+  setStart(
+    `${term.datum}T${term.startzeit.slice(0, 5)}`
+  )
+
+  setEnd(
+    `${term.datum}T${term.endzeit.slice(0, 5)}`
+  )
+}, [preselectedTerminId, termine])
   function selectTermin(id) {
     setTerminId(id); setMessage('')
     const term = termine.find((t) => t.terminId === Number(id))

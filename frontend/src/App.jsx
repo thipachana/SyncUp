@@ -29,6 +29,8 @@ function App() {
   const [ressourcen, setRessourcen] = useState([])
   const [ressourcenFehler, setRessourcenFehler] = useState(false)
   const [activePage, setActivePage] = useState('home')
+  const [selectedRequestId, setSelectedRequestId] = useState(null)
+const [preselectedTerminId, setPreselectedTerminId] = useState(null)
 
   const [benutzer, setBenutzer] = useState([])
   const [selectedBenutzer, setSelectedBenutzer] = useState(ownerId ? [ownerId] : [])
@@ -186,11 +188,17 @@ function App() {
 
       const savedRequest = await response.json()
 
-      setAppointmentRequests((prev) => [...prev, savedRequest])
+setAppointmentRequests((prev) => [...prev, savedRequest])
+await loadFreeTimeSlots(
+  savedRequest.terminanfrageId,
+  savedRequest
+)
+setMessage(
+  `Terminanfrage erstellt. ID: ${savedRequest.terminanfrageId}`
+)
 
-      setMessage(
-        `Terminanfrage erstellt. ID: ${savedRequest.terminanfrageId}`
-      )
+// Freie Zeitfenster direkt automatisch laden
+await loadFreeTimeSlots(savedRequest.terminanfrageId)
 
       setTitle('')
       setStart('')
@@ -225,22 +233,201 @@ function App() {
       if (error.name !== 'AbortError') setMessage(errorMessage(error))
     } finally { setBusy(false) }
   }
+const loadFreeTimeSlots = async (id, requestOverride = null) => {
+  const sequence = ++slotSequence.current
 
-  const loadFreeTimeSlots = async (id) => {
-    const sequence = ++slotSequence.current
-    setFreeTimeSlots([])
-    const title = appointmentRequests.find((item) => item.terminanfrageId === id)?.titel || ''
-    setSlotState({ loading: true, error: '', title })
-    try {
-      const response = await apiFetch(`/api/terminanfragen/${id}/freie-zeitfenster`)
-      const data = await response.json()
-      if (!response.ok) throw new Error(data.message || 'Zeitfenster konnten nicht geladen werden.')
-      if (sequence !== slotSequence.current) return
-      setFreeTimeSlots(data); setSlotState({ loading: false, error: '', title })
-    } catch (error) {
-      if (sequence === slotSequence.current && error.name !== 'AbortError') setSlotState({ loading: false, error: errorMessage(error), title })
+  setSelectedRequestId(id)
+  setFreeTimeSlots([])
+
+  const request =
+    requestOverride ||
+    appointmentRequests.find(
+      (item) => item.terminanfrageId === id
+    )
+
+  const requestTitle = request?.titel || ''
+
+  setSlotState({
+    loading: true,
+    error: '',
+    title: requestTitle,
+  })
+
+  setTimeout(() => {
+    document
+      .querySelector('.slots-card')
+      ?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+  }, 50)
+
+  try {
+    const response = await apiFetch(
+      `/api/terminanfragen/${id}/freie-zeitfenster`
+    )
+
+    const data = await response.json()
+
+    if (!response.ok) {
+      throw new Error(
+        data.message ||
+          'Zeitfenster konnten nicht geladen werden.'
+      )
+    }
+
+    if (sequence !== slotSequence.current) return
+
+    setFreeTimeSlots(data)
+
+    setSlotState({
+      loading: false,
+      error: '',
+      title: requestTitle,
+    })
+  } catch (error) {
+    if (
+      sequence === slotSequence.current &&
+      error.name !== 'AbortError'
+    ) {
+      setSlotState({
+        loading: false,
+        error: errorMessage(error),
+        title: requestTitle,
+      })
     }
   }
+}
+const addMinutes = (time, minutes) => {
+  const [hours, mins] = time.split(':').map(Number)
+
+  const total =
+    hours * 60 +
+    mins +
+    Number(minutes)
+
+  const newHours =
+    Math.floor(total / 60) % 24
+
+  const newMinutes =
+    total % 60
+
+  return `${String(newHours).padStart(2, '0')}:${String(
+    newMinutes
+  ).padStart(2, '0')}`
+}
+
+const confirmTimeSlot = async (slot) => {
+  if (busy || !selectedRequestId) return
+
+  const request = appointmentRequests.find(
+    (item) =>
+      item.terminanfrageId === selectedRequestId
+  )
+
+  if (!request) {
+    setSlotState((prev) => ({
+      ...prev,
+      error: 'Die Terminanfrage wurde nicht gefunden.',
+    }))
+    return
+  }
+
+  const startTime =
+    slot.start.slice(11, 16)
+
+  const endTime =
+    addMinutes(
+      startTime,
+      request.dauer
+    )
+
+  const confirmed = window.confirm(
+    `${slot.start.slice(0, 10)} von ` +
+      `${startTime} bis ${endTime} ` +
+      `als Termin festlegen?`
+  )
+
+  if (!confirmed) return
+
+  setBusy(true)
+
+  try {
+    const response = await apiFetch(
+      '/api/me/termine',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type':
+            'application/json',
+        },
+        body: JSON.stringify({
+          titel: request.titel,
+
+          beschreibung:
+            'Aus gemeinsamer Terminanfrage erstellt',
+
+          datum:
+            slot.start.slice(0, 10),
+
+          startzeit:
+            startTime,
+
+          endzeit:
+            endTime,
+
+          benutzerIds:
+            (request.benutzer || []).map(
+              (user) =>
+                user.benutzerId
+            ),
+        }),
+      }
+    )
+
+    const savedTermin =
+      await response.json()
+
+    if (!response.ok) {
+      throw new Error(
+        savedTermin.message ||
+          'Termin konnte nicht gespeichert werden.'
+      )
+    }
+
+    setPreselectedTerminId(
+      savedTermin.terminId
+    )
+
+    setFreeTimeSlots([])
+
+    setSlotState({
+      loading: false,
+      error: '',
+      title:
+        `${request.titel} wurde festgelegt.`,
+    })
+
+    setTimeout(() => {
+      document
+        .getElementById('ressourcen')
+        ?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        })
+    }, 150)
+  } catch (error) {
+    if (error.name !== 'AbortError') {
+      setSlotState((prev) => ({
+        ...prev,
+        error: errorMessage(error),
+      }))
+    }
+  } finally {
+    setBusy(false)
+  }
+}
+ 
 
   const messageIsSuccess = message.startsWith(
     'Terminanfrage erstellt'
@@ -476,10 +663,11 @@ function App() {
                         className="secondary-button" disabled={busy}
                         type="button"
                         onClick={() =>
-                          loadFreeTimeSlots(
-                            request.terminanfrageId
-                          )
-                        }
+  loadFreeTimeSlots(
+    request.terminanfrageId,
+    request
+  )
+}
                       >
                         Freie Zeiten
                       </button>
@@ -531,21 +719,38 @@ function App() {
           ) : (
             <div className="time-slot-list">
               {freeTimeSlots.map((slot, index) => (
-                <TimeSlot
-                  key={index}
-                  endDate={slot.ende.slice(0, 10)}
-                  date={slot.start.slice(0, 10)}
-                  startTime={slot.start.slice(11, 16)}
-                  endTime={slot.ende.slice(11, 16)}
-                  available={true}
-                />
-              ))}
+  <button
+    key={index}
+    type="button"
+    className="time-slot-button"
+    disabled={busy}
+    onClick={() =>
+      confirmTimeSlot(slot)
+    }
+  >
+    <TimeSlot
+      endDate={slot.ende.slice(0, 10)}
+      date={slot.start.slice(0, 10)}
+      startTime={slot.start.slice(11, 16)}
+      endTime={slot.ende.slice(11, 16)}
+      available={true}
+    />
+  </button>
+))}
             </div>
           ))}
         </section>
 
         <div id="ressourcen">
-          <Ressourcen key={ownerId || 'guest'} ressourcen={ressourcen} ladefehler={ressourcenFehler} onRefresh={() => setRequestVersion((v) => v + 1)} />
+          <Ressourcen
+  key={`${ownerId || 'guest'}-${preselectedTerminId || 'none'}`}
+  ressourcen={ressourcen}
+  ladefehler={ressourcenFehler}
+  preselectedTerminId={preselectedTerminId}
+  onRefresh={() =>
+    setRequestVersion((v) => v + 1)
+  }
+/>
         </div>
       </div>
 
