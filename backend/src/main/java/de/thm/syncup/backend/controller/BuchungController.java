@@ -55,6 +55,13 @@ public class BuchungController {
                         "Ressource wurde nicht gefunden."
                 ));
 
+        if (!Boolean.TRUE.equals(ressource.getVerfuegbarkeit())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Ressource ist derzeit nicht verfügbar."
+            );
+        }
+
         boolean belegt = buchungRepository
                 .findByRessource_RessourcenId(request.ressourcenId())
                 .stream()
