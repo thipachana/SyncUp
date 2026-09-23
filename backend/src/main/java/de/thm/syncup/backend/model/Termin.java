@@ -35,6 +35,12 @@ public class Termin {
     @JoinColumn(name = "kalender_id", nullable = false)
     private Kalender kalender;
 
+    @ManyToMany(fetch=FetchType.EAGER)
+    @JoinTable(name="termin_teilnehmer", joinColumns=@JoinColumn(name="termin_id"), inverseJoinColumns=@JoinColumn(name="benutzer_id"))
+    private java.util.List<Benutzer> teilnehmer = new java.util.ArrayList<>();
+    public java.util.List<Benutzer> getTeilnehmer() { return teilnehmer; }
+    public void setTeilnehmer(java.util.List<Benutzer> value) { teilnehmer=value; }
+
     public Termin() {
     }
 

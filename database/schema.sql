@@ -28,7 +28,8 @@ CREATE TABLE terminanfrage (
     titel VARCHAR(100) NOT NULL,
     zeitraum VARCHAR(255) NOT NULL,
     dauer INTEGER NOT NULL,
-    status VARCHAR(50) NOT NULL
+    status VARCHAR(50) NOT NULL,
+    ersteller_id BIGINT REFERENCES benutzer(benutzer_id)
 );
 CREATE TABLE terminanfrage_benutzer (
     terminanfrage_id BIGINT NOT NULL,
@@ -52,4 +53,16 @@ CREATE TABLE buchung (
   status VARCHAR(50) NOT NULL,
   FOREIGN KEY (termin_id) REFERENCES termin(termin_id),
   FOREIGN KEY (ressourcen_id) REFERENCES ressource(ressourcen_id)
+);
+CREATE TABLE termin_teilnehmer (
+    termin_id BIGINT NOT NULL REFERENCES termin(termin_id),
+    benutzer_id BIGINT NOT NULL REFERENCES benutzer(benutzer_id)
+);
+CREATE TABLE benachrichtigung (
+    id BIGSERIAL PRIMARY KEY,
+    empfaenger_id BIGINT NOT NULL,
+    text VARCHAR(500) NOT NULL,
+    erstellt_am TIMESTAMP WITH TIME ZONE NOT NULL,
+    gelesen BOOLEAN NOT NULL DEFAULT FALSE,
+    termin_id BIGINT
 );

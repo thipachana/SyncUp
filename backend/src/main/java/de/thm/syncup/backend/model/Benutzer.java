@@ -11,9 +11,11 @@ public class Benutzer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long benutzerId;
 
+    @Column(nullable = false, length = 100)
     private String name;
 
     @Column(unique = true, nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String email;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

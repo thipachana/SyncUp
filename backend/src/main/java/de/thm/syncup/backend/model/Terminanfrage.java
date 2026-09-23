@@ -29,6 +29,13 @@ public class Terminanfrage {
     inverseJoinColumns = @JoinColumn(name = "benutzer_id")
 )
 private java.util.List<Benutzer> benutzer = new java.util.ArrayList<>();
+    @com.fasterxml.jackson.annotation.JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ersteller_id")
+    private Benutzer ersteller;
+    public Benutzer getErsteller() { return ersteller; }
+    public void setErsteller(Benutzer value) { ersteller = value; }
+
     public Terminanfrage() {
     }
 

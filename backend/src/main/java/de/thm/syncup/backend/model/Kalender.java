@@ -11,7 +11,7 @@ public class Kalender {
     @Column(name = "kalender_id")
     private Long kalenderId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String name;
 
     private String beschreibung;
