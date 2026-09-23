@@ -1,11 +1,23 @@
 import './App.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useSession } from './session-context'
+import { apiFetch, errorMessage } from './api'
 import TimeSlot from './components/TimeSlot'
 import Ressourcen from './components/Ressourcen'
+import Benachrichtigungen from './components/Benachrichtigungen'
 import AuthControl from './components/AuthControl'
 import MeinKalender from './components/MeinKalender'
 
 function App() {
+  const { currentUser } = useSession()
+  const ownerId = currentUser?.benutzerId
+  const [busy, setBusy] = useState(false)
+  const [loadingRequests, setLoadingRequests] = useState(false)
+  const [requestError, setRequestError] = useState('')
+  const [requestVersion, setRequestVersion] = useState(0)
+  const [slotState, setSlotState] = useState({ loading: false, error: '', title: '' })
+  const slotSequence = useRef(0)
+  useEffect(() => () => { slotSequence.current += 1 }, [])
   const [title, setTitle] = useState('')
   const [start, setStart] = useState('')
   const [end, setEnd] = useState('')
@@ -18,11 +30,54 @@ function App() {
   const [ressourcenFehler, setRessourcenFehler] = useState(false)
   const [activePage, setActivePage] = useState('home')
 
+  const [benutzer, setBenutzer] = useState([])
+  const [selectedBenutzer, setSelectedBenutzer] = useState(ownerId ? [ownerId] : [])
+  const [benutzerMessage, setBenutzerMessage] = useState('')
+
+  const loadBenutzer = async () => {
+    setBenutzerMessage('')
+    if (!ownerId) { setBenutzerMessage('Bitte zuerst anmelden.'); return }
+
+    try {
+      const response = await apiFetch(
+        `/api/benutzer`,
+        {
+          credentials: 'include',
+        }
+      )
+
+      if (response.status === 401) {
+        setBenutzer([])
+        setBenutzerMessage('Bitte zuerst anmelden.')
+        return
+      }
+
+      if (!response.ok) {
+        throw new Error('Teilnehmer konnten nicht geladen werden.')
+      }
+
+      const data = await response.json()
+
+      setBenutzer(data)
+
+      if (data.length === 0) {
+        setBenutzerMessage('Keine Benutzer vorhanden.')
+      }
+    } catch (error) {
+      if (error.name === 'AbortError') return
+      setBenutzer([])
+      setBenutzerMessage('Teilnehmer konnten nicht geladen werden.')
+    }
+  }
+
   useEffect(() => {
+    if (!ownerId) return
+    let active = true
     const loadAppointmentRequests = async () => {
+      setLoadingRequests(true); setRequestError('')
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/terminanfragen`
+        const response = await apiFetch(
+          `/api/terminanfragen`
         )
 
         if (!response.ok) {
@@ -30,20 +85,24 @@ function App() {
         }
 
         const data = await response.json()
-        setAppointmentRequests(data)
+        if (active) setAppointmentRequests(data)
       } catch (error) {
-        console.error('Fehler beim Laden der Terminanfragen:', error)
+        if (active && error.name !== 'AbortError') setRequestError(errorMessage(error))
+      } finally { if (active) setLoadingRequests(false)
       }
     }
 
     loadAppointmentRequests()
-  }, [])
+    return () => { active = false }
+  }, [ownerId, requestVersion])
 
   useEffect(() => {
+    if (!ownerId) return
+    let active = true
     const loadRessourcen = async () => {
       try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/ressourcen`
+        const response = await apiFetch(
+          `/api/ressourcen`
         )
 
         if (!response.ok) {
@@ -51,33 +110,37 @@ function App() {
         }
 
         const data = await response.json()
+        if (!active) return
         setRessourcen(data)
         setRessourcenFehler(false)
       } catch (error) {
-        console.error('Fehler beim Laden der Ressourcen:', error)
+        if (!active || error.name === 'AbortError') return
         setRessourcenFehler(true)
       }
     }
 
     loadRessourcen()
-  }, [])
+    return () => { active = false }
+  }, [ownerId, requestVersion])
 
   const createAppointmentRequest = async () => {
+    if (busy) return
+    if (!ownerId) { setMessage('Bitte zuerst anmelden.'); return }
     if (!title || !start || !end || !duration) {
       setMessage('Bitte Titel, Von, Bis und Dauer ausfüllen.')
       return
     }
 
-    const startDate = new Date(start)
-    const endDate = new Date(end)
+    const startDate = new Date(`${start}Z`)
+    const endDate = new Date(`${end}Z`)
     const durationNumber = Number(duration)
 
-    if (endDate <= startDate) {
+    if (!Number.isFinite(startDate.getTime()) || !Number.isFinite(endDate.getTime()) || endDate <= startDate) {
       setMessage('Das Enddatum muss nach dem Startdatum liegen.')
       return
     }
 
-    if (durationNumber <= 0) {
+    if (!Number.isInteger(durationNumber) || durationNumber <= 0) {
       setMessage('Die gewünschte Dauer muss größer als 0 Minuten sein.')
       return
     }
@@ -96,18 +159,17 @@ function App() {
     }
 
     const request = {
-      titel: title,
+      titel: title.trim(),
       zeitraum: `${start} bis ${end}`,
       dauer: durationNumber,
       status: 'OFFEN',
-      benutzer: selectedBenutzer.map((id) => ({
-        benutzerId: id,
-      })),
+      benutzerIds: selectedBenutzer,
     }
 
+    setBusy(true)
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/terminanfragen`,
+      const response = await apiFetch(
+        `/api/terminanfragen`,
         {
           method: 'POST',
           headers: {
@@ -118,7 +180,8 @@ function App() {
       )
 
       if (!response.ok) {
-        throw new Error('Terminanfrage konnte nicht erstellt werden.')
+        const error = await response.json()
+        throw new Error(error.message || 'Terminanfrage konnte nicht erstellt werden.')
       }
 
       const savedRequest = await response.json()
@@ -133,18 +196,18 @@ function App() {
       setStart('')
       setEnd('')
       setDuration('60')
-      setSelectedBenutzer([])
+      setSelectedBenutzer([ownerId])
     } catch (error) {
-      setMessage(
-        'Fehler beim Erstellen. Läuft das Backend auf Port 8080?'
-      )
-    }
+      if (error.name !== 'AbortError') setMessage(errorMessage(error))
+    } finally { setBusy(false) }
   }
 
   const deleteAppointmentRequest = async (id) => {
+    if (busy) return
+    setBusy(true); slotSequence.current += 1; setFreeTimeSlots([]); setSlotState({ loading: false, error: '', title: '' })
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/terminanfragen/${id}`,
+      const response = await apiFetch(
+        `/api/terminanfragen/${id}`,
         {
           method: 'DELETE',
         }
@@ -159,37 +222,24 @@ function App() {
       )
       setFreeTimeSlots([])
     } catch (error) {
-      console.error('Fehler beim Löschen:', error)
-    }
+      if (error.name !== 'AbortError') setMessage(errorMessage(error))
+    } finally { setBusy(false) }
   }
 
   const loadFreeTimeSlots = async (id) => {
+    const sequence = ++slotSequence.current
     setFreeTimeSlots([])
-
+    const title = appointmentRequests.find((item) => item.terminanfrageId === id)?.titel || ''
+    setSlotState({ loading: true, error: '', title })
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/terminanfragen/${id}/freie-zeitfenster`
-      )
-
-      if (!response.ok) {
-        throw new Error('Freie Zeitfenster konnten nicht geladen werden.')
-      }
-
+      const response = await apiFetch(`/api/terminanfragen/${id}/freie-zeitfenster`)
       const data = await response.json()
-      setFreeTimeSlots(data)
+      if (!response.ok) throw new Error(data.message || 'Zeitfenster konnten nicht geladen werden.')
+      if (sequence !== slotSequence.current) return
+      setFreeTimeSlots(data); setSlotState({ loading: false, error: '', title })
     } catch (error) {
-      console.error(
-        'Fehler beim Laden der freien Zeitfenster:',
-        error
-      )
+      if (sequence === slotSequence.current && error.name !== 'AbortError') setSlotState({ loading: false, error: errorMessage(error), title })
     }
-  }
-
-  const scrollTo = (id) => {
-    document.getElementById(id)?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    })
   }
 
   const messageIsSuccess = message.startsWith(
@@ -225,7 +275,7 @@ function App() {
           </button>
         </nav>
 
-        <AuthControl />
+        <div className="account-actions"><Benachrichtigungen /><AuthControl /></div>
       </header>
 
       {activePage === 'home' ? (
@@ -291,7 +341,7 @@ function App() {
             <label htmlFor="title">Titel</label>
 
             <input
-              id="title"
+              id="title" maxLength={100}
               type="text"
               placeholder="z. B. Projekt-Meeting"
               value={title}
@@ -353,6 +403,7 @@ function App() {
               <label className="participant-option" key={person.benutzerId}>
                 <input
                   type="checkbox"
+                  disabled={person.benutzerId === ownerId}
                   checked={selectedBenutzer.includes(person.benutzerId)}
                   onChange={() => {
                     setSelectedBenutzer((prev) =>
@@ -370,11 +421,13 @@ function App() {
           <button
             className="primary-button"
             type="button"
+            disabled={busy || !ownerId}
             onClick={createAppointmentRequest}
           >
-            + Anfrage erstellen
+            {busy ? 'Bitte warten …' : '+ Anfrage erstellen'}
           </button>
 
+          {!ownerId && <p>Bitte anmelden, um Terminanfragen zu erstellen.</p>}
           {message && (
             <div
               className={`form-message ${
@@ -391,7 +444,9 @@ function App() {
               <span>{appointmentRequests.length}</span>
             </div>
 
-            {appointmentRequests.length === 0 ? (
+            {loadingRequests && <p role="status">Anfragen werden geladen …</p>}
+            {requestError && <p role="alert">{requestError}<button type="button" onClick={() => setRequestVersion((v) => v + 1)}>Erneut laden</button></p>}
+            {!loadingRequests && !requestError && (appointmentRequests.length === 0 ? (
               <div className="small-empty-state">
                 Noch keine Terminanfragen vorhanden.
               </div>
@@ -418,7 +473,7 @@ function App() {
 
                     <div className="request-actions">
                       <button
-                        className="secondary-button"
+                        className="secondary-button" disabled={busy}
                         type="button"
                         onClick={() =>
                           loadFreeTimeSlots(
@@ -430,7 +485,7 @@ function App() {
                       </button>
 
                       <button
-                        className="delete-button"
+                        className="delete-button" disabled={busy}
                         type="button"
                         onClick={() =>
                           deleteAppointmentRequest(
@@ -444,7 +499,7 @@ function App() {
                   </article>
                 ))}
               </div>
-            )}
+            ))}
           </div>
         </section>
 
@@ -458,7 +513,10 @@ function App() {
             Wähle bei einer Terminanfrage „Freie Zeiten“.
           </p>
 
-          {freeTimeSlots.length === 0 ? (
+          {slotState.title && <p>Für: {slotState.title}</p>}
+          {slotState.loading && <p role="status">Zeitfenster werden berechnet …</p>}
+          {slotState.error && <p role="alert">{slotState.error}</p>}
+          {!slotState.loading && !slotState.error && (freeTimeSlots.length === 0 ? (
             <div className="large-empty-state">
               <div className="empty-clock">◷</div>
 
@@ -467,7 +525,7 @@ function App() {
               </strong>
 
               <span>
-                Wähle zuerst eine Terminanfrage aus.
+                {slotState.title ? 'Für diese Dauer gibt es kein gemeinsames freies Zeitfenster.' : 'Wähle zuerst eine Terminanfrage aus.'}
               </span>
             </div>
           ) : (
@@ -475,6 +533,7 @@ function App() {
               {freeTimeSlots.map((slot, index) => (
                 <TimeSlot
                   key={index}
+                  endDate={slot.ende.slice(0, 10)}
                   date={slot.start.slice(0, 10)}
                   startTime={slot.start.slice(11, 16)}
                   endTime={slot.ende.slice(11, 16)}
@@ -482,14 +541,11 @@ function App() {
                 />
               ))}
             </div>
-          )}
+          ))}
         </section>
 
         <div id="ressourcen">
-          <Ressourcen
-          ressourcen={ressourcen}
-          ladefehler={ressourcenFehler}
-        />
+          <Ressourcen key={ownerId || 'guest'} ressourcen={ressourcen} ladefehler={ressourcenFehler} onRefresh={() => setRequestVersion((v) => v + 1)} />
         </div>
       </div>
 
@@ -530,7 +586,7 @@ function App() {
 
         </>
       ) : (
-        <MeinKalender />
+        <MeinKalender key={ownerId || 'guest'} />
       )}
 
       <footer className="footer">

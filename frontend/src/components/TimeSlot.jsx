@@ -1,4 +1,4 @@
-function TimeSlot({ date, startTime, endTime, available }) {
+function TimeSlot({ date, endDate, startTime, endTime, available }) {
   return (
     <article className="time-slot">
       <div className="time-slot-check">
@@ -10,7 +10,7 @@ function TimeSlot({ date, startTime, endTime, available }) {
           {startTime} – {endTime}
         </strong>
 
-        <span>{date}</span>
+        <span>{date}{endDate && endDate !== date ? ` bis ${endDate}` : ''}</span>
       </div>
 
       <span

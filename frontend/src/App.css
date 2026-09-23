@@ -1673,3 +1673,23 @@
   font-size: 11px;
 }
 
+
+/* Keep authentication and navigation reachable on small screens. */
+@media (max-width: 1100px) {
+  .topbar { height: auto; min-height: 84px; grid-template-columns: 1fr auto; gap: 12px; padding-top: 14px; padding-bottom: 14px; }
+  .topbar .nav { display: flex; flex-wrap: wrap; grid-row: 2; grid-column: 1 / -1; justify-content: center; }
+  .topbar .login-placeholder { display: inline-flex; }
+}
+button:disabled { opacity: .55; cursor: wait; }
+.calendar-form label { display: block; margin: 12px 0 6px; }
+.resource-list select, .resources-card select { width: 100%; padding: 12px; border: 1px solid #dce3df; border-radius: 10px; background: white; color: #1b2540; }
+.auth-overlay { overflow-y: auto; }
+.auth-modal { max-height: calc(100dvh - 32px); overflow-y: auto; }
+
+.account-actions {display:flex;align-items:center;gap:12px;justify-self:end;}
+.notifications {position:relative;}
+.notifications > button {display:flex;align-items:center;gap:4px;color:#087b5d;background:#eef5f1;border:0;border-radius:12px;padding:10px;cursor:pointer;}
+.notification-count {font-weight:700;}
+.notification-panel {position:absolute;right:0;top:48px;width:min(360px,80vw);max-height:65vh;overflow:auto;background:white;color:#19243b;border:1px solid #dbe5df;border-radius:16px;padding:18px;box-shadow:0 12px 36px #0002;z-index:100;}
+.notification-panel article {border-top:1px solid #dbe5df;padding:12px 0;}
+.calendar-form input[type=checkbox] {width:auto;min-height:auto;margin-right:8px;}
