@@ -1,6 +1,6 @@
 # F1 Geschäftsprozesse
 
-Stand: 22.09.2026
+Stand: 23.09.2026
 
 ## Ziel
 
@@ -33,8 +33,6 @@ Noch nicht vollständig umgesetzt sind:
 
 - Anmeldung der Benutzer
 - Teilnehmerauswahl im Frontend
-- vollständiger Abgleich mehrerer Teilnehmer über die Oberfläche
-- separate Eingabe der gewünschten Termindauer
 - Auswahl eines freien Zeitfensters als neuer bestätigter Termin
 - Einladungen und Benachrichtigungen
 
@@ -60,7 +58,6 @@ Wenn sich die Zeiträume überschneiden, lehnt das Backend die Buchung mit dem H
 Noch nicht vollständig umgesetzt sind:
 
 - Auswahl des Termins über eine Terminliste
-- vollständige Prüfung der allgemeinen Ressourcenverfügbarkeit
 - Vorschläge für alternative Ressourcen
 - Freigabe bereits gebuchter Ressourcen
 

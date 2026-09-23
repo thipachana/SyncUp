@@ -1,6 +1,6 @@
 # SyncUp – Installation und Inbetriebnahme
 
-Stand: 22.09.2026
+Stand: 23.09.2026
 
 ## 1. Überblick
 
@@ -125,7 +125,7 @@ cp .env.example .env
 In der Datei muss die Adresse des Backends stehen:
 
 ```text
-VITE_API_URL=http://localhost:8080
+VITE_API_URL=
 ```
 
 Danach die benötigten Pakete installieren:
@@ -196,7 +196,7 @@ Weitere Tests sind in `docs/TESTING.md` beschrieben.
 
 ## 9. Backend testen
 
-Vor dem Test sollte PostgreSQL gestartet sein und die Datenbankkonfiguration zum lokalen System passen.
+Die automatisierten Tests verwenden standardmäßig eine isolierte H2-Datenbank; ein laufendes PostgreSQL ist dafür nicht erforderlich.
 
 Im Projektordner:
 
@@ -207,7 +207,7 @@ cd backend
 
 Wenn die Tests erfolgreich durchlaufen, wird am Ende `BUILD SUCCESS` angezeigt.
 
-Dieser Test prüft den technischen Start des Backends. Die einzelnen Funktionen werden zusätzlich über die Testdokumentation geprüft.
+Die Tests prüfen den Anwendungsstart und zentrale API-Funktionen einschließlich Anmeldung, Zugriffsrechten, Validierung und Buchungskonflikten. Details stehen in docs/TESTING.md.
 
 ## 10. Frontend prüfen
 
@@ -278,3 +278,11 @@ Weitere Informationen befinden sich in:
 - `docs/TESTING.md`
 - `docs/DEMO.md`
 - F3 „Anwendungsfunktionen“
+
+## Aktuelle lokale Verbindung und Tests
+
+`VITE_API_URL` bleibt für den lokalen Standardstart leer. Alle Komponenten verwenden dieselbe API-Anbindung; Vite leitet `/api` an `http://localhost:8080` weiter. Beide Server müssen laufen. Bei belegtem Frontend-Port wird nicht stillschweigend ein anderer Port verwendet.
+
+Die Anmeldung benötigt die Sitzungscookies und für schreibende Aufrufe einen CSRF-Nachweis von `/api/auth/csrf`. Die Oberfläche erledigt dies automatisch. Nach Serverneustart gegebenenfalls neu anmelden.
+
+Backend-Tests laufen standardmäßig gegen eine separate H2-Datenbank im Arbeitsspeicher: `cd backend` und `./mvnw test`. Der normale Anwendungsstart nutzt weiterhin PostgreSQL. Produktions- oder persönliche Daten dürfen nicht für schreibende Integrationstests eingesetzt werden. HTTPS und sichere Bereitstellung außerhalb des lokalen Rechners sind ein eigener Arbeitsschritt.

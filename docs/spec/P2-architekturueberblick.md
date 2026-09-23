@@ -1,6 +1,6 @@
 # P2 Architekturüberblick
 
-Stand: 22.09.2026
+Stand: 23.09.2026
 
 ## Ziel
 
@@ -34,14 +34,12 @@ Aktuell können über das Frontend unter anderem folgende Funktionen genutzt wer
 - Ressourcen für einen vorhandenen Termin buchen
 - Rückmeldungen bei erfolgreichen oder nicht möglichen Buchungen anzeigen
 
-Für eine Ressourcenbuchung wird aktuell die ID eines vorhandenen Termins eingegeben. Eine direkte Auswahl aus einer Terminliste gibt es noch nicht.
+Für Ressourcenbuchungen wird ein eigener Termin aus einer Liste ausgewählt. Sein Zeitraum wird vorbelegt und kann angepasst werden.
 
 Noch nicht vollständig umgesetzt sind unter anderem:
 
-- Anmeldung und Registrierung
 - Dashboard
 - vollständige Kalender- und Terminverwaltung
-- Teilnehmerauswahl
 - Aufgabenverwaltung
 - Einladungen und Benachrichtigungen
 
@@ -55,7 +53,7 @@ Der Aufbau besteht hauptsächlich aus:
 - **Repositories:** Werden verwendet, um Daten aus der Datenbank zu lesen und zu speichern.
 - **Entity-Klassen:** Stellen die Datenobjekte der Anwendung dar.
 
-Eine eigene Service-Schicht ist aktuell noch nicht vorhanden. Ein Teil der Geschäftslogik befindet sich deshalb direkt in den Controllern.
+TerminService und TerminanfrageService verarbeiten die Anlage und Validierung. Die Ressourcenbuchung und die Intervallberechnung enthalten noch Geschäftslogik in Controllern.
 
 Das Backend ermöglicht aktuell unter anderem:
 
@@ -66,7 +64,7 @@ Das Backend ermöglicht aktuell unter anderem:
 - Ressourcenbuchungen anlegen und abrufen
 - Überschneidungen bei Ressourcenbuchungen prüfen
 
-Benutzer und Kalender sind als Datenmodelle vorhanden. Registrierung und Anmeldung sind umgesetzt. Eine weitergehende Zugriffskontrolle ist noch nicht umgesetzt.
+Benutzer und Kalender sind als Datenmodelle vorhanden. Registrierung und Anmeldung sind umgesetzt. Persönliche Termine, Anfragen und Buchungen sind durch Anmeldung und Eigentumsprüfungen geschützt. Ein organisationsbezogenes Rollenmodell ist nicht umgesetzt.
 
 ## Datenbank
 
@@ -101,12 +99,12 @@ Das Datenmodell wird zusätzlich in D1 und D2 beschrieben.
 6. Mögliche freie Zeitfenster werden berechnet.
 7. Das Ergebnis wird an das Frontend zurückgegeben und dort angezeigt.
 
-Die vollständige Teilnehmerauswahl ist aktuell noch nicht über das Frontend umgesetzt.
+Teilnehmer können über das Frontend ausgewählt werden; der Ersteller nimmt immer selbst teil.
 
 ### Ressource buchen
 
 1. Das Frontend lädt die vorhandenen Ressourcen.
-2. Der Benutzer wählt eine Ressource aus und gibt eine Termin-ID sowie einen Zeitraum an.
+2. Der Benutzer wählt eine Ressource und einen eigenen Termin aus und prüft den vorbelegten Zeitraum.
 3. Die Buchungsanfrage wird an das Backend geschickt.
 4. Das Backend prüft, ob sich der Zeitraum mit einer vorhandenen Buchung derselben Ressource überschneidet.
 5. Wenn keine Überschneidung besteht, wird die Buchung gespeichert.
@@ -133,8 +131,6 @@ Einige ursprünglich geplante Funktionen sind aktuell noch nicht vollständig um
 
 Dazu gehören insbesondere:
 
-- Anmeldung und Registrierung
-- Zugriffskontrolle
 - vollständige Kalender- und Terminverwaltung
 - Teilnehmerverwaltung
 - Aufgabenverwaltung

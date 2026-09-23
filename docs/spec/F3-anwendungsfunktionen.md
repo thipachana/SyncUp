@@ -1,74 +1,18 @@
 # F3 Anwendungsfunktionen
 
-Stand: 22.09.2026
+Stand: 23.09.2026 – lokaler Arbeitsstand vor Commit und Teamabnahme.
 
-## Ziel
+| Bereich | Umgesetzt | Noch offen |
+| --- | --- | --- |
+| Benutzer | Registrierung, Anmeldung, Abmeldung; BCrypt; Sitzungswechsel und CSRF-Schutz | Profil bearbeiten, Passwort ändern/zurücksetzen, Organisations-/Adminrollen |
+| Kalender | Eigener Monatskalender; Termine erstellen, anzeigen und löschen | Bestehende Termine bearbeiten, Suche, externe Kalendersynchronisation |
+| Terminfindung | Eigene Anfragen erstellen/anzeigen/löschen; Teilnehmer auswählen; Dauer getrennt eingeben; gemeinsame freie Intervalle berechnen | Einladungen, automatische Terminbestätigung für alle Teilnehmer |
+| Ressourcen | Räume anzeigen/anlegen; eigenen Termin auswählen und buchen; Nichtverfügbarkeit und Überschneidungen inklusive Parallelbuchungen prüfen | Buchungen stornieren/freigeben, alternative Räume vorschlagen |
+| Aufgaben | Noch nicht umgesetzt | Aufgaben anlegen, zuweisen, bearbeiten und abschließen |
+| Benachrichtigungen | Noch nicht umgesetzt | Einladungen, Erinnerungen und Änderungsnachrichten |
 
-Dieser Abschnitt zeigt, welche Funktionen für SyncUp geplant sind und was davon aktuell bereits umgesetzt ist.
+Der Ersteller ist immer Teilnehmer seiner Anfrage. Private Termine, Anfragen und Buchungen sind auf das eigene Konto beschränkt. Ressourcen und die Teilnehmerübersicht sind innerhalb dieser Teaminstanz für angemeldete Benutzer gemeinsam sichtbar.
 
-## Geplante Funktionen
+Ein Termin mit Ressourcenbuchung wird beim Löschen mit einer verständlichen Konfliktmeldung abgewiesen. Buchungen werden nicht stillschweigend gelöscht. Ein freies Zeitfenster ist ein Vorschlag, keine Reservierung.
 
-### Benutzerverwaltung
-
-- Benutzer registrieren
-- Benutzer anmelden
-- Profil bearbeiten
-- Passwort ändern
-
-### Kalenderverwaltung
-
-- Eigenen Kalender anzeigen
-- Termine erstellen
-- Termine bearbeiten
-- Termine löschen
-- Termine durchsuchen
-
-### Terminplanung
-
-- Teilnehmer hinzufügen
-- Gemeinsame freie Zeitfenster berechnen
-- Termine bestätigen
-- Einladungen versenden
-
-### Ressourcenverwaltung
-
-- Räume anzeigen
-- Räume reservieren
-- Ressourcen freigeben
-- Verfügbarkeit prüfen
-
-### Benachrichtigungen
-
-- Termineinladungen senden
-- Terminänderungen anzeigen
-- Erinnerungen versenden
-
-## Aktueller Umsetzungsstand
-
-### Umgesetzt
-
-- Terminanfragen erstellen, anzeigen und löschen
-- Termine im Backend speichern und abrufen
-- Gemeinsame freie Zeitfenster berechnen
-- Räume beziehungsweise Ressourcen anzeigen
-- Ressourcen reservieren
-- Überschneidende Ressourcenbuchungen verhindern
-- Daten in PostgreSQL speichern
-
-### Teilweise umgesetzt
-
-- Verfügbarkeit von Ressourcen prüfen
-- Kalender- und Terminverwaltung
-- Gemeinsame Terminplanung
-
-### Noch nicht vollständig umgesetzt
-
-- Registrierung und Anmeldung
-- Vollständige Benutzerverwaltung
-- Profil bearbeiten
-- Passwort ändern
-- Teilnehmer hinzufügen
-- Einladungen versenden
-- Ressourcen freigeben
-- Benachrichtigungen und Erinnerungen
-- Aufgabenverwaltung
+Die Zeiten sind lokale Kalenderzeiten ohne Zeitzonen. Ein Suchzeitraum kann mehrere Tage umfassen. Testergebnisse und verbleibende Funktionsgrenzen stehen in [TESTING](../TESTING.md).

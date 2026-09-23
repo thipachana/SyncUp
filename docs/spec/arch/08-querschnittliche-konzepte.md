@@ -16,7 +16,7 @@ Das Frontend greift nicht direkt auf die PostgreSQL-Datenbank zu.
 
 Benutzerdaten können im Backend verarbeitet und in der Datenbank gespeichert werden.
 
-Registrierung und Anmeldung mit serverseitiger Session sind umgesetzt. Profilverwaltung und eine weitergehende Zugriffskontrolle sind im aktuellen Entwicklungsstand noch nicht umgesetzt.
+Registrierung und Anmeldung mit serverseitiger Session sind umgesetzt. SessionSecurity prüft zentral Anmeldung und CSRF-Nachweise. Controller und Services prüfen Eigentum für persönliche Daten. Profilverwaltung und Organisationsrollen bleiben offen.
 
 ## Datenhaltung
 
@@ -39,10 +39,12 @@ Das Passwortfeld eines Benutzers wird nicht in den JSON-Antworten der REST-Schni
 
 Dadurch wird verhindert, dass gespeicherte Passwörter bei normalen API-Abfragen an das Frontend übertragen werden.
 
-Passwörter werden mit BCrypt gehasht. Eine weitergehende Autorisierung und Zugriffskontrolle ist als Erweiterung vorgesehen.
+Passwörter werden mit BCrypt gehasht. Die Sitzungs-ID und der CSRF-Nachweis wechseln nach Anmeldung; Abmeldung invalidiert die Sitzung. Cookies sind HttpOnly und SameSite=Lax. Persönliche Daten werden serverseitig nach Besitzer gefiltert.
 
 ## Konfiguration
 
-Die Adresse des Backends wird im Frontend über `VITE_API_URL` konfiguriert.
+Lokal bleibt `VITE_API_URL` leer; Vite leitet `/api` an Port 8080 weiter. Eine abweichende API-Adresse kann ausdrücklich konfiguriert werden.
 
 Dadurch kann das Frontend in unterschiedlichen lokalen Entwicklungsumgebungen mit verschiedenen Backend-Adressen verwendet werden.
+
+Ressourcenbuchungen sperren den Termin und anschließend die Ressource innerhalb derselben Transaktion. Die Konfliktprüfung und Speicherung erfolgen unter dieser Sperre. Terminlöschen prüft unter derselben Terminsperre vorhandene Buchungen und lehnt dann mit 409 ab.

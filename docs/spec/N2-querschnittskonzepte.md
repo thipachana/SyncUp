@@ -1,6 +1,6 @@
 # N2 Querschnittskonzepte
 
-Stand: 22.09.2026
+Stand: 23.09.2026
 
 ## Fehlerbehandlung
 
@@ -14,7 +14,7 @@ Frontend und Backend kommunizieren über REST-Schnittstellen.
 
 Passwörter werden bei API-Abfragen nicht an das Frontend zurückgegeben.
 
-Registrierung und Anmeldung mit serverseitiger Session sind umgesetzt. Eine weitergehende Zugriffskontrolle ist aktuell noch nicht umgesetzt.
+Registrierung und Anmeldung mit serverseitiger Session sind umgesetzt. Anmeldung und Eigentumsprüfungen schützen persönliche Daten. Ein organisationsbezogenes Rollenmodell ist noch offen.
 
 Für eine spätere produktive Nutzung sollte die Verbindung zusätzlich über HTTPS abgesichert werden.
 

@@ -2,7 +2,7 @@
 
 In diesem Kapitel werden zentrale Architekturentscheidungen des Projekts SyncUp dokumentiert.
 
-## ADR-001: Drei-Schichten-Architektur
+## Architekturprinzip: Drei-Schichten-Architektur
 
 ### Kontext
 SyncUp benötigt eine Benutzeroberfläche, eine zentrale Verarbeitung der Anwendungslogik und eine dauerhafte Speicherung der Daten.
@@ -23,7 +23,7 @@ Die einzelnen Schichten müssen über definierte Schnittstellen miteinander komm
 
 ---
 
-## ADR-002: REST-Schnittstelle zwischen Frontend und Backend
+## ADR-004: REST-Schnittstelle zwischen Frontend und Backend
 
 ### Kontext
 Das React-Frontend benötigt eine Schnittstelle, um Daten vom Backend abzurufen und neue Daten an das Backend zu senden.
@@ -65,7 +65,7 @@ Für die lokale Ausführung muss PostgreSQL eingerichtet sein. Änderungen an de
 
 ---
 
-## ADR-004: React mit Vite für das Frontend
+## ADR-002: React mit Vite für das Frontend
 
 ### Kontext
 SyncUp benötigt eine browserbasierte Benutzeroberfläche zur Darstellung und Bedienung der Funktionen.
@@ -97,10 +97,12 @@ Eine Ressource, beispielsweise ein Raum, darf nicht gleichzeitig für sich über
 - Zentrale Prüfung im Backend
 
 ### Entscheidung
-Vor dem Speichern einer Ressourcenbuchung prüft das Backend, ob für die ausgewählte Ressource bereits eine zeitlich überschneidende Buchung existiert.
+Innerhalb einer Transaktion sperrt das Backend die Ressource und prüft vor dem Speichern, ob für die ausgewählte Ressource bereits eine zeitlich überschneidende Buchung existiert.
 
 ### Begründung
 Die Geschäftsregel soll unabhängig vom verwendeten Frontend gelten. Eine Prüfung ausschließlich im Frontend könnte umgangen werden, beispielsweise durch einen direkten Aufruf der REST-Schnittstelle.
 
 ### Konsequenzen
 Überschneidende Buchungen werden vom Backend abgelehnt. Das Frontend muss die entsprechende Fehlermeldung behandeln und dem Benutzer anzeigen.
+
+Die nummerierten Basisentscheidungen stehen in [ADR 001 – Spring Boot](adrs/001-use-spring-boot.md), [ADR 002 – React](adrs/002-use-react.md), [ADR 003 – PostgreSQL](adrs/003-use-postgresql.md) und [ADR 004 – REST](adrs/004-use-rest-api.md). Die Schichtentrennung ist ein Architekturprinzip ohne konkurrierende ADR-Nummer.

@@ -1,6 +1,6 @@
 # F2 Anwendungsfälle
 
-Stand: 22.09.2026
+Stand: 23.09.2026
 
 ## Ziel
 
@@ -26,7 +26,7 @@ Die Registrierung und Anmeldung sind umgesetzt.
 
 Ein Datenmodell für Benutzer ist bereits vorhanden. Das Passwort wird bei API-Abfragen nicht ausgegeben.
 
-Die Passwörter werden mit BCrypt gehasht. Eine weitergehende Zugriffskontrolle ist noch nicht umgesetzt.
+Die Passwörter werden mit BCrypt gehasht. Persönliche Termine, Anfragen und Buchungen sind durch Anmeldung und Eigentumsprüfungen geschützt. Ein organisationsbezogenes Rollenmodell ist nicht umgesetzt.
 
 ---
 
@@ -46,7 +46,7 @@ Die Passwörter werden mit BCrypt gehasht. Eine weitergehende Zugriffskontrolle 
 
 Das Backend kann Termine bereits anlegen und abrufen. Die Termine werden in PostgreSQL gespeichert.
 
-Eine vollständige Terminverwaltung über das Frontend und die Teilnehmerauswahl sind noch nicht umgesetzt.
+Eigene Termine können im Monatskalender angelegt, angezeigt und gelöscht werden. Teilnehmer werden in Terminanfragen ausgewählt. Terminbearbeitung und Einladungen sind noch offen.
 
 ---
 
@@ -65,15 +65,9 @@ Eine vollständige Terminverwaltung über das Frontend und die Teilnehmerauswahl
 
 ### Aktueller Stand
 
-Die Berechnung freier Zeitfenster ist bereits teilweise umgesetzt.
+Freie Zeitfenster werden für die ausgewählten Teilnehmer und die gewünschte Dauer berechnet.
 
 Das Backend kann vorhandene Termine berücksichtigen und freie Zeitfenster berechnen. Das Frontend kann die Berechnung aufrufen und die Ergebnisse anzeigen.
-
-Noch nicht vollständig umgesetzt sind:
-
-- Teilnehmerauswahl über das Frontend
-- separate Eingabe der gewünschten Termindauer
-- vollständiger Abgleich mehrerer Teilnehmer über die Oberfläche
 
 ---
 
@@ -85,7 +79,7 @@ Noch nicht vollständig umgesetzt sind:
 
 1. Vorhandene Ressourcen werden angezeigt.
 2. Der Benutzer wählt eine Ressource aus.
-3. Eine vorhandene Termin-ID und ein Zeitraum werden angegeben.
+3. Ein eigener Termin wird ausgewählt und der vorbelegte Buchungszeitraum geprüft.
 4. Die Buchungsanfrage wird an das Backend gesendet.
 5. Das Backend prüft, ob für die Ressource bereits eine überschneidende Buchung vorhanden ist.
 6. Wenn die Ressource im Zeitraum frei ist, wird die Buchung gespeichert.
@@ -100,8 +94,6 @@ Der grundlegende Buchungsablauf ist umgesetzt.
 
 Noch nicht vollständig umgesetzt sind:
 
-- Auswahl eines Termins über eine Terminliste
-- vollständige Prüfung der allgemeinen Ressourcenverfügbarkeit
 - Freigabe einer bereits gebuchten Ressource
 - Vorschläge für alternative Ressourcen
 
@@ -145,7 +137,7 @@ Auch automatische Benachrichtigungen der Teilnehmer sind noch nicht vorhanden.
 
 Das Erstellen, Anzeigen und Löschen von Terminanfragen ist bereits umgesetzt.
 
-Die Teilnehmerauswahl und weitere Funktionen für eine vollständige gemeinsame Terminplanung fehlen noch.
+Teilnehmerwahl, separate Dauer und Abgleich der Teilnehmerkalender sind umgesetzt. Einladungen und automatische Terminbestätigung bleiben offen.
 
 ---
 
@@ -163,10 +155,8 @@ Die Teilnehmerauswahl und weitere Funktionen für eine vollständige gemeinsame 
 
 **Noch nicht vollständig umgesetzt:**
 
-- Registrierung und Anmeldung
-- Zugriffskontrolle
-- Teilnehmerverwaltung
-- vollständige Terminverwaltung im Frontend
+- Einladungen und nachträgliche Änderung der Teilnehmer
+- Bearbeiten bestehender Termine im Frontend
 - Einladungen und Benachrichtigungen
 - Aufgabenverwaltung
 - Freigabe von Ressourcen

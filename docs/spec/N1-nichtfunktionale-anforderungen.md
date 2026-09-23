@@ -1,6 +1,6 @@
 # N1 Nichtfunktionale Anforderungen
 
-Stand: 22.09.2026
+Stand: 23.09.2026
 
 ## Benutzerfreundlichkeit
 
@@ -20,7 +20,7 @@ Benutzerdaten und Passwörter sollen geschützt verarbeitet werden.
 
 Passwörter werden bei API-Abfragen nicht an das Frontend zurückgegeben.
 
-Registrierung und Anmeldung sowie eine sichere Passwortspeicherung mit BCrypt sind umgesetzt. Eine weitergehende Zugriffskontrolle ist aktuell noch nicht umgesetzt.
+Registrierung und Anmeldung sowie eine sichere Passwortspeicherung mit BCrypt sind umgesetzt. Anmeldung und Eigentumsprüfungen schützen persönliche Daten. Ein organisationsbezogenes Rollenmodell ist noch offen.
 
 ## Wartbarkeit
 

@@ -1,81 +1,29 @@
 # B1 Dialogspezifikation
 
-Stand: 22.09.2026
+Stand: 23.09.2026
 
-## Ziel
+## Oberfläche und Anmeldung
 
-Dieser Abschnitt beschreibt die wichtigsten Benutzeroberflächen von SyncUp und den aktuellen Stand des Frontends.
+Das bestehende grüne Dashboard mit Hero-Bereich, drei Planungskarten und Monatskalender bleibt erhalten. Home, Mein Kalender und Anmeldung sind auch bei schmalen Fenstern erreichbar.
 
-## Login und Registrierung
+Anmeldung und Registrierung öffnen ein schließbares Dialogfenster mit zwei Reitern. Registrierung benötigt Name, E-Mail und Passwort (mindestens acht Zeichen, höchstens 72 UTF-8-Bytes). Ein eigener Kalender wird erstellt; anschließend meldet die Oberfläche an. Ohne Anmeldung bleibt die Startseite sichtbar, persönliche Daten werden nicht geladen und Schreibaktionen sind gesperrt.
 
-Eine Anmeldung und Registrierung ist in SyncUp umgesetzt.
+## Mein Kalender
 
-Benutzer können sich mit ihrer E-Mail-Adresse und einem Passwort anmelden oder ein neues Konto erstellen.
+Die Monatsübersicht bietet Vor-/Zurücknavigation. Ein Klick auf einen Tag öffnet die Eingabe von Titel, Beginn und Ende. Eigene Termine erscheinen am passenden Tag. Löschen ist für eigene Termine ohne Ressourcenbuchung möglich; andernfalls wird ein Konflikt angezeigt. Terminbearbeitung ist noch nicht umgesetzt.
 
-Diese Funktionen sind aktuell noch nicht umgesetzt.
+## Terminanfragen und Zeitfenster
 
-## Dashboard
-
-Ein Dashboard mit einer Übersicht über Termine, Aufgaben und Benachrichtigungen ist geplant.
-
-Diese Ansicht ist aktuell noch nicht umgesetzt.
-
-## Termine und Terminanfragen
-
-Terminanfragen können im Frontend angezeigt, erstellt und gelöscht werden.
-
-Termine werden aktuell hauptsächlich über das Backend verwaltet.
-
-Für Terminanfragen können freie Zeitfenster berechnet und im Frontend angezeigt werden.
-
-## Terminplanung
-
-Für eine Terminanfrage wird ein Zeitraum festgelegt.
-
-Das Backend berücksichtigt bereits vorhandene Termine und berechnet daraus mögliche freie Zeitfenster.
-
-Die Ergebnisse werden im Frontend angezeigt.
-
-Noch nicht vollständig umgesetzt sind:
-
-- Teilnehmerauswahl
-- vollständiger Abgleich mehrerer Teilnehmer über das Frontend
-- Einladungen
-- Bestätigung eines freien Zeitfensters als neuer Termin
+Die linke Dashboardkarte enthält Titel, Suchzeitraum, unabhängige Dauer und Teilnehmerauswahl. Der Ersteller nimmt immer teil. Eigene Anfragen können angezeigt und gelöscht werden. „Freie Zeiten“ zeigt die gemeinsamen freien Intervalle in der mittleren Karte, einschließlich des Enddatums bei mehrtägigen Intervallen. Ergebnisse sind ihrer Anfrage zugeordnet; alte Antworten dürfen neuere Ergebnisse nicht überschreiben.
 
 ## Ressourcen
 
-Vorhandene Ressourcen wie Räume können im Frontend angezeigt werden.
+Die rechte Karte bietet eine Auswahl eigener Termine. Deren Zeiten werden vorbelegt und können angepasst werden. Nur verfügbare Ressourcen können gebucht werden. Überschneidungen ergeben eine sichtbare Konfliktmeldung. Unter „Neue Ressource anlegen“ kann ein Raum mit Name und Kapazität angelegt werden. Das Freigeben bestehender Buchungen ist noch offen.
 
-Für eine Ressource kann eine Buchung mit einer vorhandenen Termin-ID und einem Zeitraum erstellt werden.
+## Rückmeldungen und Sitzungswechsel
 
-Das Backend prüft, ob für dieselbe Ressource bereits eine Buchung im gewünschten Zeitraum vorhanden ist.
+Lade-, Validierungs-, Speicher- und Verbindungsfehler werden sichtbar angezeigt. Während eines Speichervorgangs sind erneute Speicherklicks gesperrt. Nach Abmeldung oder Benutzerwechsel werden die bisherigen persönlichen Daten und Formulare verworfen. Eine fehlgeschlagene Abmeldung wird nicht als Erfolg angezeigt.
 
-Bei einer Überschneidung wird die Buchung abgelehnt und das Frontend zeigt eine Fehlermeldung an.
+## Geplante Dialoge
 
-## Aufgaben
-
-Eine Aufgabenverwaltung ist geplant.
-
-Das Anlegen, Bearbeiten und Abschließen von Aufgaben ist aktuell noch nicht umgesetzt.
-
-## Aktuell mögliche Bedienabläufe
-
-Aktuell können unter anderem folgende Abläufe über die Oberfläche durchgeführt werden:
-
-1. Terminanfragen anzeigen, erstellen und löschen.
-2. Freie Zeitfenster für eine Terminanfrage berechnen und anzeigen.
-3. Vorhandene Ressourcen anzeigen.
-4. Eine Ressource für einen vorhandenen Termin buchen.
-5. Eine Fehlermeldung anzeigen, wenn eine Ressource im gewünschten Zeitraum bereits gebucht ist.
-
-## Noch nicht vollständig umgesetzt
-
-- Anmeldung und Registrierung
-- Profil- und Passwortverwaltung
-- vollständige Terminverwaltung im Frontend
-- Teilnehmerverwaltung
-- Einladungen
-- Aufgabenverwaltung
-- Benachrichtigungen und Erinnerungen
-- Freigabe bereits gebuchter Ressourcen
+Profil- und Passwortverwaltung, Aufgaben, Einladungen, Benachrichtigungen, Terminbearbeitung und Buchungsstornierung sind noch nicht umgesetzt.

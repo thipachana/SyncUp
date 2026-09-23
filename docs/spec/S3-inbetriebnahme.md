@@ -1,6 +1,6 @@
 # S3 Inbetriebnahme
 
-Stand: 22.09.2026
+Stand: 23.09.2026
 
 ## Ziel
 
@@ -53,7 +53,7 @@ Diese wird über `VITE_API_URL` eingestellt.
 
 Für eine lokale Ausführung kann beispielsweise folgende Einstellung verwendet werden:
 
-`VITE_API_URL=http://localhost:8080`
+`VITE_API_URL=`
 
 ## Start der Anwendung
 
@@ -107,3 +107,11 @@ Weitere Informationen befinden sich in:
 - `docs/TESTING.md` – Test der Funktionen
 - `docs/DEMO.md` – Ablauf der Demonstration
 - F3 „Anwendungsfunktionen“ – aktueller Funktionsumfang
+
+## Aktuelle lokale Verbindung und Tests
+
+`VITE_API_URL` bleibt für den lokalen Standardstart leer. Alle Komponenten verwenden dieselbe API-Anbindung; Vite leitet `/api` an `http://localhost:8080` weiter. Beide Server müssen laufen. Bei belegtem Frontend-Port wird nicht stillschweigend ein anderer Port verwendet.
+
+Die Anmeldung benötigt die Sitzungscookies und für schreibende Aufrufe einen CSRF-Nachweis von `/api/auth/csrf`. Die Oberfläche erledigt dies automatisch. Nach Serverneustart gegebenenfalls neu anmelden.
+
+Backend-Tests laufen standardmäßig gegen eine separate H2-Datenbank im Arbeitsspeicher: `cd backend` und `./mvnw test`. Der normale Anwendungsstart nutzt weiterhin PostgreSQL. Produktions- oder persönliche Daten dürfen nicht für schreibende Integrationstests eingesetzt werden. HTTPS und sichere Bereitstellung außerhalb des lokalen Rechners sind ein eigener Arbeitsschritt.

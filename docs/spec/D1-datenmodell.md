@@ -1,6 +1,6 @@
 # D1 Datenmodell
 
-Stand: 22.09.2026
+Stand: 23.09.2026
 
 ## Ziel
 
@@ -22,7 +22,7 @@ Wichtige Daten sind:
 
 Das Passwort wird bei API-Abfragen nicht zurückgegeben.
 
-Registrierung und Anmeldung sind umgesetzt. Passwörter werden mit BCrypt gehasht und nicht in API-Antworten ausgegeben. Eine weitergehende Zugriffskontrolle ist aktuell noch nicht umgesetzt.
+Registrierung und Anmeldung sind umgesetzt. Passwörter werden mit BCrypt gehasht und nicht in API-Antworten ausgegeben. Anmeldung und Eigentumsprüfungen schützen persönliche Daten. Ein organisationsbezogenes Rollenmodell ist noch offen.
 
 ## Kalender
 
@@ -113,3 +113,9 @@ Die wichtigsten Datenobjekte für Termine, Terminanfragen, Ressourcen und Buchun
 Einige ursprünglich geplante Funktionen, wie die vollständige Benutzerverwaltung und Teilnehmerverwaltung, sind noch nicht vollständig umgesetzt.
 
 Die genauen technischen Datentypen und Felder werden zusätzlich in D2 beschrieben.
+
+## Eigentum und Bestandsdaten (23.09.2026)
+
+Terminanfragen besitzen zusätzlich `ersteller_id` als Fremdschlüssel auf Benutzer. Bei neuen Anfragen ist der Ersteller gesetzt. Alte Anfragen ohne Ersteller werden keinem Benutzer automatisch zugeordnet und bleiben bei persönlichen Abfragen ausgeblendet; sie werden nicht gelöscht. Eine Zuordnung erfordert eine geprüfte Migration, andernfalls wird die Anfrage neu angelegt.
+
+Das Benutzerfeld Passwort enthält ausschließlich den BCrypt-Hash neu registrierter Konten und wird nicht in API-Antworten ausgegeben. Personenbezogene Rückgaben werden auf den jeweiligen Zweck begrenzt. Persönliche Kalender und Termine bleiben ihren Besitzern zugeordnet.

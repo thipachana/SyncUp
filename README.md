@@ -11,7 +11,9 @@ Die Anwendung soll dabei helfen, freie Zeitfenster zu finden und Ressourcen wie 
 Aktuell sind unter anderem folgende Funktionen vorhanden:
 
 - Terminanfragen erstellen, anzeigen und löschen
-- Termine im Backend speichern und abrufen
+- Eigene Termine im Monatskalender erstellen, anzeigen und löschen
+- Registrierung, Anmeldung und Abmeldung mit Sitzungsschutz
+- Teilnehmerauswahl und separate Meetingdauer
 - freie Zeitfenster anhand vorhandener Termine berechnen
 - Ressourcen anzeigen
 - Ressourcen buchen
@@ -25,10 +27,9 @@ Einige Funktionen sind bisher nur teilweise umgesetzt. Der genaue Stand wird in 
 
 Dazu gehören unter anderem:
 
-- Registrierung und Anmeldung
 - vollständige Benutzerverwaltung
-- vollständige Kalender- und Terminverwaltung im Frontend
-- Teilnehmerverwaltung
+- Termine bearbeiten und durchsuchen
+- Erweiterte Teilnehmerverwaltung und Einladungen
 - Einladungen und Benachrichtigungen
 - Ressourcen freigeben
 - Aufgabenverwaltung

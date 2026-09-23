@@ -1,66 +1,38 @@
-# SyncUp – Testcheckliste
+# SyncUp – Prüfstand 23.09.2026
 
-Stand: 23.09.2026
+Basis: GitHub main adbb031 plus die noch nicht committeten lokalen Korrekturen.
 
-Diese Checkliste wird verwendet, um die wichtigsten Funktionen von SyncUp vor der Abgabe zu prüfen.
+## Automatisierte Prüfung
 
-## 1. Backend
+- Backend: jetzt 12 Tests erfolgreich gegen H2 einschließlich UC5. Der vorherige Stand mit 10 Tests wurde auch gegen eine separate PostgreSQL-17-Testdatenbank geprüft.
+- Frontend: 8 API-Client-Tests erfolgreich; Produktionsbuild erfolgreich; Lint-Prüfung ohne Warnungen.
+- Backend deckt Registrierung, Passwortprüfung, Sessionwechsel, CSRF, anonyme Zugriffe, fremde Objekte, Eingabevalidierung, gemeinsame freie Zeitfenster und konkurrierende Ressourcenbuchungen ab.
+- Client-Tests prüfen insbesondere Sessionwechsel, verspätete Antworten, CSRF, Verbindungsfehler und fehlgeschlagene Abmeldung.
 
-- [x] Spring Boot startet ohne Fehler
-- [x] Verbindung zu PostgreSQL funktioniert
-- [x] Persönliche Termine können über die API abgerufen werden
-- [ ] Terminanfragen können über die API abgerufen werden
-- [ ] Ressourcen können über die API abgerufen werden
-- [ ] Buchungen können über die API abgerufen werden
-
-## 2. Persönlicher Kalender
-
-- [x] Angemeldeter Benutzer kann einen persönlichen Termin erstellen
-- [x] Persönliche Termine können geladen werden
-- [x] Ein persönlicher Termin kann gelöscht werden
-- [x] Persönliche Terminendpunkte verwenden die angemeldete Session
-- [x] `/api/termine` ist ohne Anmeldung nicht zugänglich
-- [ ] Monatskalender im Frontend vollständig geprüft
-
-## 3. Terminanfragen und freie Zeitfenster
-
-- [ ] Terminanfrage kann erstellt werden
-- [ ] Teilnehmer können einer Terminanfrage zugeordnet werden
-- [ ] Suchzeitraum und Termindauer können unabhängig angegeben werden
-- [ ] Terminanfrage wird nach dem Speichern angezeigt
-- [ ] Terminanfrage bleibt nach dem Neuladen vorhanden
-- [ ] Terminanfrage kann gelöscht werden
-- [ ] Gemeinsame freie Zeitfenster können berechnet werden
-- [ ] Termine der ausgewählten Teilnehmer werden bei der Berechnung berücksichtigt
-
-## 4. Ressourcen und Buchungen
-
-- [ ] Vorhandene Ressourcen werden angezeigt
-- [ ] Eine Ressource kann für einen vorhandenen Termin gebucht werden
-- [ ] Die Buchung wird gespeichert
-- [ ] Eine überschneidende Buchung derselben Ressource wird verhindert
-- [ ] Das Backend antwortet bei einer Doppelbuchung mit HTTP 409
-- [ ] Das Frontend zeigt bei einer Doppelbuchung eine verständliche Fehlermeldung
-- [ ] Eine als nicht verfügbar markierte Ressource kann nicht gebucht werden
-
-## 5. Anmeldung und Sicherheit
-
-- [x] Registrierung funktioniert
-- [x] Anmeldung funktioniert
-- [x] Session kann über `/api/auth/me` geprüft werden
-- [x] Benutzerliste ist für angemeldete Benutzer erreichbar
-- [x] Abmeldung funktioniert
-- [x] Nach der Abmeldung liefert `/api/auth/me` HTTP 401
-- [x] Passwörter werden bei API-Abfragen nicht ausgegeben
-- [x] `/api/termine` liefert ohne Anmeldung HTTP 401
-
-Die persönlichen Terminendpunkte sind an die angemeldete Session gebunden.
-Eine vollständige rollen- und objektbezogene Zugriffskontrolle für alle Geschäftsbereiche ist derzeit noch nicht umgesetzt.
-
-## 6. Automatisierter Backend-Smoke-Test
-
-Für zentrale Backend-Funktionen steht folgendes Skript zur Verfügung:
+Vom Projektverzeichnis aus:
 
 ```bash
-./scripts/backend-smoke-test.sh
-q
+cd backend
+./mvnw test
+cd ../frontend
+npm ci
+npm test
+npm run lint
+npm run build
+```
+
+Tests verwenden standardmäßig H2 und verändern keine laufenden Anwendungsdaten. PostgreSQL-Integrationstests ausschließlich mit einer getrennten Testdatenbank ausführen: Die Tests erstellen und löschen Tabellen!
+
+## Im Browser geprüft
+
+Auf einer getrennten Testinstanz: Anmeldung, persönlicher Kalendereintrag, Teilnehmerauswahl, gemeinsame freie Zeiten, Raum anlegen, eigenen Termin auswählen, erfolgreiche Buchung, verständliche Meldung bei Doppelbuchung sowie Abmeldung ohne zurückbleibende private Anfragen. Navigation auch bei schmalem Fenster sichtbar. Das vorhandene grüne Layout bleibt erhalten.
+Registrierung ist per API geprüft, nicht als vollständiger Browserablauf. Eine vollständige Prüfung aller Browser und Geräte steht aus.
+
+## Noch offen / bewusste Grenzen
+
+- Bestehende Terminanfragen ohne Ersteller bleiben gespeichert, sind aber verborgen. Eine fachlich bestätigte Zuordnung alter Daten ist erforderlich, wenn diese weiter genutzt werden sollen.
+- Rollenabhängige Administration, Einladungen, Benachrichtigungen, Aufgaben, Passwortzurücksetzung und Ressourcenfreigabe sind noch nicht vollständig umgesetzt.
+- UC5 ergänzt: Terminbearbeitung, Teilnehmer und gespeicherte Benachrichtigungen; Details in UC5-TERMIN-BEARBEITEN.md. Die neue Oberfläche ist gebaut und statisch geprüft, noch nicht vollständig im Browser abgenommen.
+- Termine mit Buchungen können nicht gelöscht oder zeitlich verschoben werden; dafür wird eine verständliche Konfliktmeldung zurückgegeben. Eine Stornierungsfunktion fehlt.
+- Betrieb außerhalb des lokalen Rechners benötigt eine eigene HTTPS-, Cookie- und Proxy-Konfiguration.
+- Fachliche Abnahme durch das Team steht aus. Erfolgreiche Tests sind keine Garantie, dass das gesamte Projekt fehlerfrei ist.

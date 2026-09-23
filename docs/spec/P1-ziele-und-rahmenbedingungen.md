@@ -1,6 +1,6 @@
 # P1 Ziele und Rahmenbedingungen
 
-Stand: 22.09.2026
+Stand: 23.09.2026
 
 ## Projektziel
 
@@ -81,7 +81,7 @@ SyncUp richtet sich hauptsächlich an:
 - Die Daten werden in PostgreSQL gespeichert.
 - Die Anwendung wird aktuell lokal ausgeführt.
 - Frontend und Backend kommunizieren über REST-Schnittstellen.
-- Registrierung und Anmeldung sind umgesetzt. Eine weitergehende Zugriffskontrolle ist aktuell noch nicht umgesetzt.
+- Registrierung und Anmeldung sind umgesetzt. Anmeldung und Eigentumsprüfungen schützen persönliche Daten. Ein organisationsbezogenes Rollenmodell ist noch offen.
 - Die Installation und der Start der Anwendung werden in S3 „Inbetriebnahme“ und in der Installationsanleitung beschrieben.
 
 ## Erfolgsziele
