@@ -207,6 +207,7 @@ const terminHatBereitsRaum =
             `${start} bis ${end}`,
         },
       })
+      setBuchungen((alle) => [...alle, neueBuchung])
 
       setSuccess(true)
       setMessage(
@@ -431,21 +432,7 @@ const terminHatBereitsRaum =
     : 'Verfügbar'}
 </span>
 
-  <span
-  className={
-    ressourceIstBelegt(ressource.ressourcenId)
-      ? 'availability unavailable'
-      : ressource.verfuegbarkeit
-        ? 'availability available'
-        : 'availability unavailable'
-  }
->
-  {ressourceIstBelegt(ressource.ressourcenId)
-    ? 'Nicht verfügbar'
-    : ressource.verfuegbarkeit
-      ? 'Verfügbar'
-      : 'Nicht verfügbar'}
-</span>
+ 
 
 </div>
 
