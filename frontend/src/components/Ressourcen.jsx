@@ -413,23 +413,20 @@ const terminHatBereitsRaum =
   </div>
 
   <span
-    className={
-      terminHatBereitsRaum ||
-      ressourceIstBelegt(ressource.ressourcenId)
-        ? 'availability unavailable'
-        : ressource.verfuegbarkeit
-          ? 'availability available'
-          : 'availability unavailable'
-    }
-  >
-    {terminHatBereitsRaum
-      ? 'Bereits reserviert'
-      : ressourceIstBelegt(ressource.ressourcenId)
-        ? 'Nicht verfügbar'
-        : ressource.verfuegbarkeit
-          ? 'Verfügbar'
-          : 'Nicht verfügbar'}
-  </span>
+  className={
+    ressourceIstBelegt(ressource.ressourcenId)
+      ? 'availability unavailable'
+      : ressource.verfuegbarkeit
+        ? 'availability available'
+        : 'availability unavailable'
+  }
+>
+  {ressourceIstBelegt(ressource.ressourcenId)
+    ? 'Nicht verfügbar'
+    : ressource.verfuegbarkeit
+      ? 'Verfügbar'
+      : 'Nicht verfügbar'}
+</span>
 
 </div>
 
