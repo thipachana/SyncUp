@@ -1,19 +1,56 @@
 # UC5 – Termin bearbeiten und Benachrichtigungen
 
-Der Ersteller kann im Monatskalender einen bestehenden Termin mit „Bearbeiten“ öffnen, Titel, Beschreibung, Datum, Zeiten und Teilnehmer ändern und speichern. Teilnehmer sehen den Termin ebenfalls in ihrem Kalender, dürfen ihn jedoch nicht bearbeiten oder löschen.
+Stand: 24.09.2026
 
-Die Glocke rechts oben zeigt gespeicherte Benachrichtigungen und die Anzahl ungelesener Meldungen. Beim Öffnen sowie alle 15 Sekunden wird aktualisiert; einzelne Meldungen können als gelesen markiert werden. Nur der jeweilige Empfänger hat Zugriff. Es werden keine E-Mails oder Betriebssystem-Push-Nachrichten versendet.
+## Termin bearbeiten
 
-Änderungen benachrichtigen die bisherigen und neuen Teilnehmer außer dem Bearbeiter. Entfernte Teilnehmer bekommen nur einen Entfernungshinweis. Unverändertes Speichern erzeugt keine zusätzliche Nachricht. Alte persönliche Termine erhalten nicht automatisch Teilnehmer aus früheren Terminanfragen; diese Zuordnung muss beim Bearbeiten ausdrücklich erfolgen.
+Eigene Termine können über den persönlichen Kalender bearbeitet werden.
 
-Bestehende Ressourcenbuchungen verhindern Änderungen an Datum und Zeiten mit HTTP 409. Es wird keine Buchung stillschweigend verschoben. Titel, Beschreibung und Teilnehmer bleiben bearbeitbar. Stornieren bzw. gemeinsames Verschieben der Buchung ist ein eigener noch offener Anwendungsfall.
+Dabei können die vorhandenen Angaben eines Termins geändert und anschließend gespeichert werden.
 
-API: PUT /api/me/termine/{id} und PUT /api/termine/{id}; optionale benutzerIds im Termin-Payload; GET /api/me/benachrichtigungen; POST /api/me/benachrichtigungen/{id}/gelesen. Schreibzugriffe benötigen Session und CSRF-Token. Migration im lokalen Entwicklungsbetrieb erfolgt über Hibernate ddl-auto=update; database/schema.sql beschreibt Neuinstallationen.
+Teilnehmer gemeinsamer Termine können den Termin in ihrem Kalender sehen. Die Bearbeitung erfolgt durch den jeweiligen Besitzer beziehungsweise Organisator des Termins.
+
+Private Termine besitzen keine Teilnehmerauswahl.
+
+## Benachrichtigungen
+
+Bei neu festgelegten gemeinsamen Terminen erhalten die beteiligten Teilnehmer eine Benachrichtigung innerhalb von SyncUp.
+
+Die Benachrichtigungen werden dem jeweiligen Benutzer zugeordnet und können über die Benutzeroberfläche angezeigt werden.
+
+Es werden keine E-Mails oder Betriebssystem-Push-Benachrichtigungen versendet.
+
+Weitergehende Benachrichtigungen, zum Beispiel bei jeder nachträglichen Änderung eines bestehenden Termins, sind nicht Bestandteil des aktuell nachgewiesenen Funktionsumfangs.
+
+## Ressourcenbuchungen und Terminänderungen
+
+Ressourcenbuchungen sind an einen bestehenden Termin gebunden.
+
+Die Buchungszeit wird aus dem Zeitraum des Termins übernommen.
+
+Beim Löschen eines Termins wird eine vorhandene Raumbuchung ebenfalls entfernt.
+
+Das Verhalten bei einer nachträglichen Änderung der Zeit eines bereits gebuchten Termins muss mit dem tatsächlich getesteten Stand übereinstimmen und wird deshalb nicht als eigener abgeschlossener Ablauf beschrieben.
+
+## Schnittstellen
+
+Für die Termin- und Benachrichtigungsfunktionen stellt das Backend REST-Schnittstellen bereit.
+
+Schreibende Zugriffe benötigen eine gültige Anmeldung und den vorgesehenen CSRF-Schutz.
+
+Die genaue technische Umsetzung ist in der Backend-Implementierung und der Architekturdokumentation beschrieben.
 
 ## Zuständigkeiten
 
-David: Backend, Teilnehmerzuordnung, Benachrichtigungsdaten, Schema und Integrationstests.
-Sarah: Bearbeiten-Formular, Teilnehmerauswahl, Glocke, Darstellung und Frontendprüfung.
-Thipachana: Spezifikation und Abnahme mit zwei Konten; vorhandene Übergabeanleitung verwenden.
+- David prüft die Backend-Logik und die Speicherung.
+- Sarah prüft die Darstellung und Bearbeitung im Frontend.
+- Thipachana prüft die Beschreibung in der Spezifikation und den Ablauf mit Testkonten.
+- Ilias unterstützt bei der technischen Integration.
 
-Die aktuellen Übergabepakete ersetzen die früheren Pakete vollständig. Nicht zusätzlich auf bereits angewendete alte Pakete anwenden.
+## Aktueller Stand
+
+Terminbearbeitung ist umgesetzt.
+
+Benachrichtigungen für neu festgelegte gemeinsame Termine sind umgesetzt.
+
+Weitere Benachrichtigungsarten und zusätzliche Bearbeitungsregeln gehören nur dann zum finalen Funktionsumfang, wenn sie vor der Abgabe tatsächlich getestet und bestätigt wurden.

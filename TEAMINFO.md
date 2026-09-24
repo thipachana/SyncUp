@@ -1,47 +1,81 @@
 # Teaminfo & Projektidee
 
+Stand: 24.09.2026
+
 ## Projekttitel
 
 SyncUp
 
 ## Kurzbeschreibung
 
-SyncUp ist ein intelligenter Terminplaner für Projektgruppen, Unternehmen und kleine Teams. Die Software löst das Problem der aufwändigen Terminfindung, indem sie individuelle Kalender abgleicht und automatisch gemeinsame, freie Zeitslots für Meetings vorschlägt. Zusätzlich lassen sich bei der Terminerstellung direkt benötigte Ressourcen wie Räume buchen, um die gesamte Organisation zentral an einem Ort zu bündeln.
+SyncUp ist eine Webanwendung zur gemeinsamen Terminplanung für Projektgruppen, Unternehmen und kleinere Teams.
+
+Die Anwendung unterstützt Benutzer dabei, gemeinsame freie Zeitfenster zu finden. Dafür werden die vorhandenen Termine der beteiligten Personen berücksichtigt.
+
+Aus einem freien Zeitfenster kann anschließend ein gemeinsamer Termin erstellt werden.
+
+Zusätzlich können für Termine vorhandene Räume reserviert werden. Dabei prüft SyncUp, ob der gewünschte Raum zu dieser Zeit bereits belegt ist.
+
+Jeder Benutzer besitzt außerdem einen persönlichen Kalender, in dem private Termine erstellt, bearbeitet und gelöscht werden können.
 
 ## Team
 
-| Name | Studiengang | Rolle | Git-Handle (optional) |
+| Name | Studiengang | Rolle | Git-Handle |
 |---|---|---|---|
 | Thipachana Clarian Kenady | WI B.Sc. | Projektleiterin | thipachana |
 | Sarah Kouskous | WI B.Sc. | Software Architect | sae0900 |
 | David Cabas Canella | WI B.Sc. | Spec/Requirements Lead | david241104 |
 | Ilias Jelloli | WI B.Sc. | Implementation Lead | Ilias04j |
 
-> **Spalte „Git-Handle" (optional):** Nur ausfüllen, wenn die Git-Commit-Identität nicht auf den Klarnamen gesetzt ist und Commits unter einem Plattform-Username (GitHub/GitLab) laufen. Damit bleibt die Zuordnung Commit → Person nachvollziehbar. Details und Alternativen: [`tutorials/git-identity.md`](tutorials/git-identity.md).
+Im öffentlichen Repository werden keine Matrikelnummern, privaten Telefonnummern oder persönlichen E-Mail-Adressen veröffentlicht.
 
-> **Datenschutz-Hinweis:** Im öffentlichen Repository erscheinen hier ausschließlich Name, Studiengang, Rolle und (optional) der ohnehin öffentliche Git-Plattform-Handle. **Keine** Matrikel-Nummern, **keine** privaten Telefonnummern, **keine** individuellen E-Mail-Adressen. Die **vollständige Mitgliederliste** mit Matrikel-Nummern und THM-E-Mails wird durch die/den Projektleiter:in **per Mail** an den Betreuer übermittelt — spätestens zu **M0+**, bei Änderungen aktualisiert spätestens zur **M3**-Abgabe.
+Die vollständigen Angaben der Teammitglieder werden bei Bedarf separat an den Betreuer übermittelt.
 
-**Rollen-Empfehlung (frei änderbar):** Projektleiter:in, Software Architect, Spec/Requirements Lead, Implementation Lead, QA/Test Lead, DevOps/Build Lead.
+## Technologien
 
-## Technologien (voraussichtlich)
+Für SyncUp werden folgende Technologien verwendet:
 
+- **Backend:** Java 21 und Spring Boot
+- **Frontend:** React mit JavaScript / JSX
+- **Frontend-Tooling:** Vite
+- **Datenbank:** PostgreSQL
+- **Persistenz:** Spring Data JPA und Hibernate
+- **Build:** Maven und npm
+- **Versionsverwaltung:** Git und GitHub
+- **Gemeinsame Testumgebung:** Tailscale
 
-- **Sprache(n):** Java 21, TypeScript
-- **Frameworks:** Spring Boot, React
-- **Persistenz:** PostgreSQL
-- **Build/Tooling:** Maven, Vite
-- **Sonstiges:** Docker, GitHub, Authentifizierung über Hochschul-E-Mail
+## Technischer Aufbau
 
+SyncUp besteht aus drei Hauptteilen:
 
-> Diese Liste ist eine Momentaufnahme — Änderungen im Projektverlauf sind erlaubt und in der Architekturbeschreibung (M2) endgültig festzulegen.
+- React-Frontend
+- Spring-Boot-Backend
+- PostgreSQL-Datenbank
+
+Das Frontend kommuniziert über REST-Schnittstellen mit dem Backend.
+
+Das Backend verarbeitet die Geschäftslogik und greift über JPA und Hibernate auf die PostgreSQL-Datenbank zu.
+
+Für gemeinsame Tests im Team wird Tailscale verwendet.
 
 ## Repository
 
 - **URL:** https://github.com/thipachana/SyncUp.git
 - **Sichtbarkeit:** öffentlich
 
+## Eingesetzte KI-Werkzeuge
 
-## Eingesetzte KI-Werkzeuge (vorläufige Planung)
+Im Projekt wurden KI-Werkzeuge unterstützend eingesetzt.
 
-- ChatGPT für Strukturierung und Dokumentationsentwürfe
-- GitHub Copilot für Code-Vervollständigung und kleinere Implementierungshilfen
+Verwendet wurden unter anderem:
+
+- ChatGPT für Dokumentation, Strukturierung, technische Fragen und Fehlersuche
+- Codex zur Unterstützung bei einzelnen Codeprüfungen und Änderungen
+
+Die erzeugten Vorschläge wurden nicht ungeprüft übernommen.
+
+Änderungen wurden vom Team angepasst und durch Builds, Tests oder manuelle Prüfungen kontrolliert.
+
+Die endgültige Entscheidung über die Verwendung der Vorschläge lag beim Team.
+
+Eine ausführlichere Beschreibung des KI-Einsatzes befindet sich in der entsprechenden Projektdokumentation.

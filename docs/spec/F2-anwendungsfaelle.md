@@ -1,52 +1,55 @@
 # F2 Anwendungsfälle
 
-Stand: 23.09.2026
+Stand: 24.09.2026
 
 ## Ziel
 
-Dieser Abschnitt beschreibt die wichtigsten Anwendungsfälle von SyncUp.
-
-Da sich einige Funktionen noch in der Entwicklung befinden, wird bei jedem Anwendungsfall angegeben, was geplant und was aktuell bereits umgesetzt ist.
+Dieser Abschnitt beschreibt die wichtigsten Anwendungsfälle von SyncUp und den aktuellen Umsetzungsstand.
 
 ## UC1 – Benutzer registrieren
 
 **Akteur:** Benutzer
 
-### Geplanter Ablauf
+### Ablauf
 
 1. Der Benutzer öffnet die Registrierung.
 2. Er gibt seinen Namen, seine E-Mail-Adresse und ein Passwort ein.
-3. Die eingegebenen Daten werden geprüft.
+3. SyncUp prüft die eingegebenen Daten.
 4. Das Benutzerkonto wird erstellt.
-5. Der Benutzer kann SyncUp verwenden.
+5. Für den Benutzer wird ein persönlicher Kalender angelegt.
+6. Der Benutzer kann sich anmelden und SyncUp verwenden.
 
 ### Aktueller Stand
 
-Die Registrierung und Anmeldung sind umgesetzt.
+Implementiert.
 
-Ein Datenmodell für Benutzer ist bereits vorhanden. Das Passwort wird bei API-Abfragen nicht ausgegeben.
+Registrierung und Anmeldung sind vorhanden. Passwörter werden mit BCrypt gehasht und nicht in API-Antworten ausgegeben.
 
-Die Passwörter werden mit BCrypt gehasht. Persönliche Termine, Anfragen und Buchungen sind durch Anmeldung und Eigentumsprüfungen geschützt. Ein organisationsbezogenes Rollenmodell ist nicht umgesetzt.
+Persönliche Kalender-, Termin- und Terminanfragedaten sind an den angemeldeten Benutzer gebunden.
 
 ---
 
-## UC2 – Termin erstellen
+## UC2 – Privaten Termin erstellen
 
-**Akteur:** Organisator
+**Akteur:** Benutzer
 
-### Geplanter Ablauf
+### Ablauf
 
-1. Der Organisator erstellt einen neuen Termin.
-2. Er gibt Titel, Datum und Uhrzeit ein.
-3. Ein Kalender wird dem Termin zugeordnet.
-4. Bei Bedarf werden Teilnehmer hinzugefügt.
-5. Der Termin wird gespeichert.
+1. Der Benutzer öffnet „Mein Kalender“.
+2. Er wählt einen Tag im Monatskalender aus.
+3. Er gibt Titel, Beginn und Ende des Termins ein.
+4. Optional ergänzt er eine Beschreibung.
+5. SyncUp prüft die Eingaben.
+6. Der Termin wird gespeichert.
+7. Der Termin erscheint im persönlichen Kalender.
 
 ### Aktueller Stand
 
-Das Backend kann Termine bereits anlegen und abrufen. Die Termine werden in PostgreSQL gespeichert.
+Implementiert.
 
-Eigene Termine können im Monatskalender angelegt, angezeigt und gelöscht werden. Teilnehmer werden in Terminanfragen ausgewählt. Terminbearbeitung und Einladungen sind noch offen.
+Private Termine können über „Mein Kalender“ erstellt, angezeigt, bearbeitet und gelöscht werden.
+
+Für private Termine gibt es keine Teilnehmerauswahl.
 
 ---
 
@@ -54,20 +57,29 @@ Eigene Termine können im Monatskalender angelegt, angezeigt und gelöscht werde
 
 **Akteur:** Organisator
 
-### Geplanter Ablauf
+### Ablauf
 
 1. Der Organisator erstellt eine Terminanfrage.
-2. Er gibt einen Zeitraum und die gewünschte Termindauer an.
-3. Teilnehmer werden ausgewählt.
-4. SyncUp berücksichtigt bereits vorhandene Termine.
-5. Das System berechnet mögliche gemeinsame freie Zeitfenster.
-6. Die Ergebnisse werden im Frontend angezeigt.
+2. Er gibt einen Titel, einen Suchzeitraum und die gewünschte Termindauer an.
+3. Er wählt die gewünschten Teilnehmer aus.
+4. Der Organisator selbst nimmt ebenfalls teil.
+5. SyncUp berücksichtigt die bereits gespeicherten Termine der beteiligten Benutzer.
+6. Das System berechnet gemeinsame freie Zeitfenster.
+7. Die Ergebnisse werden im Frontend angezeigt.
+8. Der Organisator wählt eines der vorgeschlagenen Zeitfenster aus.
+9. SyncUp erstellt daraus einen gemeinsamen Termin mit der in der Terminanfrage angegebenen Dauer.
+10. Der Termin wird in den Kalendern der beteiligten Benutzer angezeigt.
+11. Die Terminanfrage wird als erledigt markiert.
 
 ### Aktueller Stand
 
-Freie Zeitfenster werden für die ausgewählten Teilnehmer und die gewünschte Dauer berechnet.
+Implementiert.
 
-Das Backend kann vorhandene Termine berücksichtigen und freie Zeitfenster berechnen. Das Frontend kann die Berechnung aufrufen und die Ergebnisse anzeigen.
+Freie Zeitfenster werden anhand der ausgewählten Teilnehmer, des Suchzeitraums und der gewünschten Dauer berechnet.
+
+Vorhandene Termine der beteiligten Benutzer werden berücksichtigt.
+
+Aus einem ausgewählten freien Zeitfenster wird ein gemeinsamer Termin erzeugt. Der Termin besitzt exakt die angegebene gewünschte Dauer und nicht automatisch die gesamte Länge des freien Zeitfensters.
 
 ---
 
@@ -77,45 +89,52 @@ Das Backend kann vorhandene Termine berücksichtigen und freie Zeitfenster berec
 
 ### Ablauf
 
-1. Vorhandene Ressourcen werden angezeigt.
-2. Der Benutzer wählt eine Ressource aus.
-3. Ein eigener Termin wird ausgewählt und der vorbelegte Buchungszeitraum geprüft.
-4. Die Buchungsanfrage wird an das Backend gesendet.
-5. Das Backend prüft, ob für die Ressource bereits eine überschneidende Buchung vorhanden ist.
-6. Wenn die Ressource im Zeitraum frei ist, wird die Buchung gespeichert.
-7. Bei einer Überschneidung wird die Buchung abgelehnt.
-8. Das Frontend zeigt eine entsprechende Meldung an.
+1. Der Organisator legt einen gemeinsamen Termin fest.
+2. Anschließend wird der Bereich zur Raumreservierung geöffnet beziehungsweise fokussiert.
+3. Der zuvor erstellte Termin wird vorausgewählt.
+4. Der Benutzer wählt einen vorhandenen Raum aus.
+5. Beginn und Ende der Buchung werden aus dem zugehörigen Termin übernommen.
+6. Das Backend prüft, ob für dieselbe Ressource bereits eine zeitlich überlappende Buchung vorhanden ist.
+7. Das Backend prüft außerdem, ob für den Termin bereits eine andere Ressource gebucht wurde.
+8. Ist der Raum verfügbar, wird die Buchung gespeichert.
+9. Bei einer Überschneidung oder einer bereits vorhandenen Raumbuchung wird die Buchung abgelehnt.
+10. Der gebuchte Raum wird beim Termin im Kalender angezeigt.
 
 ### Aktueller Stand
 
-Der grundlegende Buchungsablauf ist umgesetzt.
+Implementiert.
 
-Überschneidende Buchungen derselben Ressource werden vom Backend erkannt. In diesem Fall antwortet das Backend mit dem HTTP-Status 409.
+Überschneidende Buchungen derselben Ressource werden verhindert.
 
-Noch nicht vollständig umgesetzt sind:
+Einem Termin kann nur ein Raum zugeordnet werden.
 
-- Freigabe einer bereits gebuchten Ressource
-- Vorschläge für alternative Ressourcen
+Die Buchungszeit wird aus dem zugehörigen Termin übernommen.
+
+Wird ein Termin gelöscht, wird auch die zugehörige Raumbuchung entfernt.
+
+Nicht umgesetzt sind automatische Vorschläge alternativer Räume.
 
 ---
 
 ## UC5 – Termin bearbeiten
 
-**Akteur:** Organisator
+**Akteur:** Benutzer
 
-### Geplanter Ablauf
+### Ablauf
 
-1. Der Organisator öffnet einen vorhandenen Termin.
+1. Der Benutzer öffnet einen eigenen Termin.
 2. Er ändert die gewünschten Angaben.
-3. Die Änderungen werden geprüft.
+3. SyncUp prüft die Änderungen.
 4. Der Termin wird gespeichert.
-5. Betroffene Teilnehmer werden über die Änderung informiert.
+5. Die aktualisierten Daten werden im Kalender angezeigt.
 
 ### Aktueller Stand
 
-Die vollständige Bearbeitung bestehender Termine über das Frontend ist noch nicht umgesetzt.
+Implementiert.
 
-Auch automatische Benachrichtigungen der Teilnehmer sind noch nicht vorhanden.
+Eigene Termine können über die Benutzeroberfläche bearbeitet werden.
+
+Eine automatische Benachrichtigung aller Teilnehmer bei jeder nachträglichen Änderung ist nicht Bestandteil des aktuell nachgewiesenen Funktionsumfangs.
 
 ---
 
@@ -125,38 +144,72 @@ Auch automatische Benachrichtigungen der Teilnehmer sind noch nicht vorhanden.
 
 ### Ablauf
 
-1. Vorhandene Terminanfragen werden im Frontend angezeigt.
+1. Vorhandene offene Terminanfragen werden im Frontend angezeigt.
 2. Der Benutzer kann eine neue Terminanfrage erstellen.
-3. Dazu gibt er einen Titel sowie Beginn und Ende des Zeitraums ein.
-4. Die Anfrage wird an das Backend gesendet.
-5. Das Backend speichert die Terminanfrage.
+3. Er gibt Titel, Suchzeitraum und gewünschte Dauer an.
+4. Er wählt die gewünschten Teilnehmer aus.
+5. Die Anfrage wird an das Backend gesendet und gespeichert.
 6. Die neue Anfrage wird anschließend angezeigt.
-7. Eine vorhandene Terminanfrage kann wieder gelöscht werden.
+7. Für die Anfrage können gemeinsame freie Zeitfenster berechnet werden.
+8. Nach Auswahl eines freien Zeitfensters wird ein gemeinsamer Termin angelegt.
+9. Die Terminanfrage wird anschließend als erledigt markiert.
 
 ### Aktueller Stand
 
-Das Erstellen, Anzeigen und Löschen von Terminanfragen ist bereits umgesetzt.
+Implementiert.
 
-Teilnehmerwahl, separate Dauer und Abgleich der Teilnehmerkalender sind umgesetzt. Einladungen und automatische Terminbestätigung bleiben offen.
+Terminanfragen können erstellt und angezeigt werden.
+
+Teilnehmerauswahl, gewünschte Dauer, Abgleich der Teilnehmerkalender und Berechnung gemeinsamer freier Zeitfenster sind umgesetzt.
+
+Nach erfolgreicher Terminwahl wird die Anfrage abgeschlossen.
+
+---
+
+## UC7 – Benachrichtigung über gemeinsamen Termin
+
+**Akteur:** Teilnehmer
+
+### Ablauf
+
+1. Ein Organisator legt aus einer Terminanfrage einen gemeinsamen Termin fest.
+2. SyncUp erstellt für die beteiligten Teilnehmer eine Benachrichtigung.
+3. Die Teilnehmer können die Benachrichtigung in der Anwendung sehen.
+
+### Aktueller Stand
+
+Implementiert.
+
+Teilnehmer gemeinsamer Termine erhalten eine Benachrichtigung über neu festgelegte Termine.
 
 ---
 
 ## Zusammenfassung des Umsetzungsstands
 
-**Umgesetzt beziehungsweise teilweise umgesetzt:**
+**Umgesetzt:**
 
-- Termine im Backend anlegen und abrufen
-- Terminanfragen erstellen, anzeigen und löschen
-- freie Zeitfenster berechnen und anzeigen
-- Ressourcen anzeigen
-- Ressourcen buchen
-- Überschneidungen bei Ressourcenbuchungen verhindern
+- Registrierung und Anmeldung
+- persönlicher Kalender
+- private Termine erstellen
+- private Termine bearbeiten und löschen
+- Terminanfragen erstellen und anzeigen
+- Teilnehmer auswählen
+- gewünschte Termindauer festlegen
+- gemeinsame freie Zeitfenster berechnen
+- freien Zeitslot als gemeinsamen Termin übernehmen
+- gemeinsame Termine bei Teilnehmern anzeigen
+- Benachrichtigungen für gemeinsame Termine
+- vorhandene Räume anzeigen
+- Räume für Termine buchen
+- überlappende Raumbelegungen verhindern
+- mehrere Räume für denselben Termin verhindern
+- gebuchten Raum im Kalender anzeigen
+- Raumbuchung beim Löschen eines Termins entfernen
 - Speicherung der Daten in PostgreSQL
 
-**Noch nicht vollständig umgesetzt:**
+**Nicht Bestandteil des aktuellen Funktionsumfangs:**
 
-- Einladungen und nachträgliche Änderung der Teilnehmer
-- Bearbeiten bestehender Termine im Frontend
-- Einladungen und Benachrichtigungen
+- automatische Vorschläge alternativer Räume
+- Profil- und Passwortverwaltung
 - Aufgabenverwaltung
-- Freigabe von Ressourcen
+- Anbindung externer Kalenderdienste

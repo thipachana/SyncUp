@@ -4,19 +4,18 @@ Im Projekt wurde ChatGPT als Unterstützung verwendet.
 
 ChatGPT wurde vor allem genutzt für:
 
-- Formulierung und Überarbeitung von Dokumentation
+- Formulierung und Überarbeitung der Dokumentation
 - Strukturierung einzelner Dokumente
-- Fragen zu Git und GitHub
-- Unterstützung bei technischen Verständnisfragen
+- Hilfe bei Git und GitHub
+- Unterstützung bei technischen Fragen
+- Fehlersuche und Verbesserung von Code
 
-Die Vorschläge wurden vom Team geprüft und an das Projekt SyncUp angepasst.
+Zusätzlich wurde Codex für die Prüfung und Überarbeitung einzelner Codestellen verwendet. Dabei ging es unter anderem um Sitzungsverwaltung, Eingabeprüfungen, persönliche Daten, Ressourcenbuchungen und React-Zustände.
 
-Technische und fachliche Entscheidungen wurden nicht automatisch übernommen, sondern vom Team selbst geprüft und abgestimmt.
+Die Vorschläge der KI wurden nicht einfach übernommen, sondern an unser Projekt angepasst und vom Team überprüft. Änderungen wurden außerdem durch Builds, Tests und manuelle Funktionsprüfungen kontrolliert.
 
-Alle Teammitglieder sollen die von ihnen verwendeten Inhalte verstehen und erklären können.
+Die Entscheidungen darüber, welche Änderungen tatsächlich übernommen werden, wurden vom Team getroffen.
 
-## Ergänzung vom 23.09.2026
+Alle Teammitglieder sollen die von ihnen verwendeten Inhalte und Änderungen verstehen und erklären können.
 
-Codex unterstützte bei Codeprüfung und Korrekturen für Sitzungsschutz, Eingabevalidierung, persönliche Daten, parallele Buchungen und React-Zustände. Die grüne Oberfläche wurde beibehalten. Codex erstellte und führte automatisierte Tests aus und prüfte den Ablauf zusätzlich im Browser mit künstlichen Daten in einer getrennten Testinstanz. Die genaue Prüfung steht in `docs/TESTING.md`.
-
-Die neuen Änderungen sind noch nicht durch das Team abgenommen oder committet. Die zuständigen Personen müssen die Änderungen nachvollziehen, testen und ihre tatsächliche Prüfung dokumentieren. Eine bereits erfolgte menschliche Prüfung dieser neuen Änderungen wird hier nicht behauptet.
+Weitere Informationen zu den durchgeführten Tests stehen in `docs/TESTING.md`.

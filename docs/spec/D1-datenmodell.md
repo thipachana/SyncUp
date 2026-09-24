@@ -56,7 +56,7 @@ Termine werden unter anderem für die Berechnung freier Zeitfenster und für Res
 
 ## Terminanfrage
 
-Eine Terminanfrage wird verwendet, um mögliche freie Zeitfenster zu finden.
+Eine Terminanfrage wird verwendet, um gemeinsame freie Zeitfenster für mehrere Benutzer zu finden.
 
 Wichtige Daten sind:
 
@@ -65,9 +65,10 @@ Wichtige Daten sind:
 - Zeitraum
 - Dauer
 - Status
+- Ersteller
 - zugeordnete Benutzer
 
-Terminanfragen können über das Frontend erstellt, angezeigt und gelöscht werden.
+Terminanfragen können über das Frontend erstellt und angezeigt werden. Nach erfolgreicher Auswahl eines freien Zeitfensters wird die Terminanfrage als erledigt markiert.
 
 ## Ressource
 
@@ -93,7 +94,9 @@ Wichtige Daten sind:
 - Zeitraum
 - Status
 
-Bei einer neuen Buchung prüft das Backend, ob für dieselbe Ressource bereits eine Buchung im gewünschten Zeitraum vorhanden ist.
+Der Zeitraum einer Buchung wird aus dem zugehörigen Termin übernommen.
+Bei einer neuen Buchung prüft das Backend, ob für dieselbe Ressource bereits eine zeitlich überlappende Buchung vorhanden ist.
+Zusätzlich darf einem Termin nur eine Ressource zugeordnet werden.
 
 ## Beziehungen
 
@@ -101,17 +104,21 @@ Die wichtigsten Beziehungen zwischen den Daten sind:
 
 - Benutzer können Kalender besitzen.
 - Kalender enthalten Termine.
+- Termine können mehreren Teilnehmern zugeordnet sein.
 - Benutzer können Terminanfragen zugeordnet werden.
+- Eine Terminanfrage besitzt einen Ersteller.
 - Eine Buchung gehört zu einem Termin.
 - Eine Buchung gehört zu einer Ressource.
 - Eine Ressource kann mehrere Buchungen haben.
+- Ein Termin kann höchstens eine Raumbuchung besitzen.
 
 ## Aktueller Stand
 
-Die wichtigsten Datenobjekte für Termine, Terminanfragen, Ressourcen und Buchungen sind bereits im Backend vorhanden.
-
-Einige ursprünglich geplante Funktionen, wie die vollständige Benutzerverwaltung und Teilnehmerverwaltung, sind noch nicht vollständig umgesetzt.
-
+Die zentralen Datenobjekte Benutzer, Kalender, Termin, Terminanfrage, Ressource und Buchung sind im Backend umgesetzt.
+Registrierung und Anmeldung sind vorhanden. Persönliche Kalender und Termine sind an den jeweiligen Benutzer gebunden.
+Gemeinsame Termine können Teilnehmer besitzen und werden in den Kalendern der beteiligten Benutzer angezeigt.
+Terminanfragen besitzen einen Ersteller sowie zugeordnete Teilnehmer. Nach erfolgreicher Terminwahl kann ihr Status auf „ERLEDIGT“ gesetzt werden.
+Ressourcenbuchungen sind mit einem Termin und einer Ressource verknüpft. Überschneidende Buchungen derselben Ressource sowie mehrere Räume für denselben Termin werden verhindert.
 Die genauen technischen Datentypen und Felder werden zusätzlich in D2 beschrieben.
 
 ## Eigentum und Bestandsdaten (23.09.2026)

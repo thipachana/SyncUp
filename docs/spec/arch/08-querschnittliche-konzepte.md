@@ -2,21 +2,31 @@
 
 ## Fehlerbehandlung
 
-Fehler werden zentral im Backend behandelt und über HTTP-Statuscodes an das Frontend übermittelt.
+Fehler werden hauptsächlich im Backend erkannt und über passende HTTP-Statuscodes an das Frontend zurückgegeben.
 
-Bei einer überschneidenden Ressourcenbuchung lehnt das Backend die Anfrage beispielsweise mit dem HTTP-Statuscode `409 Conflict` ab. Das Frontend verarbeitet diese Antwort und zeigt dem Benutzer eine verständliche Fehlermeldung an.
+Das Frontend verarbeitet diese Antworten und zeigt dem Benutzer eine verständliche Meldung an.
+
+Ein Beispiel ist eine überschneidende Raumreservierung. Ist ein Raum im gewünschten Zeitraum bereits belegt, wird die neue Buchung abgelehnt.
+
+Auch wenn für einen Termin bereits ein Raum gebucht wurde, kann nicht noch ein weiterer Raum für denselben Termin reserviert werden.
 
 ## Kommunikation
 
-Die Kommunikation zwischen Frontend und Backend erfolgt über REST-Schnittstellen. Die Daten werden im JSON-Format übertragen.
+Die Kommunikation zwischen Frontend und Backend erfolgt über REST-Schnittstellen.
 
-Das Frontend greift nicht direkt auf die PostgreSQL-Datenbank zu.
+Die Daten werden hauptsächlich im JSON-Format übertragen.
+
+Das Frontend greift nicht direkt auf die PostgreSQL-Datenbank zu. Alle Datenzugriffe laufen über das Backend.
 
 ## Benutzerverwaltung
 
-Benutzerdaten können im Backend verarbeitet und in der Datenbank gespeichert werden.
+Benutzer können sich in SyncUp registrieren, anmelden und wieder abmelden.
 
-Registrierung und Anmeldung mit serverseitiger Session sind umgesetzt. SessionSecurity prüft zentral Anmeldung und CSRF-Nachweise. Controller und Services prüfen Eigentum für persönliche Daten. Profilverwaltung und Organisationsrollen bleiben offen.
+Nach der Anmeldung wird eine serverseitige Sitzung verwendet.
+
+Persönliche Daten wie Kalender und Termine werden dem jeweiligen Benutzer zugeordnet. Das Backend prüft bei geschützten Funktionen, ob ein Benutzer angemeldet ist und auf die jeweiligen Daten zugreifen darf.
+
+Eine erweiterte Profilverwaltung sowie ein Rollen- oder Administrationssystem sind nicht Bestandteil des aktuellen Funktionsumfangs.
 
 ## Datenhaltung
 
@@ -30,21 +40,45 @@ Dazu gehören unter anderem:
 - Terminanfragen
 - Ressourcen
 - Buchungen
+- Benachrichtigungen
 
 Für den Datenbankzugriff verwendet das Backend Spring Data JPA und Hibernate.
 
 ## Sicherheit
 
-Das Passwortfeld eines Benutzers wird nicht in den JSON-Antworten der REST-Schnittstellen ausgegeben.
+Passwörter werden nicht im Klartext gespeichert, sondern mit BCrypt gehasht.
 
-Dadurch wird verhindert, dass gespeicherte Passwörter bei normalen API-Abfragen an das Frontend übertragen werden.
+Das Passwortfeld wird außerdem nicht über normale REST-Antworten an das Frontend übertragen.
 
-Passwörter werden mit BCrypt gehasht. Die Sitzungs-ID und der CSRF-Nachweis wechseln nach Anmeldung; Abmeldung invalidiert die Sitzung. Cookies sind HttpOnly und SameSite=Lax. Persönliche Daten werden serverseitig nach Besitzer gefiltert.
+Für angemeldete Benutzer wird eine serverseitige Sitzung verwendet.
+
+Schreibende Anfragen werden zusätzlich über einen CSRF-Nachweis geschützt.
+
+Persönliche Daten werden serverseitig nach dem jeweiligen Benutzer beziehungsweise Besitzer gefiltert.
+
+Dadurch soll verhindert werden, dass ein Benutzer über fremde IDs auf persönliche Daten eines anderen Benutzers zugreifen kann.
 
 ## Konfiguration
 
-Lokal bleibt `VITE_API_URL` leer; Vite leitet `/api` an Port 8080 weiter. Eine abweichende API-Adresse kann ausdrücklich konfiguriert werden.
+Für den lokalen Standardstart bleibt `VITE_API_URL` leer.
 
-Dadurch kann das Frontend in unterschiedlichen lokalen Entwicklungsumgebungen mit verschiedenen Backend-Adressen verwendet werden.
+Das Frontend verwendet relative `/api`-Aufrufe. Vite leitet diese während der lokalen Entwicklung an das Backend auf Port `8080` weiter.
 
-Ressourcenbuchungen sperren den Termin und anschließend die Ressource innerhalb derselben Transaktion. Die Konfliktprüfung und Speicherung erfolgen unter dieser Sperre. Terminlöschen prüft unter derselben Terminsperre vorhandene Buchungen und lehnt dann mit 409 ab.
+Dadurch wird für Frontend und Backend eine einheitliche API-Anbindung verwendet.
+
+Für die gemeinsame Testumgebung wird Tailscale verwendet. Die anderen Teammitglieder greifen dabei auf die Anwendung des Host-Rechners zu.
+
+## Ressourcenbuchungen
+
+Eine Raumreservierung ist immer mit einem bestehenden Termin verbunden.
+
+Beginn und Ende der Buchung werden aus dem ausgewählten Termin übernommen und nicht unabhängig davon eingegeben.
+
+Vor dem Speichern prüft das Backend:
+
+- ob der Raum im Zeitraum des Termins bereits belegt ist,
+- ob für den Termin bereits ein anderer Raum gebucht wurde.
+
+Bei einem Konflikt wird die Buchung nicht gespeichert.
+
+Wird ein Termin gelöscht, wird eine zugehörige Raumbuchung ebenfalls entfernt.

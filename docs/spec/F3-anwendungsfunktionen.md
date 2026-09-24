@@ -1,18 +1,32 @@
 # F3 Anwendungsfunktionen
 
-Stand: 23.09.2026 – lokaler Arbeitsstand vor Commit und Teamabnahme.
+Stand: 24.09.2026
 
-| Bereich | Umgesetzt | Noch offen |
+| Bereich | Umgesetzt | Noch offen / nicht umgesetzt |
 | --- | --- | --- |
-| Benutzer | Registrierung, Anmeldung, Abmeldung; BCrypt; Sitzungswechsel und CSRF-Schutz | Profil bearbeiten, Passwort ändern/zurücksetzen, Organisations-/Adminrollen |
-| Kalender | Eigener Monatskalender; Termine erstellen, anzeigen und löschen | Bestehende Termine bearbeiten, Suche, externe Kalendersynchronisation |
-| Terminfindung | Eigene Anfragen erstellen/anzeigen/löschen; Teilnehmer auswählen; Dauer getrennt eingeben; gemeinsame freie Intervalle berechnen | Einladungen, automatische Terminbestätigung für alle Teilnehmer |
-| Ressourcen | Räume anzeigen/anlegen; eigenen Termin auswählen und buchen; Nichtverfügbarkeit und Überschneidungen inklusive Parallelbuchungen prüfen | Buchungen stornieren/freigeben, alternative Räume vorschlagen |
-| Aufgaben | Noch nicht umgesetzt | Aufgaben anlegen, zuweisen, bearbeiten und abschließen |
-| Benachrichtigungen | Noch nicht umgesetzt | Einladungen, Erinnerungen und Änderungsnachrichten |
+| Benutzer | Registrierung, Anmeldung, Abmeldung, BCrypt, Sitzungsverwaltung und CSRF-Schutz | Profil bearbeiten, Passwort ändern oder zurücksetzen, Adminrollen |
+| Kalender | Eigener Monatskalender, private Termine erstellen, anzeigen, bearbeiten und löschen, gemeinsame Termine anzeigen, gebuchten Raum am Termin anzeigen | Suche, Verbindung zu externen Kalendern |
+| Terminfindung | Terminanfragen erstellen und anzeigen, Teilnehmer auswählen, gewünschte Dauer angeben, freie Zeitfenster berechnen, freien Zeitslot als Termin übernehmen, Anfrage als erledigt markieren | Teilnehmer nachträglich ändern |
+| Ressourcen | Räume anzeigen, Termin auswählen, Raum buchen, Überschneidungen verhindern, nur einen Raum pro Termin zulassen, Buchung beim Löschen des Termins mit entfernen | Alternative Räume automatisch vorschlagen |
+| Aufgaben | Nicht umgesetzt | Aufgaben erstellen, zuweisen, bearbeiten und abschließen |
+| Benachrichtigungen | Benachrichtigung bei neu festgelegten gemeinsamen Terminen | Erinnerungen und weitere Änderungsbenachrichtigungen |
 
-Der Ersteller ist immer Teilnehmer seiner Anfrage. Private Termine, Anfragen und Buchungen sind auf das eigene Konto beschränkt. Ressourcen und die Teilnehmerübersicht sind innerhalb dieser Teaminstanz für angemeldete Benutzer gemeinsam sichtbar.
+Der Ersteller ist immer Teilnehmer seiner eigenen Terminanfrage.
 
-Ein Termin mit Ressourcenbuchung wird beim Löschen mit einer verständlichen Konfliktmeldung abgewiesen. Buchungen werden nicht stillschweigend gelöscht. Ein freies Zeitfenster ist ein Vorschlag, keine Reservierung.
+Private Termine gehören nur zum eigenen Kalender und haben keine Teilnehmerauswahl.
 
-Die Zeiten sind lokale Kalenderzeiten ohne Zeitzonen. Ein Suchzeitraum kann mehrere Tage umfassen. Testergebnisse und verbleibende Funktionsgrenzen stehen in [TESTING](../TESTING.md).
+Gemeinsame Termine entstehen über eine Terminanfrage und werden bei den ausgewählten Teilnehmern im Kalender angezeigt.
+
+Ein freies Zeitfenster ist zuerst nur ein Vorschlag. Erst wenn der Organisator einen Zeitslot auswählt, wird daraus ein gemeinsamer Termin mit der vorher angegebenen Dauer.
+
+Räume werden zentral im System verwaltet und können nicht von normalen Benutzern neu angelegt werden.
+
+Die Buchungszeit wird automatisch aus dem Termin übernommen.
+
+Überschneidende Buchungen desselben Raums werden verhindert. Ein Termin kann nur einen Raum haben.
+
+Wenn ein Termin gelöscht wird, wird die dazugehörige Raumbuchung ebenfalls gelöscht.
+
+Die Zeiten werden ohne zusätzliche Zeitzonenlogik verarbeitet. Der Suchzeitraum kann auch mehrere Tage umfassen.
+
+Weitere Tests und noch offene Punkte stehen in [TESTING](../TESTING.md).

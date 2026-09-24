@@ -2,17 +2,18 @@
 
 ## Überblick
 
-Die Verteilungssicht beschreibt, auf welchen technischen Umgebungen die einzelnen Bestandteile von SyncUp ausgeführt werden.
+Die Verteilungssicht beschreibt, auf welchen technischen Umgebungen die einzelnen Bestandteile von SyncUp ausgeführt werden und wie sie miteinander verbunden sind.
 
-## Entwicklungsumgebung
+## Lokale Entwicklungsumgebung
 
-Während der Entwicklung werden Frontend, Backend und Datenbank lokal ausgeführt.
+Während der Entwicklung können Frontend, Backend und Datenbank lokal auf einem Rechner ausgeführt werden.
 
-- Das React-Frontend wird über einen Webbrowser verwendet.
+- Das React-Frontend wird mit Vite gestartet und über einen Webbrowser verwendet.
 - Das Spring-Boot-Backend läuft als eigenständige Serveranwendung.
-- PostgreSQL stellt die persistente Datenhaltung bereit.
+- PostgreSQL übernimmt die persistente Datenhaltung.
 - Frontend und Backend kommunizieren über HTTP und REST.
-- Das Backend greift auf die PostgreSQL-Datenbank zu.
+- Das Backend greift über JPA und Hibernate auf PostgreSQL zu.
+- Das Frontend greift nicht direkt auf die Datenbank zu.
 
 ## Verteilung
 
@@ -32,12 +33,3 @@ Spring Boot Backend
    | JPA / Hibernate
    v
 PostgreSQL
-```
-
-## Lokale Kommunikation
-
-Das Frontend wird während der Entwicklung über Vite gestartet. Die Adresse des Backends wird im Frontend über `VITE_API_URL` konfiguriert.
-
-Das Spring-Boot-Backend läuft standardmäßig auf Port `8080` und stellt die REST-Schnittstellen bereit.
-
-PostgreSQL läuft lokal auf Port `5432` und wird ausschließlich vom Backend angesprochen.

@@ -50,17 +50,13 @@ Wichtige Begriffe werden in E2 erklärt.
 
 ## Geplanter und aktueller Stand
 
-In der Spezifikation werden sowohl geplante als auch bereits umgesetzte Funktionen beschrieben.
+In der Spezifikation werden die fachlichen Anforderungen und der aktuelle Umsetzungsstand beschrieben.
 
-Dabei wird zwischen folgenden Zuständen unterschieden:
-
-- **Geplant / offen:** Die Funktion ist vorgesehen, aber noch nicht umgesetzt.
-- **Teilweise umgesetzt:** Ein Teil der Funktion funktioniert bereits.
-- **Umgesetzt:** Die Funktion ist im aktuellen Stand vorhanden.
+Für einzelne Funktionen wird angegeben, ob sie umgesetzt, teilweise umgesetzt oder nicht Bestandteil des finalen Funktionsumfangs sind.
 
 Eine Übersicht über den aktuellen Stand befindet sich in F3.
 
-Dabei wird auch berücksichtigt, dass eine Funktion bereits im Backend vorhanden sein kann, obwohl sie noch nicht vollständig über das Frontend verwendet werden kann.
+Die Spezifikation wird mit dem finalen Stand der Implementierung abgeglichen, damit dokumentierte Funktionen und tatsächliches Systemverhalten übereinstimmen.
 
 ## Zusammenhang mit Architektur und Code
 
@@ -88,8 +84,15 @@ Der aktuelle Stand der Dokumentation ist jeweils durch das angegebene Datum erke
 
 ## Eingesetzte KI-Werkzeuge
 
-Im Projekt wurden KI-Werkzeuge zur Unterstützung eingesetzt.
+Im Projekt wurde ChatGPT unterstützend eingesetzt.
 
-Die Verwendung der KI sowie die jeweiligen Einsatzbereiche werden in der dafür vorgesehenen Dokumentation festgehalten.
+Einsatzbereiche waren insbesondere:
 
-Die übernommenen Inhalte werden vom Team geprüft. Jedes Teammitglied soll die Inhalte seines Bereichs verstehen und erklären können.
+- Unterstützung bei Code-Entwürfen und Refactoring,
+- Fehlersuche und Analyse von Implementierungsproblemen,
+- Überarbeitung und Strukturierung der Dokumentation,
+- Unterstützung bei der Formulierung von Testfällen und technischen Beschreibungen.
+
+Die erzeugten Vorschläge wurden durch das Projektteam geprüft, an die vorhandene Implementierung angepasst und durch Builds, Tests und manuelle Funktionsprüfungen validiert.
+
+Die endgültige Auswahl und Übernahme von Änderungen erfolgte durch das Projektteam. Jedes Teammitglied soll die Inhalte seines Bereichs verstehen und erklären können.

@@ -1,107 +1,117 @@
 # F1 Geschäftsprozesse
 
-Stand: 23.09.2026
+Stand: 24.09.2026
 
 ## Ziel
 
-Dieser Abschnitt beschreibt die wichtigsten Abläufe von SyncUp.
+Dieser Abschnitt beschreibt die wichtigsten fachlichen Abläufe von SyncUp.
 
-SyncUp soll Teams dabei helfen, gemeinsame Termine zu finden und benötigte Ressourcen wie Räume zu reservieren.
-
-Da noch nicht alle geplanten Funktionen umgesetzt sind, wird bei den einzelnen Geschäftsprozessen zwischen dem geplanten Ablauf und dem aktuellen Stand unterschieden.
+SyncUp unterstützt Benutzer dabei, private Termine zu verwalten, gemeinsame Termine mit mehreren Teilnehmern zu planen und für gemeinsame Termine Räume zu reservieren.
 
 ## Geschäftsprozess 1: Gemeinsamen Termin planen
 
-### Geplanter Ablauf
+### Ablauf
 
-1. Ein Organisator erstellt eine Terminanfrage.
-2. Er gibt einen Titel, einen Zeitraum und eine gewünschte Termindauer ein.
-3. Die Teilnehmer werden ausgewählt.
-4. SyncUp berücksichtigt die vorhandenen Termine der Teilnehmer.
-5. Das System berechnet mögliche gemeinsame freie Zeitfenster.
-6. Der Organisator wählt einen passenden Zeitpunkt aus.
-7. Der Termin wird gespeichert.
-8. Die Teilnehmer werden über den Termin informiert.
-
-### Aktueller Stand
-
-Terminanfragen können bereits über das Frontend erstellt, angezeigt und gelöscht werden.
-
-Für eine Terminanfrage können freie Zeitfenster berechnet und anschließend im Frontend angezeigt werden. Bereits vorhandene Termine werden bei der Berechnung berücksichtigt.
-
-Noch nicht vollständig umgesetzt sind:
-
-- Anmeldung der Benutzer
-- Teilnehmerauswahl im Frontend
-- Auswahl eines freien Zeitfensters als neuer bestätigter Termin
-- Einladungen und Benachrichtigungen
-
-## Geschäftsprozess 2: Ressource reservieren
-
-### Geplanter Ablauf
-
-1. Der Benutzer wählt einen vorhandenen Termin aus.
-2. Eine passende Ressource, zum Beispiel ein Raum, wird ausgewählt.
-3. Der gewünschte Zeitraum wird angegeben.
-4. SyncUp prüft, ob die Ressource in diesem Zeitraum bereits gebucht ist.
-5. Wenn die Ressource frei ist, wird die Buchung gespeichert.
-6. Wenn sie bereits gebucht ist, wird die Buchung abgelehnt.
+1. Der Organisator meldet sich bei SyncUp an.
+2. Er erstellt eine Terminanfrage.
+3. Er gibt einen Titel, einen Suchzeitraum und die gewünschte Termindauer ein.
+4. Er wählt die gewünschten Teilnehmer aus.
+5. Der Organisator selbst nimmt ebenfalls an der Terminanfrage teil.
+6. SyncUp berücksichtigt die bereits gespeicherten Termine der beteiligten Benutzer.
+7. Das System berechnet gemeinsame freie Zeitfenster.
+8. Der Organisator wählt eines der vorgeschlagenen Zeitfenster aus.
+9. SyncUp erstellt daraus einen gemeinsamen Termin mit exakt der in der Terminanfrage angegebenen Dauer.
+10. Der gemeinsame Termin wird in den Kalendern der beteiligten Benutzer angezeigt.
+11. Die Teilnehmer erhalten eine Benachrichtigung über den festgelegten Termin.
+12. Die Terminanfrage wird anschließend als erledigt markiert.
 
 ### Aktueller Stand
 
-Vorhandene Ressourcen können im Frontend angezeigt werden.
+Dieser Geschäftsprozess ist umgesetzt.
 
-Für eine Buchung werden aktuell eine vorhandene Termin-ID und ein Zeitraum angegeben. Das Backend prüft anschließend, ob für dieselbe Ressource bereits eine Buchung im gewünschten Zeitraum vorhanden ist.
+Registrierung und Anmeldung, Teilnehmerauswahl, Berechnung gemeinsamer freier Zeitfenster, Auswahl eines Zeitfensters, Erstellung des gemeinsamen Termins sowie Benachrichtigungen der Teilnehmer sind vorhanden.
 
-Wenn sich die Zeiträume überschneiden, lehnt das Backend die Buchung mit dem HTTP-Status 409 ab. Das Frontend zeigt dem Benutzer dazu eine Fehlermeldung an.
+Der erzeugte Termin besitzt die zuvor in der Terminanfrage festgelegte Dauer und nicht automatisch die gesamte Länge des angezeigten freien Zeitfensters.
 
-Noch nicht vollständig umgesetzt sind:
+## Geschäftsprozess 2: Raum reservieren
 
-- Auswahl des Termins über eine Terminliste
-- Vorschläge für alternative Ressourcen
-- Freigabe bereits gebuchter Ressourcen
+### Ablauf
 
-## Geschäftsprozess 3: Termin verwalten
-
-### Geplanter Ablauf
-
-1. Ein Benutzer öffnet einen vorhandenen Termin.
-2. Die gewünschten Angaben werden geändert.
-3. Die Änderungen werden gespeichert.
-4. Die betroffenen Teilnehmer werden über Änderungen informiert.
+1. Der Organisator legt einen gemeinsamen Termin fest.
+2. Anschließend wird der Bereich zur Raumreservierung geöffnet beziehungsweise fokussiert.
+3. Der zuvor erstellte Termin wird für die Buchung vorausgewählt.
+4. Der Benutzer wählt einen vorhandenen Raum aus.
+5. Beginn und Ende der Buchung werden automatisch aus dem zugehörigen Termin übernommen.
+6. SyncUp prüft, ob der Raum während dieses Zeitraums bereits gebucht ist.
+7. SyncUp prüft außerdem, ob für den Termin bereits ein anderer Raum gebucht wurde.
+8. Ist der Raum verfügbar, wird die Buchung gespeichert.
+9. Ist eine Überschneidung vorhanden oder besitzt der Termin bereits eine Raumbuchung, wird die Buchung abgelehnt.
+10. Der gebuchte Raum wird anschließend beim Termin im Kalender angezeigt.
 
 ### Aktueller Stand
 
-Termine können im Backend bereits gespeichert und abgerufen werden.
+Dieser Geschäftsprozess ist umgesetzt.
 
-Eine vollständige Bearbeitung bestehender Termine über das Frontend sowie automatische Benachrichtigungen sind aktuell noch nicht umgesetzt.
+Die im System vorhandenen Räume können ausgewählt und für Termine reserviert werden.
+
+Die Buchungszeit wird aus dem Termin übernommen und kann nicht unabhängig vom Termin festgelegt werden.
+
+Zeitlich überlappende Buchungen derselben Ressource werden verhindert. Außerdem kann einem Termin nur ein Raum zugeordnet werden.
+
+Wird ein Termin gelöscht, wird auch die zugehörige Raumbuchung entfernt.
+
+## Geschäftsprozess 3: Privaten Termin verwalten
+
+### Ablauf
+
+1. Der Benutzer öffnet „Mein Kalender“.
+2. Er wählt einen Tag aus.
+3. Er gibt Titel, Beginn und Ende des Termins ein.
+4. Optional kann eine Beschreibung ergänzt werden.
+5. Der Benutzer speichert den Termin.
+6. Der Termin wird in seinem persönlichen Kalender angezeigt.
+7. Ein bestehender eigener Termin kann bearbeitet oder gelöscht werden.
+
+### Aktueller Stand
+
+Dieser Geschäftsprozess ist umgesetzt.
+
+Private Termine werden dem persönlichen Kalender des angemeldeten Benutzers zugeordnet.
+
+Für private Termine gibt es keine Teilnehmerauswahl. Dadurch unterscheiden sie sich von gemeinsamen Terminen, die über eine Terminanfrage entstehen.
+
+Eigene Termine können erstellt, angezeigt, bearbeitet und gelöscht werden.
 
 ## Beteiligte Rollen
 
 ### Organisator
 
-Der Organisator plant einen Termin beziehungsweise eine Terminanfrage und kann eine Ressource reservieren.
+Der Organisator erstellt eine Terminanfrage, wählt Teilnehmer aus, lässt gemeinsame freie Zeitfenster berechnen und legt einen gemeinsamen Termin fest.
+
+Er kann anschließend einen Raum für den Termin reservieren.
 
 ### Teilnehmer
 
-Teilnehmer sollen an gemeinsamen Terminen beteiligt werden können.
+Teilnehmer sind Benutzer, die einer Terminanfrage beziehungsweise einem gemeinsamen Termin zugeordnet sind.
 
-Die vollständige Teilnehmerverwaltung ist aktuell noch nicht umgesetzt.
+Gemeinsame Termine werden in ihren Kalendern angezeigt. Teilnehmer erhalten außerdem eine Benachrichtigung, wenn ein gemeinsamer Termin festgelegt wurde.
 
-## Geplante Erweiterungen
+### Benutzer
 
-Noch nicht vollständig umgesetzt sind insbesondere:
+Ein angemeldeter Benutzer besitzt einen persönlichen Kalender und kann darin private Termine verwalten.
 
-- Benutzeranmeldung und Registrierung
-- Teilnehmerverwaltung
-- Einladungen und Benachrichtigungen
-- vollständige Terminverwaltung
+## Nicht Bestandteil des finalen Funktionsumfangs
+
+Folgende Funktionen gehören nicht zum aktuell umgesetzten Kernumfang:
+
+- Anbindung externer Kalenderdienste
+- Profil- und Passwortverwaltung
 - Aufgabenverwaltung
-- Freigabe von Ressourcen
+- automatische Vorschläge alternativer Räume bei einer belegten Ressource
 
 ## Abgrenzung
 
-SyncUp arbeitet aktuell mit den innerhalb der Anwendung gespeicherten Daten.
+SyncUp arbeitet mit den innerhalb der Anwendung gespeicherten Kalender-, Termin-, Benutzer- und Ressourcendaten.
 
 Eine Verbindung zu externen Kalenderdiensten wie Google Calendar oder Microsoft Outlook gehört nicht zur aktuellen Version.
 

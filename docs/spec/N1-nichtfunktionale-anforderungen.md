@@ -1,35 +1,49 @@
 # N1 Nichtfunktionale Anforderungen
 
-Stand: 23.09.2026
+Stand: 24.09.2026
 
 ## Benutzerfreundlichkeit
 
 SyncUp soll einfach aufgebaut und ohne lange Einarbeitung nutzbar sein.
 
-Die wichtigsten Funktionen sollen für den Benutzer verständlich dargestellt werden.
+Die wichtigsten Funktionen sollen übersichtlich dargestellt werden, damit Benutzer schnell verstehen, wie Termine erstellt, freie Zeitfenster gefunden und Räume gebucht werden können.
+
+Fehlermeldungen und Rückmeldungen sollen verständlich angezeigt werden.
 
 ## Performance
 
-Die Anwendung soll bei normaler Nutzung möglichst schnell auf Anfragen reagieren.
+Die Anwendung soll bei normaler Nutzung schnell auf Anfragen reagieren.
 
-Das Laden und Speichern von Daten soll ohne unnötig lange Wartezeiten möglich sein.
+Das Laden und Speichern von Daten sowie die Berechnung freier Zeitfenster sollen ohne unnötig lange Wartezeiten möglich sein.
 
 ## Sicherheit
 
 Benutzerdaten und Passwörter sollen geschützt verarbeitet werden.
 
-Passwörter werden bei API-Abfragen nicht an das Frontend zurückgegeben.
+Passwörter werden nicht im Klartext gespeichert, sondern mit BCrypt gehasht.
 
-Registrierung und Anmeldung sowie eine sichere Passwortspeicherung mit BCrypt sind umgesetzt. Anmeldung und Eigentumsprüfungen schützen persönliche Daten. Ein organisationsbezogenes Rollenmodell ist noch offen.
+Passwörter werden nicht in API-Antworten an das Frontend übertragen.
+
+Persönliche Kalender, Termine und Terminanfragen sind an den angemeldeten Benutzer gebunden. Eigentumsprüfungen verhindern, dass Benutzer persönliche Daten anderer Benutzer verändern.
+
+Für die Anmeldung wird eine Sitzung verwendet. Zusätzlich ist CSRF-Schutz vorhanden.
+
+Ein erweitertes Rollen- oder Administrationssystem ist nicht Bestandteil des aktuellen Funktionsumfangs.
 
 ## Wartbarkeit
 
 SyncUp ist in Frontend, Backend und Datenbank aufgeteilt.
 
-Dadurch können die einzelnen Bereiche getrennt bearbeitet und erweitert werden.
+Das Frontend wurde mit React umgesetzt, das Backend mit Spring Boot und die Daten werden in PostgreSQL gespeichert.
+
+Durch diese Aufteilung können die einzelnen Bereiche getrennt bearbeitet und erweitert werden.
 
 ## Verfügbarkeit
 
-Die Anwendung soll während der Nutzung stabil laufen.
+Die Anwendung ist für den Projektbetrieb als lokal beziehungsweise innerhalb der Teamumgebung gestartete Webanwendung vorgesehen.
 
-Da SyncUp aktuell lokal ausgeführt wird, hängt die Verfügbarkeit auch davon ab, ob Frontend, Backend und Datenbank gestartet sind.
+Damit SyncUp verwendet werden kann, müssen Frontend, Backend und PostgreSQL laufen.
+
+Für die gemeinsame Testumgebung wurde die Anwendung innerhalb des Teams über Tailscale erreichbar gemacht.
+
+Eine dauerhaft öffentlich betriebene Produktivumgebung ist nicht Bestandteil des Projekts.
