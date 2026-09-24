@@ -644,21 +644,47 @@ setAppointmentRequests((prev) =>
             </div>
           )}
 
-          <div className="request-section">
-            <div className="small-heading">
-              <h3>Offene Terminanfragen</h3>
-              <span>{appointmentRequests.length}</span>
-            </div>
+         <div className="request-section">
+  <div className="small-heading">
+    <h3>Offene Terminanfragen</h3>
+    <span>
+      {
+        appointmentRequests.filter(
+          (request) => request.status !== 'ERLEDIGT'
+        ).length
+      }
+    </span>
+  </div>
 
-            {loadingRequests && <p role="status">Anfragen werden geladen …</p>}
-            {requestError && <p role="alert">{requestError}<button type="button" onClick={() => setRequestVersion((v) => v + 1)}>Erneut laden</button></p>}
-            {!loadingRequests && !requestError && (appointmentRequests.length === 0 ? (
-              <div className="small-empty-state">
-                Noch keine Terminanfragen vorhanden.
-              </div>
+  {loadingRequests && (
+    <p role="status">Anfragen werden geladen …</p>
+  )}
+
+  {requestError && (
+    <p role="alert">
+      {requestError}
+      <button
+        type="button"
+        onClick={() => setRequestVersion((v) => v + 1)}
+      >
+        Erneut laden
+      </button>
+    </p>
+  )}
+
+  {!loadingRequests &&
+    !requestError &&
+    (appointmentRequests.filter(
+      (request) => request.status !== 'ERLEDIGT'
+    ).length === 0 ? (
+      <div className="small-empty-state">
+        Keine offenen Terminanfragen vorhanden.
+      </div>
             ) : (
               <div className="request-list">
-                {appointmentRequests.map((request) => (
+                {appointmentRequests
+  .filter((request) => request.status !== 'ERLEDIGT')
+  .map((request) => (
                   <article
                     className="request-item"
                     key={request.terminanfrageId}

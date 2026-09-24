@@ -189,14 +189,12 @@ function Ressourcen({
   return (
     <section className="dashboard-card resources-card">
 
-      <div className="resource-label">
-        03
-        <span>RESSOURCEN</span>
-      </div>
-
-      <h2 className="resource-title">
-        Raum reservieren
-      </h2>
+      <div className="card-title">
+  <div className="title-icon">◈</div>
+  <h2 className="resource-title">
+    Raum reservieren
+  </h2>
+</div>
 
       <p className="resource-description">
         Wähle einen vorhandenen Termin
