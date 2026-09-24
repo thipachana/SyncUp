@@ -16,6 +16,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 @RestController
 @RequestMapping("/api/buchungen")
@@ -44,7 +46,69 @@ public class BuchungController {
                 security.current(http).getBenutzerId()
         );
     }
+@GetMapping("/verfuegbarkeit")
+public Map<Long, Boolean> verfuegbarkeit(
+        @RequestParam Long terminId,
+        HttpServletRequest http
+) {
+    Long owner = security.current(http).getBenutzerId();
 
+    var term = terms.findById(Input.id(terminId))
+            .filter(t ->
+                    t.getKalender()
+                            .getBesitzer()
+                            .getBenutzerId()
+                            .equals(owner)
+            )
+            .orElseThrow(() ->
+                    new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            "Termin nicht gefunden."
+                    )
+            );
+
+    var interval = new Input.Interval(
+            LocalDateTime.of(
+                    term.getDatum(),
+                    term.getStartzeit()
+            ),
+            LocalDateTime.of(
+                    term.getDatum(),
+                    term.getEndzeit()
+            )
+    );
+
+    Map<Long, Boolean> result = new LinkedHashMap<>();
+
+    for (var resource : resources.findAll()) {
+        boolean available =
+                Boolean.TRUE.equals(resource.getVerfuegbarkeit());
+
+        if (available) {
+            for (var booking :
+                    bookings.findByRessource_RessourcenId(
+                            resource.getRessourcenId()
+                    )) {
+
+                var occupied = Input.interval(
+                        booking.getZeitraum()
+                );
+
+                if (interval.overlaps(occupied)) {
+                    available = false;
+                    break;
+                }
+            }
+        }
+
+        result.put(
+                resource.getRessourcenId(),
+                available
+        );
+    }
+
+    return result;
+}
     @PostMapping
     @Transactional
     @ResponseStatus(HttpStatus.CREATED)
