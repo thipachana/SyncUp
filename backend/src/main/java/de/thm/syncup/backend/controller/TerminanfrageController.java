@@ -129,4 +129,36 @@ public List<FreiesZeitfenster> getFreieZeitfenster(@PathVariable Long id, HttpSe
 private record Zeitblock(LocalDateTime start, LocalDateTime ende) {}
 
 public record FreiesZeitfenster(LocalDateTime start, LocalDateTime ende) {}
+@PostMapping("/{id}/erledigt")
+@Transactional
+public Terminanfrage erledigt(
+        @PathVariable Long id,
+        HttpServletRequest http
+) {
+    Long owner = security.current(http).getBenutzerId();
+
+    var request = terminanfrageRepository.findById(id)
+            .orElseThrow(() ->
+                    new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            "Terminanfrage nicht gefunden."
+                    )
+            );
+
+    if (
+        request.getErsteller() == null ||
+        !request.getErsteller()
+                .getBenutzerId()
+                .equals(owner)
+    ) {
+        throw new ResponseStatusException(
+                HttpStatus.FORBIDDEN,
+                "Nur der Ersteller darf die Terminanfrage abschließen."
+        );
+    }
+
+    request.setStatus("ERLEDIGT");
+
+    return terminanfrageRepository.save(request);
+}
 }

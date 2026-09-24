@@ -1,7 +1,9 @@
 package de.thm.syncup.backend.controller;
 
-import de.thm.syncup.backend.model.*;
-import de.thm.syncup.backend.repository.*;
+import de.thm.syncup.backend.model.Buchung;
+import de.thm.syncup.backend.repository.BuchungRepository;
+import de.thm.syncup.backend.repository.RessourceRepository;
+import de.thm.syncup.backend.repository.TerminRepository;
 import de.thm.syncup.backend.security.SessionSecurity;
 import de.thm.syncup.backend.service.Input;
 
@@ -38,7 +40,7 @@ public class BuchungController {
 
     @GetMapping
     public List<Buchung> list(HttpServletRequest http) {
-        return bookings.findByTerminKalenderBesitzerBenutzerId(
+        return bookings.findVisibleForUser(
                 security.current(http).getBenutzerId()
         );
     }
@@ -68,6 +70,13 @@ public class BuchungController {
                                 "Termin nicht gefunden."
                         )
                 );
+
+        if (bookings.existsByTermin_TerminId(data.terminId())) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    "Für diesen Termin wurde bereits ein Raum reserviert."
+            );
+        }
 
         var interval = new Input.Interval(
                 LocalDateTime.of(
