@@ -11,6 +11,7 @@ function Ressourcen({
   const { currentUser } = useSession()
 
   const [termine, setTermine] = useState([])
+  const [buchungen, setBuchungen] = useState([])
   const [terminId, setTerminId] = useState('')
   const [start, setStart] = useState('')
   const [end, setEnd] = useState('')
@@ -29,6 +30,7 @@ function Ressourcen({
   useEffect(() => {
     if (!currentUser) {
       setTermine([])
+      setBuchungen([])
       setTerminId('')
       setStart('')
       setEnd('')
@@ -40,12 +42,16 @@ function Ressourcen({
     setTermsLoading(true)
     setTermsError('')
 
-    api('/api/me/termine')
-      .then((data) => {
-        if (active) {
-          setTermine(data)
-        }
-      })
+    Promise.all([
+  api('/api/me/termine'),
+  api('/api/buchungen'),
+])
+  .then(([data, bookings]) => {
+    if (active) {
+      setTermine(data)
+      setBuchungen(bookings)
+    }
+  })
       .catch((error) => {
         if (
           active &&
@@ -131,7 +137,12 @@ function Ressourcen({
         : ''
     )
   }
-
+const terminHatBereitsRaum =
+  Boolean(terminId) &&
+  buchungen.some(
+    (buchung) =>
+      buchung.termin?.terminId === Number(terminId)
+  )
   const bucheRessource = async (
     ressourcenId
   ) => {
@@ -156,7 +167,7 @@ function Ressourcen({
     setBusy(true)
 
     try {
-      await api('/api/buchungen', {
+      const neueBuchung = await api('/api/buchungen', {
         method: 'POST',
         body: {
           terminId:
@@ -374,13 +385,21 @@ function Ressourcen({
                         {ressource.name}
                       </strong>
 
-                      <span>
-                        {ressource.typ}
-                        {' · '}
-                        {ressource.kapazitaet}
-                        {' '}
-                        Personen
-                      </span>
+                      <span
+  className={
+    terminHatBereitsRaum
+      ? 'availability unavailable'
+      : ressource.verfuegbarkeit
+        ? 'availability available'
+        : 'availability unavailable'
+  }
+>
+  {terminHatBereitsRaum
+    ? 'Bereits reserviert'
+    : ressource.verfuegbarkeit
+      ? 'Verfügbar'
+      : 'Nicht verfügbar'}
+</span>
 
                     </div>
 
@@ -404,6 +423,7 @@ function Ressourcen({
                       busy ||
                       !currentUser ||
                       !terminId ||
+                      terminHatBereitsRaum ||
                       !ressource.verfuegbarkeit ||
                       termsLoading ||
                       Boolean(
