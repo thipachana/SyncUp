@@ -145,7 +145,7 @@ function MeinKalender() {
 
       setHinweis(
         editing
-          ? 'Termin geändert. Betroffene Teilnehmer wurden benachrichtigt.'
+          ? 'Termin geändert.'
           : 'Termin gespeichert.'
       )
     } catch (error) {
@@ -438,54 +438,7 @@ function MeinKalender() {
             }
           />
 
-         <fieldset disabled={busy}>
-  <legend>
-    Teilnehmer
-    (du bist automatisch dabei)
-  </legend>
-
-  {users
-    .filter(
-      (u) =>
-        u.benutzerId !==
-        currentUser?.benutzerId
-    )
-    .map((u) => (
-      <label
-        key={u.benutzerId}
-        style={{
-          display: 'block',
-        }}
-      >
-
-        <input
-          type="checkbox"
-          checked={participants.includes(
-            u.benutzerId
-          )}
-          onChange={(e) =>
-            setParticipants(
-              (ids) =>
-                e.target.checked
-                  ? [
-                      ...ids,
-                      u.benutzerId,
-                    ]
-                  : ids.filter(
-                      (id) =>
-                        id !==
-                        u.benutzerId
-                    )
-            )
-          }
-        />
-
-        {' '}
-        {u.name}
-
-      </label>
-    ))}
-</fieldset>
+        
 
           {editing && (
             <button
