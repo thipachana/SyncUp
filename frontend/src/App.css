@@ -1586,6 +1586,9 @@
 
 .calendar-day small {
   display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 4px 6px;
   border-radius: 6px;
   background: #e7f2eb;
