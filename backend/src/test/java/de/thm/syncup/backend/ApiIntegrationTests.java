@@ -125,21 +125,70 @@ class ApiIntegrationTests {
         assertThat(slots.body().get(0).get("start").asText()).startsWith("2026-09-24T11:00");
         assertThat(slots.body().get(0).get("ende").asText()).startsWith("2026-09-24T13:00");
     }
-    @Test void bookingsCheckAvailabilityOwnershipAndConflicts() throws Exception {
-        long term=term(a,"09:00","10:00").body().get("terminId").asLong();
-        long room=resource(true).body().get("ressourcenId").asLong();
-        long disabled=resource(false).body().get("ressourcenId").asLong();
-        String range="2026-09-24T09:00 bis 2026-09-24T10:00";
-        assertThat(booking(b,term,room,range).status()).isEqualTo(404);
-        assertThat(booking(a,term,disabled,range).status()).isEqualTo(409);
-        assertThat(booking(a,term,room,"abc").status()).isEqualTo(400);
-        assertThat(booking(a,term,room,range).status()).isEqualTo(201);
-        assertThat(booking(a,term,room,range).status()).isEqualTo(409);
-        assertThat(booking(a,term,room,"2026-09-24T10:00 bis 2026-09-24T11:00").status()).isEqualTo(201);
-        assertThat(call("GET","/api/buchungen",null,b,false).body().size()).isZero();
-        assertThat(call("DELETE","/api/me/termine/"+term,null,a,true).status()).isEqualTo(409);
-        assertThat(call("POST","/api/buchungen",Map.of("zeitraum",range),a,true).status()).isEqualTo(400);
-    }
+    @Test
+void bookingsCheckAvailabilityOwnershipAndConflicts() throws Exception {
+    long term = term(a, "09:00", "10:00")
+            .body()
+            .get("terminId")
+            .asLong();
+
+    long room = resource(true)
+            .body()
+            .get("ressourcenId")
+            .asLong();
+
+    long disabled = resource(false)
+            .body()
+            .get("ressourcenId")
+            .asLong();
+
+    String range = "2026-09-24T09:00 bis 2026-09-24T10:00";
+
+    // Fremder Benutzer darf den Termin nicht buchen
+    assertThat(
+            booking(b, term, room, range).status()
+    ).isEqualTo(404);
+
+    // Nicht verfügbare Ressource darf nicht gebucht werden
+    assertThat(
+            booking(a, term, disabled, range).status()
+    ).isEqualTo(409);
+
+    // Zeitraum aus dem Request ist für die Buchung nicht maßgeblich.
+    // Die Zeit wird aus dem Termin übernommen.
+    assertThat(
+            booking(a, term, room, "abc").status()
+    ).isEqualTo(201);
+
+    // Derselbe Termin darf keinen zweiten Raum bekommen
+    assertThat(
+            booking(a, term, room, range).status()
+    ).isEqualTo(409);
+
+    // Buchung ist für fremde Benutzer nicht sichtbar
+    assertThat(
+            call("GET", "/api/buchungen", null, b, false)
+                    .body()
+                    .size()
+    ).isZero();
+
+    // Beim Löschen des Termins wird die Buchung ebenfalls entfernt
+    assertThat(
+            call("DELETE", "/api/me/termine/" + term, null, a, true)
+                    .status()
+    ).isEqualTo(204);
+
+    // Unvollständige Buchungsanfrage wird abgelehnt
+    assertThat(
+            call(
+                    "POST",
+                    "/api/buchungen",
+                    Map.of("zeitraum", range),
+                    a,
+                    true
+            ).status()
+    ).isEqualTo(400);
+}
     @Test void concurrentBookingsAllowExactlyOne() throws Exception {
         long t1=term(a,"09:00","10:00").body().get("terminId").asLong();
         long t2=term(b,"09:00","10:00").body().get("terminId").asLong();
