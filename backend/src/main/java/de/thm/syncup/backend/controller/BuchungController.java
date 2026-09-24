@@ -51,14 +51,24 @@ public Map<Long, Boolean> verfuegbarkeit(
         @RequestParam Long terminId,
         HttpServletRequest http
 ) {
-    Long owner = security.current(http).getBenutzerId();
+    Input.id(terminId);
 
-    var term = terms.findById(Input.id(terminId))
+    Long userId = security.current(http).getBenutzerId();
+
+    var term = terms.findById(terminId)
             .filter(t ->
                     t.getKalender()
                             .getBesitzer()
                             .getBenutzerId()
-                            .equals(owner)
+                            .equals(userId)
+                    ||
+                    t.getTeilnehmer()
+                            .stream()
+                            .anyMatch(teilnehmer ->
+                                    teilnehmer
+                                            .getBenutzerId()
+                                            .equals(userId)
+                            )
             )
             .orElseThrow(() ->
                     new ResponseStatusException(
@@ -81,8 +91,11 @@ public Map<Long, Boolean> verfuegbarkeit(
     Map<Long, Boolean> result = new LinkedHashMap<>();
 
     for (var resource : resources.findAll()) {
+
         boolean available =
-                Boolean.TRUE.equals(resource.getVerfuegbarkeit());
+                Boolean.TRUE.equals(
+                        resource.getVerfuegbarkeit()
+                );
 
         if (available) {
             for (var booking :
