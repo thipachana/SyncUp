@@ -282,15 +282,20 @@ function MeinKalender() {
           const dateKey =
             getDateKey(day)
 
+            const today = new Date()
+
+  const isToday =
+    year === today.getFullYear() &&
+    month === today.getMonth() &&
+    day === today.getDate()
+
           return (
             <button
               key={day}
               type="button"
               className={`calendar-day ${
-                selectedDate === dateKey
-                  ? 'selected'
-                  : ''
-              }`}
+  selectedDate === dateKey ? 'selected' : ''
+} ${isToday ? 'today' : ''}`}
               onClick={() => {
                 setSelectedDate(dateKey)
                 setHinweis('')

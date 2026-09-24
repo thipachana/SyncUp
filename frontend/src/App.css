@@ -1693,3 +1693,12 @@ button:disabled { opacity: .55; cursor: wait; }
 .notification-panel {position:absolute;right:0;top:48px;width:min(360px,80vw);max-height:65vh;overflow:auto;background:white;color:#19243b;border:1px solid #dbe5df;border-radius:16px;padding:18px;box-shadow:0 12px 36px #0002;z-index:100;}
 .notification-panel article {border-top:1px solid #dbe5df;padding:12px 0;}
 .calendar-form input[type=checkbox] {width:auto;min-height:auto;margin-right:8px;}
+.calendar-day.today > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 2px solid #087b5d;
+  border-radius: 50%;
+}
