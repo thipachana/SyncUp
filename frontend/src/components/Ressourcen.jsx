@@ -437,7 +437,7 @@ const terminHatBereitsRaum =
                       busy ||
                       !currentUser ||
                       !terminId ||
-                      terminHatBereitsRaum ||
+                    
                       ressourceIstBelegt(ressource.ressourcenId) ||
                       !ressource.verfuegbarkeit ||
                       termsLoading ||
