@@ -26,7 +26,24 @@ public class TerminService {
             calendar=calendars.findFirstByBesitzerBenutzerId(owner).orElseGet(() -> {var k=new Kalender();k.setName("Mein Kalender");k.setBesitzer(user);return calendars.save(k);});
         }
         var term=new Termin(title,data.beschreibung(),data.datum(),data.startzeit(),data.endzeit(),"BESTAETIGT",calendar);
-        term.setTeilnehmer(participants(data.benutzerIds(),owner)); return terms.save(term);
+        term.setTeilnehmer(participants(data.benutzerIds(), owner));
+
+var saved = terms.save(term);
+
+for (var participant : saved.getTeilnehmer()) {
+    if (!participant.getBenutzerId().equals(owner)) {
+        var n = new Benachrichtigung();
+        n.empfaengerId = participant.getBenutzerId();
+        n.terminId = saved.getTerminId();
+        n.text = title + " wurde erstellt. Termin: "
+                + data.datum() + ", "
+                + data.startzeit() + "–"
+                + data.endzeit() + ".";
+        notifications.save(n);
+    }
+}
+
+return saved;
     }
     private java.util.List<Benutzer> participants(java.util.List<Long> ids,Long owner) {
         var unique=new java.util.LinkedHashSet<Long>(); unique.add(owner);

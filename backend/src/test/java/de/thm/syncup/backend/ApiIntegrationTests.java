@@ -217,16 +217,16 @@ void bookingsCheckAvailabilityOwnershipAndConflicts() throws Exception {
         assertThat(call("PUT","/api/me/termine/"+id,data,a,false).status()).isEqualTo(403);
         assertThat(call("PUT","/api/me/termine/"+id,data,a,true).status()).isEqualTo(200);
         var list=call("GET","/api/me/benachrichtigungen",null,b,false);
-        assertThat(list.body().size()).isEqualTo(1);
+        assertThat(list.body().size()).isEqualTo(2);
         assertThat(list.body().get(0).get("text").asText()).contains("Projektmeeting","2026-09-25","16:00");
         long notification=list.body().get(0).get("id").asLong();
         assertThat(call("POST","/api/me/benachrichtigungen/"+notification+"/gelesen",null,a,true).status()).isEqualTo(404);
         assertThat(call("POST","/api/me/benachrichtigungen/"+notification+"/gelesen",null,b,true).body().get("gelesen").asBoolean()).isTrue();
         assertThat(call("PUT","/api/me/termine/"+id,data,a,true).status()).isEqualTo(200);
-        assertThat(call("GET","/api/me/benachrichtigungen",null,b,false).body().size()).isEqualTo(1);
+        assertThat(call("GET","/api/me/benachrichtigungen",null,b,false).body().size()).isEqualTo(2);
         data.put("endzeit","15:00");
         assertThat(call("PUT","/api/me/termine/"+id,data,a,true).status()).isEqualTo(400);
-        assertThat(call("GET","/api/me/benachrichtigungen",null,b,false).body().size()).isEqualTo(1);
+        assertThat(call("GET","/api/me/benachrichtigungen",null,b,false).body().size()).isEqualTo(2);
     }
     @Test void bookedAppointmentCannotBeShifted() throws Exception {
         var created=term(a,"10:00","11:00");long id=created.body().get("terminId").asLong();
