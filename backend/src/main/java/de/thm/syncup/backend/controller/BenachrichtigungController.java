@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 @RestController @RequestMapping("/api/me/benachrichtigungen")
 public class BenachrichtigungController {
  private final BenachrichtigungRepository notifications; private final SessionSecurity security;
@@ -16,4 +18,18 @@ public class BenachrichtigungController {
  var item=notifications.findByIdAndEmpfaengerId(id,security.current(http).getBenutzerId()).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
  item.gelesen=true;return notifications.save(item);
  }
+ @DeleteMapping("/{id}")
+@ResponseStatus(HttpStatus.NO_CONTENT)
+public void delete(@PathVariable Long id, HttpServletRequest http) {
+    var item = notifications
+        .findByIdAndEmpfaengerId(
+            id,
+            security.current(http).getBenutzerId()
+        )
+        .orElseThrow(() ->
+            new ResponseStatusException(HttpStatus.NOT_FOUND)
+        );
+
+    notifications.delete(item);
+}
 }
