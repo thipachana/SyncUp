@@ -12,6 +12,7 @@ function Ressourcen({
 
   const [termine, setTermine] = useState([])
   const [buchungen, setBuchungen] = useState([])
+  const [raumVerfuegbarkeit, setRaumVerfuegbarkeit] = useState({})
   const [terminId, setTerminId] = useState('')
   const [start, setStart] = useState('')
   const [end, setEnd] = useState('')
@@ -109,6 +110,32 @@ function Ressourcen({
 
     setMessage('')
   }, [preselectedTerminId, termine])
+  useEffect(() => {
+  if (!terminId) {
+    setRaumVerfuegbarkeit({})
+    return
+  }
+
+  let active = true
+
+  api(
+    `/api/buchungen/verfuegbarkeit?terminId=${encodeURIComponent(terminId)}`
+  )
+    .then((data) => {
+      if (active) {
+        setRaumVerfuegbarkeit(data)
+      }
+    })
+    .catch((error) => {
+      if (active && error.name !== 'AbortError') {
+        setMessage(errorMessage(error))
+      }
+    })
+
+  return () => {
+    active = false
+  }
+}, [terminId])
 
   function selectTermin(id) {
     setTerminId(id)
@@ -143,26 +170,7 @@ const terminHatBereitsRaum =
     (buchung) =>
       buchung.termin?.terminId === Number(terminId)
   )
-  const ressourceIstBelegt = (ressourcenId) => {
-  if (!start || !end) return false
 
-  return buchungen.some((buchung) => {
-    if (
-      buchung.ressource?.ressourcenId !== ressourcenId ||
-      !buchung.termin
-    ) {
-      return false
-    }
-
-    const belegterStart =
-      `${buchung.termin.datum}T${buchung.termin.startzeit.slice(0, 5)}`
-
-    const belegtesEnde =
-      `${buchung.termin.datum}T${buchung.termin.endzeit.slice(0, 5)}`
-
-    return start < belegtesEnde && belegterStart < end
-  })
-}
   const bucheRessource = async (
     ressourcenId
   ) => {
@@ -411,6 +419,17 @@ const terminHatBereitsRaum =
       Personen
     </span>
   </div>
+  <span
+  className={
+    raumVerfuegbarkeit[ressource.ressourcenId] === false
+      ? 'availability unavailable'
+      : 'availability available'
+  }
+>
+  {raumVerfuegbarkeit[ressource.ressourcenId] === false
+    ? 'Nicht verfügbar'
+    : 'Verfügbar'}
+</span>
 
   <span
   className={
@@ -434,17 +453,17 @@ const terminHatBereitsRaum =
                   <button
                     className="primary-button resource-button"
                     disabled={
-                      busy ||
-                      !currentUser ||
-                      !terminId ||
+  busy ||
+  !currentUser ||
+  !terminId ||
+  terminHatBereitsRaum ||
+  raumVerfuegbarkeit[ressource.ressourcenId] === false ||
+  !ressource.verfuegbarkeit ||
+  termsLoading ||
+  Boolean(termsError)
+}
                     
-                      ressourceIstBelegt(ressource.ressourcenId) ||
-                      !ressource.verfuegbarkeit ||
-                      termsLoading ||
-                      Boolean(
-                        termsError
-                      )
-                    }
+                     
                     type="button"
                     onClick={() =>
                       bucheRessource(
