@@ -438,6 +438,7 @@ const terminHatBereitsRaum =
                       !currentUser ||
                       !terminId ||
                       terminHatBereitsRaum ||
+                      ressourceIstBelegt(ressource.ressourcenId) ||
                       !ressource.verfuegbarkeit ||
                       termsLoading ||
                       Boolean(
