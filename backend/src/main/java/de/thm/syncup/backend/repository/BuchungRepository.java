@@ -11,6 +11,8 @@ public interface BuchungRepository extends JpaRepository<Buchung, Long> {
 
     boolean existsByTermin_TerminId(Long id);
 
+    void deleteByTermin_TerminId(Long terminId);
+
     List<Buchung> findByTerminKalenderBesitzerBenutzerId(Long id);
 
     List<Buchung> findByRessource_RessourcenId(Long ressourcenId);

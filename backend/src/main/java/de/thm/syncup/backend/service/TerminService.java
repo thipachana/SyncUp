@@ -56,12 +56,27 @@ public class TerminService {
         }
         return terms.save(term);
     }
-    @Transactional public void delete(Long id,Long owner) {
-        var term=terms.lockById(Input.id(id)).filter(t -> t.getKalender().getBesitzer().getBenutzerId().equals(owner))
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Termin nicht gefunden."));
-        if(bookings.existsByTermin_TerminId(id)) throw new ResponseStatusException(HttpStatus.CONFLICT,"Dieser Termin hat eine Ressourcenbuchung und kann deshalb nicht gelöscht werden.");
-        terms.delete(term);
-    }
+  @Transactional
+public void delete(Long id, Long owner) {
+
+    var term = terms.lockById(Input.id(id))
+            .filter(t ->
+                    t.getKalender()
+                            .getBesitzer()
+                            .getBenutzerId()
+                            .equals(owner)
+            )
+            .orElseThrow(() ->
+                    new ResponseStatusException(
+                            HttpStatus.NOT_FOUND,
+                            "Termin nicht gefunden."
+                    )
+            );
+
+    bookings.deleteByTermin_TerminId(id);
+
+    terms.delete(term);
+}
     public record CalendarId(Long kalenderId) {}
     public record TerminRequest(String titel,String beschreibung,LocalDate datum,LocalTime startzeit,LocalTime endzeit,Long kalenderId,CalendarId kalender,java.util.List<Long> benutzerIds) {}
 }
