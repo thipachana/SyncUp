@@ -394,6 +394,25 @@ const confirmTimeSlot = async (slot) => {
           'Termin konnte nicht gespeichert werden.'
       )
     }
+    const finishResponse = await apiFetch(
+  `/api/terminanfragen/${selectedRequestId}/erledigt`,
+  {
+    method: 'POST',
+  }
+)
+
+if (!finishResponse.ok) {
+  throw new Error(
+    'Termin wurde erstellt, aber die Terminanfrage konnte nicht abgeschlossen werden.'
+  )
+}
+
+setAppointmentRequests((prev) =>
+  prev.filter(
+    (request) =>
+      request.terminanfrageId !== selectedRequestId
+  )
+)
 
     setPreselectedTerminId(
       savedTermin.terminId
