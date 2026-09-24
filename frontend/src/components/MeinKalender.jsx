@@ -6,8 +6,6 @@ function MeinKalender() {
   const { currentUser } = useSession()
 
   const [editing, setEditing] = useState(null)
-  const [users, setUsers] = useState([])
-  const [participants, setParticipants] = useState([])
   const [description, setDescription] = useState('')
   const [busy, setBusy] = useState(false)
   const [loadError, setLoadError] = useState('')
@@ -38,7 +36,6 @@ function MeinKalender() {
     if (!currentUser) {
       setTermine([])
       setBuchungen([])
-      setUsers([])
       setLoading(false)
       return
     }
@@ -49,17 +46,15 @@ function MeinKalender() {
     setLoadError('')
 
     Promise.all([
-      api('/api/me/termine'),
-      api('/api/benutzer'),
-      api('/api/buchungen'),
-    ])
-      .then(([data, people, bookings]) => {
-        if (active) {
-          setTermine(data)
-          setUsers(people)
-          setBuchungen(bookings)
-        }
-      })
+  api('/api/me/termine'),
+  api('/api/buchungen'),
+])
+.then(([data, bookings]) => {
+  if (active) {
+    setTermine(data)
+    setBuchungen(bookings)
+  }
+})
       .catch((error) => {
         if (active && error.name !== 'AbortError') {
           setLoadError(errorMessage(error))
@@ -139,7 +134,6 @@ function MeinKalender() {
       setTitel('')
       setVon('')
       setBis('')
-      setParticipants([])
       setDescription('')
       setEditing(null)
 
