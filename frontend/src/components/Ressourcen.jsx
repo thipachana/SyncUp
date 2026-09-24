@@ -143,6 +143,26 @@ const terminHatBereitsRaum =
     (buchung) =>
       buchung.termin?.terminId === Number(terminId)
   )
+  const ressourceIstBelegt = (ressourcenId) => {
+  if (!start || !end) return false
+
+  return buchungen.some((buchung) => {
+    if (
+      buchung.ressource?.ressourcenId !== ressourcenId ||
+      !buchung.termin
+    ) {
+      return false
+    }
+
+    const belegterStart =
+      `${buchung.termin.datum}T${buchung.termin.startzeit.slice(0, 5)}`
+
+    const belegtesEnde =
+      `${buchung.termin.datum}T${buchung.termin.endzeit.slice(0, 5)}`
+
+    return start < belegtesEnde && belegterStart < end
+  })
+}
   const bucheRessource = async (
     ressourcenId
   ) => {
@@ -372,51 +392,48 @@ const terminHatBereitsRaum =
                     ressource.ressourcenId
                   }
                 >
-
                   <div className="resource-row">
 
-                    <div className="resource-symbol">
-                      ▣
-                    </div>
+  <div className="resource-symbol">
+    ▣
+  </div>
 
-                    <div className="resource-main">
+  <div className="resource-main">
+    <strong>
+      {ressource.name}
+    </strong>
 
-                      <strong>
-                        {ressource.name}
-                      </strong>
+    <span>
+      {ressource.typ}
+      {' · '}
+      {ressource.kapazitaet}
+      {' '}
+      Personen
+    </span>
+  </div>
 
-                      <span
-  className={
-    terminHatBereitsRaum
-      ? 'availability unavailable'
-      : ressource.verfuegbarkeit
-        ? 'availability available'
-        : 'availability unavailable'
-  }
->
-  {terminHatBereitsRaum
-    ? 'Bereits reserviert'
-    : ressource.verfuegbarkeit
-      ? 'Verfügbar'
-      : 'Nicht verfügbar'}
-</span>
+  <span
+    className={
+      terminHatBereitsRaum ||
+      ressourceIstBelegt(ressource.ressourcenId)
+        ? 'availability unavailable'
+        : ressource.verfuegbarkeit
+          ? 'availability available'
+          : 'availability unavailable'
+    }
+  >
+    {terminHatBereitsRaum
+      ? 'Bereits reserviert'
+      : ressourceIstBelegt(ressource.ressourcenId)
+        ? 'Nicht verfügbar'
+        : ressource.verfuegbarkeit
+          ? 'Verfügbar'
+          : 'Nicht verfügbar'}
+  </span>
 
-                    </div>
+</div>
 
-                    <span
-                      className={
-                        ressource.verfuegbarkeit
-                          ? 'availability available'
-                          : 'availability unavailable'
-                      }
-                    >
-                      {ressource.verfuegbarkeit
-                        ? 'Verfügbar'
-                        : 'Nicht verfügbar'}
-                    </span>
-
-                  </div>
-
+                  
                   <button
                     className="primary-button resource-button"
                     disabled={
