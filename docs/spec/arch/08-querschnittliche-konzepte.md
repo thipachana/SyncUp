@@ -10,6 +10,8 @@ Ein Beispiel ist eine überschneidende Raumreservierung. Ist ein Raum im gewüns
 
 Auch wenn für einen Termin bereits ein Raum gebucht wurde, kann nicht noch ein weiterer Raum für denselben Termin reserviert werden.
 
+Die serverseitige Prüfung ist dabei maßgeblich. Auch wenn das Frontend einen Raum zuvor als verfügbar angezeigt hat, wird unmittelbar vor dem Speichern erneut geprüft, ob weiterhin eine gültige Buchung möglich ist.
+
 ## Kommunikation
 
 Die Kommunikation zwischen Frontend und Backend erfolgt über REST-Schnittstellen.
@@ -74,11 +76,29 @@ Eine Raumreservierung ist immer mit einem bestehenden Termin verbunden.
 
 Beginn und Ende der Buchung werden aus dem ausgewählten Termin übernommen und nicht unabhängig davon eingegeben.
 
-Vor dem Speichern prüft das Backend:
+Nachdem ein Termin ausgewählt wurde, fragt das Frontend die zeitbezogene Verfügbarkeit der vorhandenen Räume beim Backend ab.
+
+Das Backend berücksichtigt dafür bereits gespeicherte Buchungen und prüft, ob sich deren Zeiträume mit dem ausgewählten Termin überschneiden.
+
+Ein Raum wird im Frontend als „Nicht verfügbar“ angezeigt, wenn:
+
+- der Raum grundsätzlich nicht buchbar ist oder
+- für den Zeitraum des ausgewählten Termins bereits eine überschneidende Buchung existiert.
+
+Andere Räume bleiben im selben Zeitraum weiterhin verfügbar, solange für diese keine überschneidende Buchung existiert.
+
+Vor dem tatsächlichen Speichern einer neuen Buchung führt das Backend die Konfliktprüfung erneut durch.
+
+Dabei wird geprüft:
 
 - ob der Raum im Zeitraum des Termins bereits belegt ist,
+- ob die Ressource grundsätzlich verfügbar ist,
 - ob für den Termin bereits ein anderer Raum gebucht wurde.
 
-Bei einem Konflikt wird die Buchung nicht gespeichert.
+Dadurch dient die Verfügbarkeitsanzeige im Frontend nur der Benutzerführung, während die endgültige Konsistenzprüfung im Backend erfolgt.
+
+Direkt aufeinanderfolgende Buchungen gelten nicht als Überschneidung. Eine Buchung von 14:00 bis 15:00 Uhr verhindert daher beispielsweise keine weitere Buchung desselben Raumes von 15:00 bis 16:00 Uhr.
+
+Für einen Termin kann höchstens eine Raumreservierung existieren.
 
 Wird ein Termin gelöscht, wird eine zugehörige Raumbuchung ebenfalls entfernt.

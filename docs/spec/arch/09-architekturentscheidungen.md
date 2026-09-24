@@ -28,15 +28,15 @@ Die Anwendung besteht aus:
 
 ### Begründung
 
-Durch die Trennung haben die einzelnen Bereiche klare Aufgaben.
+Durch die Trennung besitzen die einzelnen Bereiche klar abgegrenzte Aufgaben.
 
-Das Frontend übernimmt die Darstellung und Benutzereingaben, das Backend die Geschäftslogik und PostgreSQL die Speicherung der Daten.
+Das Frontend übernimmt Darstellung und Benutzereingaben, das Backend die Geschäftslogik und PostgreSQL die dauerhafte Speicherung der Daten.
 
-Dadurch können die einzelnen Bereiche leichter unabhängig voneinander entwickelt und getestet werden.
+Dadurch können die einzelnen Bereiche weitgehend unabhängig voneinander entwickelt und getestet werden.
 
 ### Konsequenzen
 
-Die einzelnen Schichten müssen über festgelegte Schnittstellen miteinander kommunizieren.
+Die einzelnen Schichten müssen über klar definierte Schnittstellen miteinander kommunizieren.
 
 Dadurch entsteht zusätzlicher Aufwand für die Konfiguration und Kommunikation zwischen Frontend und Backend.
 
@@ -60,15 +60,15 @@ Das Backend wird mit Spring Boot und Java 21 umgesetzt.
 
 ### Begründung
 
-Spring Boot bietet eine gute Unterstützung für REST-Schnittstellen, Datenbankzugriffe und die Strukturierung einer Webanwendung.
+Spring Boot bietet Unterstützung für REST-Schnittstellen, Datenbankzugriffe und die Strukturierung einer Webanwendung.
 
-Außerdem kann Spring Data JPA direkt für den Zugriff auf PostgreSQL verwendet werden.
+Außerdem kann Spring Data JPA für den Zugriff auf PostgreSQL verwendet werden.
 
 ### Konsequenzen
 
 Für die Ausführung des Backends wird Java 21 benötigt.
 
-Das Backend verwendet die typische Aufteilung in Controller, Services, Repositories und Entity-Klassen.
+Das Backend verwendet eine Aufteilung in Controller, Services, Repositories und Entity-Klassen.
 
 ---
 
@@ -126,15 +126,15 @@ Der Datenzugriff im Backend erfolgt über Spring Data JPA und Hibernate.
 
 ### Begründung
 
-Die Daten von SyncUp besitzen viele Beziehungen untereinander.
+Die Daten von SyncUp besitzen mehrere Beziehungen untereinander.
 
-Eine relationale Datenbank eignet sich deshalb gut für die benötigte Datenstruktur.
+Eine relationale Datenbank eignet sich deshalb für die benötigte Datenstruktur.
 
-Spring Data JPA reduziert außerdem den notwendigen Code für viele grundlegende Datenbankoperationen.
+Spring Data JPA reduziert außerdem den notwendigen Code für grundlegende Datenbankoperationen.
 
 ### Konsequenzen
 
-Für die lokale Ausführung muss PostgreSQL eingerichtet sein.
+Für die lokale Ausführung muss PostgreSQL eingerichtet und erreichbar sein.
 
 Änderungen an den Entity-Klassen können Auswirkungen auf das Datenbankschema haben.
 
@@ -160,64 +160,96 @@ Die Daten werden hauptsächlich im JSON-Format übertragen.
 
 ### Begründung
 
-REST lässt sich mit Spring Boot einfach umsetzen und vom React-Frontend über HTTP-Anfragen verwenden.
+REST lässt sich mit Spring Boot direkt umsetzen und vom React-Frontend über HTTP-Anfragen verwenden.
 
-Das Frontend bleibt dadurch von der Datenbank getrennt.
+Das Frontend bleibt dadurch von der Datenbank und deren technischer Struktur getrennt.
 
 ### Konsequenzen
 
 Für die benötigten Funktionen müssen passende REST-Endpunkte im Backend vorhanden sein.
 
-Außerdem muss die Kommunikation zwischen Frontend und Backend korrekt konfiguriert werden.
+Das Frontend muss Fehlerantworten des Backends verarbeiten und verständlich darstellen.
 
 ---
 
-## ADR-005: Prüfung von Raumreservierungen im Backend
+## ADR-005: Serverzentrierte Konsistenzprüfung bei Raumreservierungen
 
 ### Kontext
 
-Ein Raum darf nicht gleichzeitig für mehrere sich überschneidende Termine reserviert werden.
+Bei Raumreservierungen müssen mehrere fachliche Regeln eingehalten werden.
 
-Außerdem soll ein Termin nur einen Raum besitzen.
+Ein Raum darf nicht für zwei sich zeitlich überschneidende Termine reserviert werden.
+
+Gleichzeitig dürfen unterschiedliche Räume im gleichen Zeitraum weiterhin von unterschiedlichen Terminen genutzt werden.
+
+Zusätzlich darf einem Termin höchstens ein Raum zugeordnet sein.
+
+Da mehrere Benutzer gleichzeitig mit der Anwendung arbeiten können, darf sich die Konsistenz nicht ausschließlich auf den im Frontend angezeigten Zustand verlassen.
 
 ### Alternativen
 
-- Prüfung nur im Frontend
-- keine zentrale Prüfung
-- Prüfung der Geschäftsregeln im Backend
+- Prüfung ausschließlich im Frontend
+- Prüfung ausschließlich beim Laden der Raumliste
+- keine zentrale Konfliktprüfung
+- Vorab-Anzeige im Frontend und erneute verbindliche Prüfung im Backend
 
 ### Entscheidung
 
-Die Regeln für Raumreservierungen werden im Backend geprüft.
+Die Regeln für Raumreservierungen werden zentral im Backend durchgesetzt.
 
-Vor dem Speichern wird geprüft:
+Nach Auswahl eines Termins fragt das Frontend die zeitbezogene Verfügbarkeit der vorhandenen Räume beim Backend ab.
 
-- ob der ausgewählte Raum im Zeitraum des Termins bereits belegt ist,
-- ob für den Termin bereits ein anderer Raum reserviert wurde.
+Das Backend ermittelt für jeden Raum, ob im Zeitraum des ausgewählten Termins bereits eine überschneidende Buchung existiert.
 
-Die Buchungszeit wird aus dem ausgewählten Termin übernommen.
+Das Frontend verwendet diese Information zur Anzeige von:
+
+- „Verfügbar“
+- „Nicht verfügbar“
+
+Vor dem tatsächlichen Speichern einer neuen Buchung führt das Backend die Prüfung erneut durch.
+
+Dabei wird geprüft:
+
+- ob die Ressource grundsätzlich verfügbar ist,
+- ob der Raum im Zeitraum des Termins bereits durch eine überschneidende Buchung belegt ist,
+- ob für den ausgewählten Termin bereits eine Raumreservierung existiert.
+
+Beginn und Ende der Buchung werden aus dem ausgewählten Termin übernommen.
+
+Direkt aufeinanderfolgende Zeiträume gelten nicht als Überschneidung.
 
 ### Begründung
 
-Diese Regeln gehören zur Geschäftslogik und sollen unabhängig vom verwendeten Frontend gelten.
+Die Regeln für Raumreservierungen sind Teil der Geschäftslogik und müssen unabhängig vom Frontend eingehalten werden.
 
-Eine Prüfung nur im Frontend könnte umgangen werden, zum Beispiel durch einen direkten Aufruf der REST-Schnittstelle.
+Eine ausschließliche Prüfung im Frontend könnte durch direkte REST-Aufrufe umgangen werden.
+
+Außerdem kann sich der Buchungszustand zwischen Anzeige und tatsächlichem Buchungsversuch ändern, wenn mehrere Benutzer gleichzeitig arbeiten.
+
+Die erneute serverseitige Prüfung vor dem Speichern stellt deshalb die maßgebliche Konsistenzprüfung dar.
 
 ### Konsequenzen
 
-Ungültige oder überschneidende Buchungen werden vom Backend abgelehnt.
+Das Frontend kann dem Benutzer bereits vor dem Buchungsversuch anzeigen, welche Räume im gewählten Zeitraum belegt sind.
 
-Das Frontend muss die Antwort verarbeiten und dem Benutzer eine passende Fehlermeldung anzeigen.
+Unterschiedliche freie Räume können im gleichen Zeitraum parallel genutzt werden.
+
+Eine Doppelbelegung desselben Raumes wird vom Backend verhindert.
+
+Für einen Termin kann höchstens eine Raumreservierung gespeichert werden.
+
+Das Frontend muss Konfliktantworten des Backends verarbeiten und dem Benutzer eine verständliche Meldung anzeigen.
+
+Wird ein Termin gelöscht, wird eine zugehörige Raumreservierung ebenfalls entfernt.
 
 ---
 
-Die einzelnen Basisentscheidungen sind zusätzlich in folgenden ADR-Dateien dokumentiert:
+Die Architekturentscheidungen sind zusätzlich in einzelnen ADR-Dateien dokumentiert:
 
 - `adrs/001-use-spring-boot.md`
 - `adrs/002-use-react.md`
 - `adrs/003-use-postgresql.md`
 - `adrs/004-use-rest-api.md`
+- `adrs/005-room-booking-consistency.md`
 
 Die Drei-Schichten-Architektur wird als übergeordnetes Architekturprinzip verwendet.
-
-Die Prüfung der Raumreservierungen wird in diesem Kapitel als zusätzliche Architekturentscheidung beschrieben.

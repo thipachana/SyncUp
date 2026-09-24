@@ -28,7 +28,7 @@ Das Frontend wurde mit React und JavaScript/JSX entwickelt. Für Entwicklung und
 
 Über das Frontend können unter anderem folgende Funktionen genutzt werden:
 
-- Registrierung und Anmeldung
+- Registrierung, Anmeldung und Abmeldung
 - persönlicher Monatskalender
 - private Termine erstellen, anzeigen, bearbeiten und löschen
 - Terminanfragen erstellen und anzeigen
@@ -37,11 +37,15 @@ Das Frontend wurde mit React und JavaScript/JSX entwickelt. Für Entwicklung und
 - gemeinsame freie Zeitfenster berechnen und anzeigen
 - freien Zeitslot als gemeinsamen Termin übernehmen
 - vorhandene Räume anzeigen
-- Räume für Termine reservieren
+- zeitbezogene Raumverfügbarkeit anzeigen
+- Räume für bestehende Termine reservieren
 - gebuchten Raum im Kalender anzeigen
-- Benachrichtigungen anzeigen
+- Benachrichtigungen anzeigen und löschen
+- Erfolgs- und Fehlermeldungen darstellen
 
-Bei einer Raumreservierung wird der passende Termin ausgewählt. Beginn und Ende der Buchung werden aus dem Termin übernommen und können nicht unabhängig verändert werden.
+Bei einer Raumreservierung wird ein bestehender Termin ausgewählt.
+
+Beginn und Ende der Buchung werden automatisch aus dem Termin übernommen und können nicht unabhängig verändert werden.
 
 ## Backend
 
@@ -50,13 +54,13 @@ Das Backend wurde mit Spring Boot umgesetzt. Das Projekt verwendet Java 21.
 Der Aufbau besteht hauptsächlich aus:
 
 - **Controllern:** nehmen Anfragen vom Frontend entgegen und stellen REST-Schnittstellen bereit
-- **Services:** enthalten Teile der Geschäftslogik und Validierung
+- **Services:** enthalten Geschäftslogik und Validierung
 - **Repositories:** lesen und speichern Daten in der Datenbank
 - **Entity-Klassen:** stellen die wichtigsten Datenobjekte der Anwendung dar
 
 Das Backend ermöglicht unter anderem:
 
-- Benutzer registrieren und anmelden
+- Benutzer registrieren, anmelden und abmelden
 - persönliche Kalenderdaten laden
 - Termine anlegen, bearbeiten, anzeigen und löschen
 - Terminanfragen anlegen und anzeigen
@@ -64,12 +68,16 @@ Das Backend ermöglicht unter anderem:
 - gemeinsame Termine aus freien Zeitfenstern erzeugen
 - Terminanfragen als erledigt markieren
 - Ressourcen abrufen
+- zeitbezogene Raumverfügbarkeit berechnen
 - Ressourcenbuchungen speichern
 - Überschneidungen bei Ressourcenbuchungen prüfen
 - mehrere Räume für denselben Termin verhindern
+- parallele Nutzung unterschiedlicher freier Räume ermöglichen
 - Benachrichtigungen für Teilnehmer gemeinsamer Termine erzeugen
+- Benachrichtigungen löschen
+- zugehörige Raumbuchungen beim Löschen eines Termins entfernen
 
-Persönliche Daten werden durch Anmeldung und Eigentumsprüfungen geschützt.
+Persönliche Daten werden durch Anmeldung und serverseitige Eigentums- beziehungsweise Zugriffsprüfungen geschützt.
 
 Ein erweitertes Rollen- oder Administrationssystem ist nicht Bestandteil des aktuellen Funktionsumfangs.
 
@@ -89,7 +97,9 @@ Gespeichert werden unter anderem:
 
 Benutzer können Terminanfragen und gemeinsamen Terminen zugeordnet werden.
 
-Hibernate übernimmt während der Entwicklung die Abbildung der Entity-Klassen auf die Datenbanktabellen.
+Buchungen verknüpfen einen bestehenden Termin mit einer Ressource.
+
+Hibernate übernimmt die Abbildung der Entity-Klassen auf die Datenbanktabellen.
 
 Das Datenmodell wird zusätzlich in D1 und D2 beschrieben.
 
@@ -105,26 +115,32 @@ Das Datenmodell wird zusätzlich in D1 und D2 beschrieben.
 6. Die Ergebnisse werden an das Frontend zurückgegeben.
 7. Der Organisator wählt ein freies Zeitfenster aus.
 8. Das Backend erzeugt daraus einen gemeinsamen Termin mit der angegebenen Dauer.
-9. Der Termin wird bei den beteiligten Benutzern angezeigt.
-10. Die Terminanfrage wird als erledigt markiert.
-11. Für die Teilnehmer werden Benachrichtigungen erzeugt.
+9. Der Termin wird den beteiligten Benutzern zugeordnet und bei ihnen im Kalender angezeigt.
+10. Für die Teilnehmer werden Benachrichtigungen erzeugt.
+11. Die Terminanfrage wird als erledigt markiert.
 
 ### Raum buchen
 
-1. Das Frontend lädt die vorhandenen Räume.
-2. Der Benutzer wählt einen Termin und einen Raum aus.
-3. Beginn und Ende der Buchung werden aus dem Termin übernommen.
-4. Die Buchungsanfrage wird an das Backend gesendet.
-5. Das Backend prüft, ob der Raum im gleichen Zeitraum bereits gebucht ist.
-6. Zusätzlich wird geprüft, ob für den Termin schon ein anderer Raum gebucht wurde.
-7. Wenn keine dieser Regeln verletzt wird, wird die Buchung gespeichert.
-8. Bei einem Konflikt wird die Buchung abgelehnt.
-9. Das Frontend zeigt dem Benutzer eine passende Meldung an.
-10. Der gebuchte Raum wird anschließend beim Termin im Kalender angezeigt.
+1. Das Frontend lädt die vorhandenen Räume und relevanten Termine.
+2. Der Benutzer wählt einen bestehenden Termin aus.
+3. Beginn und Ende der Buchung werden automatisch aus dem Termin übernommen.
+4. Das Frontend fragt beim Backend die zeitbezogene Verfügbarkeit der Räume für diesen Termin ab.
+5. Das Backend prüft bereits gespeicherte Buchungen.
+6. Freie Räume werden als „Verfügbar“ und belegte Räume als „Nicht verfügbar“ an das Frontend zurückgegeben.
+7. Der Benutzer wählt einen verfügbaren Raum aus.
+8. Das Frontend sendet die Buchungsanfrage an das Backend.
+9. Das Backend prüft vor dem Speichern erneut:
+   - ob die Ressource grundsätzlich verfügbar ist,
+   - ob derselbe Raum im Zeitraum bereits überschneidend gebucht ist,
+   - ob für den Termin bereits eine andere Raumreservierung existiert.
+10. Wenn keine Regel verletzt wird, wird die Buchung gespeichert.
+11. Bei einem Konflikt wird die Buchung abgelehnt.
+12. Das Frontend zeigt dem Benutzer eine passende Meldung an.
+13. Der gebuchte Raum wird anschließend beim Termin im Kalender angezeigt.
 
 ## Lokale Ausführung
 
-Frontend, Backend und Datenbank werden für das Projekt lokal ausgeführt.
+Frontend, Backend und Datenbank können für das Projekt lokal auf einem Rechner ausgeführt werden.
 
 Standardmäßig werden folgende Adressen beziehungsweise Ports verwendet:
 
@@ -132,19 +148,23 @@ Standardmäßig werden folgende Adressen beziehungsweise Ports verwendet:
 - Backend: `http://localhost:8080`
 - PostgreSQL: `localhost:5432`
 
-Die Adresse des Backends kann im Frontend über `VITE_API_URL` eingestellt werden.
+Das Frontend verwendet relative `/api`-Aufrufe beziehungsweise die konfigurierte API-Anbindung.
 
 ## Gemeinsame Testumgebung mit Tailscale
 
 Für gemeinsame Tests im Team wird Tailscale verwendet.
 
-Frontend, Backend und PostgreSQL laufen dabei auf einem Rechner im Team. Die anderen Teammitglieder können über das gemeinsame Tailscale-Netzwerk auf die Anwendung zugreifen.
+Frontend, Backend und PostgreSQL laufen dabei auf einem Rechner im Team.
 
-Tailscale dient dabei nur dazu, die lokal laufende Anwendung innerhalb des Teams erreichbar zu machen. Die Anwendung wird dadurch nicht öffentlich im Internet bereitgestellt.
+Die anderen Teammitglieder können über das gemeinsame Tailscale-Netzwerk auf dieselbe laufende Anwendung zugreifen.
 
-Für die gemeinsame Testumgebung wird der lokale Vite-Server über Tailscale bereitgestellt. API-Anfragen werden vom Frontend an das lokal laufende Backend weitergeleitet.
+Tailscale dient dabei nur dazu, die lokal laufende Anwendung innerhalb des Teams erreichbar zu machen.
+
+Die Anwendung wird dadurch nicht öffentlich im Internet bereitgestellt.
 
 Die Datenbank bleibt auf dem Host-Rechner und wird nicht direkt von den anderen Teammitgliedern angesprochen.
+
+Alle Datenzugriffe erfolgen über Frontend und Backend.
 
 ## Nicht Bestandteil des aktuellen Funktionsumfangs
 

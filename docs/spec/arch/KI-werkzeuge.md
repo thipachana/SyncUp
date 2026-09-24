@@ -22,15 +22,15 @@ Architekturentscheidungen wie die Verwendung von React, Spring Boot, PostgreSQL 
 
 ## Codex
 
-Codex wurde zusätzlich bei einzelnen technischen Prüfungen und Änderungen eingesetzt.
+Codex wurde ergänzend bei einzelnen technischen Prüfungen und Änderungen eingesetzt.
 
 Dazu gehörten unter anderem:
 
-- Prüfung der Sitzungsverwaltung
-- Eingabevalidierung
-- Zugriff auf persönliche Daten
-- Prüfung von Ressourcenbuchungen
-- Behandlung paralleler Buchungsversuche
+- Unterstützung bei der Prüfung der Sitzungsverwaltung
+- Unterstützung bei der Eingabevalidierung
+- Prüfung von Zugriffen auf persönliche Daten
+- Unterstützung bei der Prüfung von Ressourcenbuchungen
+- Unterstützung bei der Analyse paralleler Buchungsszenarien
 - Prüfung von React-Zuständen
 - Unterstützung bei automatisierten Tests
 
@@ -40,17 +40,15 @@ Die vorhandene Benutzeroberfläche und der grundsätzliche Aufbau des Projekts w
 
 KI-generierte Vorschläge wurden nicht ungeprüft übernommen.
 
-Die Änderungen wurden vom Team nachvollzogen, angepasst und je nach Bereich durch:
+Die vorgeschlagenen Änderungen wurden vom Team nachvollzogen, angepasst und abhängig vom jeweiligen Bereich durch folgende Maßnahmen überprüft:
 
-- automatisierte Tests,
-- Builds,
+- automatisierte Tests
+- Builds
 - manuelle Prüfungen im Browser
-- und gemeinsame Funktionstests
-
-überprüft.
+- gemeinsame Funktionstests
 
 Der aktuelle Teststand ist in `docs/TESTING.md` dokumentiert.
 
-Die endgültige Entscheidung, welche Vorschläge übernommen werden, lag beim Team.
+Die endgültige Entscheidung darüber, welche Vorschläge übernommen werden, lag beim Team.
 
-Alle Teammitglieder sollen die übernommenen Änderungen nachvollziehen und im Rahmen der Präsentation erklären können.
+Die Teammitglieder sollen die übernommenen Änderungen nachvollziehen und im Rahmen der Präsentation sowie des Code Walkthroughs erklären können.

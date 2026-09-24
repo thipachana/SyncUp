@@ -4,9 +4,9 @@ Stand: 24.09.2026
 
 ## Ziel
 
-Dieser Abschnitt beschreibt, was benötigt wird, um SyncUp lokal zu starten und wie die Anwendung für gemeinsame Tests im Team erreichbar gemacht werden kann.
+Dieser Abschnitt beschreibt die Voraussetzungen und den grundlegenden Ablauf zur lokalen Inbetriebnahme von SyncUp sowie die gemeinsame Testumgebung des Teams.
 
-Eine ausführlichere Anleitung mit den benötigten Befehlen befindet sich in der Datei `INSTALL.md`.
+Eine ausführliche Schritt-für-Schritt-Anleitung mit den benötigten Befehlen befindet sich in `INSTALL.md`.
 
 ## Voraussetzungen
 
@@ -15,53 +15,58 @@ Für die lokale Ausführung werden benötigt:
 - Git
 - Java 21
 - Node.js und npm
-- PostgreSQL
+- PostgreSQL 17
 - ein aktueller Webbrowser
 
-Für das Backend wird der Maven Wrapper verwendet, der bereits im Projekt enthalten ist. Maven muss deshalb nicht extra installiert werden.
+Für das Backend wird der im Projekt enthaltene Maven Wrapper verwendet. Eine separate Maven-Installation ist daher nicht erforderlich.
 
-Für gemeinsame Tests im Team wird zusätzlich Tailscale verwendet.
+Für gemeinsame Tests im Team wird zusätzlich Tailscale eingesetzt.
 
-## Aufbau
+## Systemaufbau
 
-SyncUp besteht aus drei Teilen:
+SyncUp besteht aus drei Hauptkomponenten:
 
-- **Frontend:** React
+- **Frontend:** React mit Vite
 - **Backend:** Spring Boot
 - **Datenbank:** PostgreSQL
 
-Das Frontend kommuniziert über REST mit dem Backend.
+Das Frontend kommuniziert über REST-Schnittstellen mit dem Backend.
 
-Das Backend greift auf die PostgreSQL-Datenbank zu.
+Das Backend enthält die Anwendungs- und Geschäftslogik und greift über Spring Data JPA und Hibernate auf PostgreSQL zu.
 
 ## Datenbank
 
 Vor dem Start des Backends muss PostgreSQL laufen.
 
-Für die lokale Teamumgebung wird folgende Datenbank verwendet:
+Für die lokale Anwendung wird folgende Datenbank verwendet:
 
 - Datenbankname: `syncup`
-- Benutzer: `uni`
 - Adresse: `localhost`
 - Port: `5432`
 
-Falls lokal andere Zugangsdaten verwendet werden, muss die Backend-Konfiguration entsprechend angepasst werden.
+Die verwendete JDBC-Adresse lautet:
 
-Die benötigten Tabellen werden mithilfe von Hibernate erstellt beziehungsweise aktualisiert.
+`jdbc:postgresql://localhost:5432/syncup`
+
+Der lokale PostgreSQL-Benutzer kann sich je nach Entwicklungsrechner unterscheiden. Falls die lokalen Zugangsdaten nicht der vorhandenen Backend-Konfiguration entsprechen, müssen diese entsprechend angepasst oder über geeignete Umgebungsvariablen gesetzt werden.
+
+Die benötigten Tabellen werden über Hibernate/JPA anhand der vorhandenen Entity-Klassen verwaltet.
 
 ## Frontend
 
-Das Frontend benötigt die Verbindung zum Backend.
+Das Frontend benötigt eine Verbindung zum Spring-Boot-Backend.
 
-Für den lokalen Standardstart bleibt `VITE_API_URL` leer. Vite leitet Aufrufe an `/api` an das lokal laufende Backend weiter.
+Beim lokalen Standardbetrieb läuft das Frontend über Vite auf Port `5173` und kommuniziert mit dem Backend auf Port `8080`.
+
+Die konkreten Einstellungen und Startbefehle sind in `INSTALL.md` dokumentiert.
 
 ## Lokaler Start
 
 Die Anwendung wird in folgender Reihenfolge gestartet:
 
 1. PostgreSQL starten.
-2. Backend starten.
-3. Frontend starten.
+2. Spring-Boot-Backend starten.
+3. React-Frontend starten.
 4. Anwendung im Browser öffnen.
 
 Das Backend läuft standardmäßig unter:
@@ -72,48 +77,50 @@ Das Frontend läuft standardmäßig unter:
 
 `http://localhost:5173`
 
-Die genauen Befehle zum Start befinden sich in `INSTALL.md`.
+Die genauen Befehle zur Installation und zum Start befinden sich in `INSTALL.md`.
 
 ## Gemeinsame Testumgebung mit Tailscale
 
-Für gemeinsame Tests wird ein Rechner aus dem Team als Host verwendet.
+Für gemeinsame Mehrbenutzertests wird ein Rechner aus dem Team als Host verwendet.
 
 Auf diesem Rechner laufen:
 
 - PostgreSQL
-- das Spring-Boot-Backend
-- das React-Frontend
+- Spring-Boot-Backend
+- React-Frontend
+- Tailscale
 
-Über Tailscale wird das Frontend innerhalb des gemeinsamen Tailscale-Netzwerks erreichbar gemacht.
+Das Frontend wird über Tailscale innerhalb des gemeinsamen Tailnets erreichbar gemacht.
 
-Dadurch können die anderen Teammitglieder die gleiche laufende Anwendung und den gleichen Datenbestand verwenden.
+Dadurch greifen alle beteiligten Teammitglieder auf dieselbe laufende Anwendung und denselben Datenbestand zu.
 
-Die PostgreSQL-Datenbank wird dabei nicht direkt über Tailscale freigegeben. Die anderen Benutzer greifen nur über die Webanwendung und das Backend auf die Daten zu.
+Die PostgreSQL-Datenbank wird nicht direkt über Tailscale für andere Rechner freigegeben. Der Zugriff auf die Daten erfolgt ausschließlich über die Webanwendung und das Backend.
 
-Der Host-Rechner muss eingeschaltet sein und Frontend, Backend sowie Tailscale müssen laufen, damit die gemeinsame Anwendung erreichbar ist.
+Der Host-Rechner muss eingeschaltet sein. Zusätzlich müssen PostgreSQL, Backend, Frontend und Tailscale aktiv sein, damit die gemeinsame Testumgebung erreichbar ist.
 
-Tailscale wird nur für die interne Testumgebung des Teams verwendet. Eine öffentliche Bereitstellung der Anwendung ist nicht Bestandteil des Projekts.
+Tailscale wird ausschließlich für interne Entwicklungs- und Testzwecke verwendet. Eine öffentliche Bereitstellung von SyncUp ist nicht Bestandteil des Projekts.
 
-## Prüfung
+## Prüfung der Inbetriebnahme
 
 Nach dem Start sollte geprüft werden, ob:
 
+- PostgreSQL erreichbar ist,
 - das Backend ohne Fehler startet,
-- die Verbindung zur Datenbank funktioniert,
+- die Verbindung zwischen Backend und Datenbank hergestellt wird,
 - das Frontend erreichbar ist,
 - Frontend und Backend miteinander kommunizieren,
-- eine Anmeldung möglich ist,
-- Daten über die Anwendung geladen und gespeichert werden können.
+- eine Registrierung und Anmeldung möglich ist,
+- Daten über die Anwendung gespeichert und erneut geladen werden können.
 
-Bei der gemeinsamen Testumgebung sollte zusätzlich geprüft werden, ob die Anwendung von einem zweiten Teammitglied über Tailscale erreichbar ist.
+Bei der gemeinsamen Testumgebung wird zusätzlich geprüft, ob mindestens ein weiterer Rechner innerhalb des Tailnets auf die Anwendung zugreifen kann.
 
-Für die vollständige Prüfung der Funktionen wird die Datei `docs/TESTING.md` verwendet.
+Die funktionalen Tests der Anwendung sind in `docs/TESTING.md` dokumentiert.
 
-## Testdaten
+## Benötigte Testdaten
 
-Für einige Funktionen werden bereits vorhandene beziehungsweise während der Nutzung angelegte Daten benötigt.
+Für verschiedene Funktionen werden Daten benötigt, die entweder bereits vorhanden sind oder über die Anwendung angelegt werden.
 
-Dazu gehören zum Beispiel:
+Dazu gehören insbesondere:
 
 - Benutzer
 - Kalender
@@ -123,35 +130,23 @@ Dazu gehören zum Beispiel:
 - Buchungen
 - Benachrichtigungen
 
-Für eine Ressourcenbuchung muss zum Beispiel bereits ein Termin vorhanden sein.
+Für eine Raumreservierung muss beispielsweise bereits ein Termin vorhanden sein.
+
+Ressourcen werden zentral bereitgestellt und nicht von normalen Benutzern über die Oberfläche angelegt.
 
 ## Sicherheit bei der lokalen Nutzung
 
-Die Anmeldung verwendet Sitzungscookies.
+Die Authentifizierung verwendet serverseitige Sitzungen beziehungsweise Sitzungscookies.
 
-Für schreibende Aufrufe wird zusätzlich ein CSRF-Nachweis verwendet.
+Schreibende Aufrufe werden zusätzlich durch einen CSRF-Schutz abgesichert.
 
-Die Oberfläche übernimmt diese Verarbeitung automatisch.
+Die notwendige Verarbeitung erfolgt über die Anwendung, sodass Benutzer hierfür keine manuellen Schritte durchführen müssen.
 
-Nach einem Neustart des Backends kann es notwendig sein, sich erneut anzumelden.
+Nach einem Neustart des Backends kann eine erneute Anmeldung erforderlich sein.
 
 ## Tests
 
-Backend-Tests können mit dem Maven Wrapper ausgeführt werden.
+Backend-Tests können im Backend-Verzeichnis mit dem Maven Wrapper ausgeführt werden:
 
-Dazu wird im Backend-Verzeichnis folgender Befehl verwendet:
-
-`./mvnw test`
-
-Die automatisierten Backend-Tests verwenden eine separate Testdatenbank und greifen nicht auf persönliche Daten aus der normalen Team-Datenbank zu.
-
-Zusätzlich werden die wichtigsten Abläufe manuell über die Weboberfläche geprüft.
-
-## Weitere Dokumentation
-
-Weitere Informationen befinden sich in:
-
-- `INSTALL.md` – Installation und Start
-- `docs/TESTING.md` – Test der Funktionen
-- `docs/DEMO.md` – Ablauf der Demonstration
-- F3 „Anwendungsfunktionen“ – aktueller Funktionsumfang
+```bash
+./mvnw test

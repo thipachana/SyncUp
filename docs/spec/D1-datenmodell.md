@@ -1,12 +1,12 @@
 # D1 Datenmodell
 
-Stand: 23.09.2026
+Stand: 24.09.2026
 
 ## Ziel
 
-Das Datenmodell beschreibt die wichtigsten Daten, die SyncUp aktuell verwendet.
+Das Datenmodell beschreibt die wichtigsten fachlichen Datenobjekte, die SyncUp aktuell verwendet.
 
-Die Daten werden in einer PostgreSQL-Datenbank gespeichert.
+Die Daten werden dauerhaft in einer PostgreSQL-Datenbank gespeichert.
 
 ## Benutzer
 
@@ -20,13 +20,17 @@ Wichtige Daten sind:
 - Passwort
 - Rolle
 
-Das Passwort wird bei API-Abfragen nicht zurückgegeben.
+Das Passwort wird nicht im Klartext gespeichert, sondern mit BCrypt gehasht.
 
-Registrierung und Anmeldung sind umgesetzt. Passwörter werden mit BCrypt gehasht und nicht in API-Antworten ausgegeben. Anmeldung und Eigentumsprüfungen schützen persönliche Daten. Ein organisationsbezogenes Rollenmodell ist noch offen.
+Das Passwortfeld wird nicht über normale API-Antworten an das Frontend übertragen.
+
+Registrierung und Anmeldung sind umgesetzt. Persönliche Daten werden dem jeweiligen Benutzer zugeordnet und serverseitig geschützt.
+
+Ein erweitertes organisationsbezogenes Rollenmodell ist nicht Bestandteil des aktuellen Funktionsumfangs.
 
 ## Kalender
 
-Ein Kalender wird verwendet, um Termine zu verwalten.
+Ein Kalender wird verwendet, um Termine eines Benutzers zu verwalten.
 
 Wichtige Daten sind:
 
@@ -51,6 +55,11 @@ Wichtige Daten sind:
 - Endzeit
 - Status
 - Kalender
+- Teilnehmer
+
+Private Termine gehören ausschließlich zum persönlichen Kalender eines Benutzers und besitzen keine Teilnehmerauswahl.
+
+Gemeinsame Termine können mehreren Teilnehmern zugeordnet sein.
 
 Termine werden unter anderem für die Berechnung freier Zeitfenster und für Ressourcenbuchungen verwendet.
 
@@ -62,17 +71,21 @@ Wichtige Daten sind:
 
 - Terminanfrage-ID
 - Titel
-- Zeitraum
-- Dauer
+- Suchzeitraum
+- gewünschte Dauer
 - Status
 - Ersteller
-- zugeordnete Benutzer
+- zugeordnete Teilnehmer
 
-Terminanfragen können über das Frontend erstellt und angezeigt werden. Nach erfolgreicher Auswahl eines freien Zeitfensters wird die Terminanfrage als erledigt markiert.
+Der Ersteller ist Teilnehmer seiner eigenen Terminanfrage.
+
+Terminanfragen können über das Frontend erstellt und angezeigt werden.
+
+Nach erfolgreicher Auswahl eines freien Zeitfensters wird ein gemeinsamer Termin erstellt und die Terminanfrage als erledigt markiert.
 
 ## Ressource
 
-Eine Ressource ist zum Beispiel ein Raum, der für einen Termin verwendet werden kann.
+Eine Ressource ist ein buchbares Objekt innerhalb von SyncUp, zum Beispiel ein Raum.
 
 Wichtige Daten sind:
 
@@ -82,9 +95,11 @@ Wichtige Daten sind:
 - Kapazität
 - Verfügbarkeit
 
+Ressourcen werden zentral im System bereitgestellt und nicht von normalen Benutzern über die Oberfläche angelegt.
+
 ## Buchung
 
-Eine Buchung verbindet einen Termin mit einer Ressource.
+Eine Buchung verbindet einen bestehenden Termin mit einer Ressource.
 
 Wichtige Daten sind:
 
@@ -94,9 +109,34 @@ Wichtige Daten sind:
 - Zeitraum
 - Status
 
-Der Zeitraum einer Buchung wird aus dem zugehörigen Termin übernommen.
-Bei einer neuen Buchung prüft das Backend, ob für dieselbe Ressource bereits eine zeitlich überlappende Buchung vorhanden ist.
-Zusätzlich darf einem Termin nur eine Ressource zugeordnet werden.
+Beginn und Ende der Buchung werden aus dem zugehörigen Termin übernommen.
+
+Bei einer neuen Buchung prüft das Backend:
+
+- ob die Ressource grundsätzlich verfügbar ist,
+- ob für dieselbe Ressource bereits eine zeitlich überschneidende Buchung existiert,
+- ob für den Termin bereits eine andere Raumreservierung vorhanden ist.
+
+Ein Termin kann höchstens eine Raumreservierung besitzen.
+
+Unterschiedliche Ressourcen können im gleichen Zeitraum für unterschiedliche Termine verwendet werden, sofern keine Überschneidung derselben Ressource vorliegt.
+
+Wird ein Termin gelöscht, wird die dazugehörige Raumreservierung ebenfalls entfernt.
+
+## Benachrichtigung
+
+Eine Benachrichtigung informiert einen Benutzer über ein relevantes Ereignis innerhalb von SyncUp.
+
+Wichtige Daten sind:
+
+- Benachrichtigungs-ID
+- Empfänger
+- Nachricht beziehungsweise Inhalt
+- Zeitpunkt
+
+Beim Erstellen eines gemeinsamen Termins werden Benachrichtigungen für die beteiligten Teilnehmer erzeugt.
+
+Benachrichtigungen können über die Anwendung angezeigt und gelöscht werden.
 
 ## Beziehungen
 
@@ -107,22 +147,32 @@ Die wichtigsten Beziehungen zwischen den Daten sind:
 - Termine können mehreren Teilnehmern zugeordnet sein.
 - Benutzer können Terminanfragen zugeordnet werden.
 - Eine Terminanfrage besitzt einen Ersteller.
-- Eine Buchung gehört zu einem Termin.
-- Eine Buchung gehört zu einer Ressource.
-- Eine Ressource kann mehrere Buchungen haben.
+- Eine Buchung gehört zu genau einem Termin.
+- Eine Buchung gehört zu genau einer Ressource.
+- Eine Ressource kann mehrere Buchungen besitzen.
 - Ein Termin kann höchstens eine Raumbuchung besitzen.
+- Benachrichtigungen sind einem Benutzer als Empfänger zugeordnet.
 
 ## Aktueller Stand
 
-Die zentralen Datenobjekte Benutzer, Kalender, Termin, Terminanfrage, Ressource und Buchung sind im Backend umgesetzt.
-Registrierung und Anmeldung sind vorhanden. Persönliche Kalender und Termine sind an den jeweiligen Benutzer gebunden.
-Gemeinsame Termine können Teilnehmer besitzen und werden in den Kalendern der beteiligten Benutzer angezeigt.
+Die zentralen Datenobjekte Benutzer, Kalender, Termin, Terminanfrage, Ressource, Buchung und Benachrichtigung sind im Backend umgesetzt.
+
+Registrierung und Anmeldung sind vorhanden. Persönliche Kalender und private Termine sind an den jeweiligen Benutzer gebunden.
+
+Gemeinsame Termine können Teilnehmer besitzen und werden bei den beteiligten Benutzern im Kalender angezeigt.
+
 Terminanfragen besitzen einen Ersteller sowie zugeordnete Teilnehmer. Nach erfolgreicher Terminwahl kann ihr Status auf „ERLEDIGT“ gesetzt werden.
+
 Ressourcenbuchungen sind mit einem Termin und einer Ressource verknüpft. Überschneidende Buchungen derselben Ressource sowie mehrere Räume für denselben Termin werden verhindert.
+
+Benachrichtigungen werden bei neu erstellten gemeinsamen Terminen gespeichert und können vom jeweiligen Benutzer gelöscht werden.
+
 Die genauen technischen Datentypen und Felder werden zusätzlich in D2 beschrieben.
 
-## Eigentum und Bestandsdaten (23.09.2026)
+## Bestandsdaten
 
-Terminanfragen besitzen zusätzlich `ersteller_id` als Fremdschlüssel auf Benutzer. Bei neuen Anfragen ist der Ersteller gesetzt. Alte Anfragen ohne Ersteller werden keinem Benutzer automatisch zugeordnet und bleiben bei persönlichen Abfragen ausgeblendet; sie werden nicht gelöscht. Eine Zuordnung erfordert eine geprüfte Migration, andernfalls wird die Anfrage neu angelegt.
+Ältere Datensätze können von später ergänzten Feldern abweichen.
 
-Das Benutzerfeld Passwort enthält ausschließlich den BCrypt-Hash neu registrierter Konten und wird nicht in API-Antworten ausgegeben. Personenbezogene Rückgaben werden auf den jeweiligen Zweck begrenzt. Persönliche Kalender und Termine bleiben ihren Besitzern zugeordnet.
+Beispielsweise besitzen ältere Terminanfragen gegebenenfalls keinen gesetzten Ersteller. Solche Datensätze werden nicht automatisch einem Benutzer zugeordnet.
+
+Eine nachträgliche Zuordnung erfolgt nur über eine gezielte und geprüfte Migration beziehungsweise durch Neuanlage der betroffenen Daten.

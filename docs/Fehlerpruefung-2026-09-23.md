@@ -4,7 +4,7 @@ Stand: 23.09.2026
 
 > Dieses Dokument beschreibt einen früheren Zwischenstand von SyncUp vor den letzten Korrekturen.
 > Die hier genannten Punkte sind deshalb nicht automatisch noch aktuell.
-> Der aktuelle Stand der Tests und der noch vorhandenen Einschränkungen wird in `TESTING.md` dokumentiert.
+> Der aktuelle Stand der Tests und der noch vorhandenen Einschränkungen wird in `docs/TESTING.md` dokumentiert.
 
 ## Zweck
 
@@ -150,10 +150,10 @@ Dabei wurden insbesondere folgende Dokumente überprüft:
 
 Die gefundenen Punkte wurden im Team nach den jeweiligen Aufgabenbereichen aufgeteilt.
 
-- David kümmerte sich hauptsächlich um Backend, Datenbank und Validierung.
-- Sarah kümmerte sich hauptsächlich um Frontend und Benutzeroberfläche.
-- Thipachana kümmerte sich hauptsächlich um Spezifikation und Projektdokumentation.
-- Ilias unterstützte bei der technischen Integration und Backend-Implementierung.
+- David Cabas Canella unterstützte vor allem bei Requirements, Backend- und Datenbankthemen.
+- Sarah Kouskous bearbeitete vor allem Frontend- und Architekturthemen.
+- Thipachana Clarian Kenady koordinierte die Spezifikation, Projektdokumentation und den finalen Abgleich.
+- Ilias Jelloli unterstützte vor allem bei Implementierung und technischer Integration.
 
 Die Aufteilung beschreibt die Zusammenarbeit bei der Bearbeitung und nicht, wer einen Fehler verursacht hat.
 

@@ -1,12 +1,12 @@
 # E1 Leseanleitung
 
-Stand: 22.09.2026
+Stand: 24.09.2026
 
 ## Zweck
 
-Diese Dokumentation beschreibt die Anforderungen, den Aufbau und den aktuellen Stand von SyncUp.
+Diese Dokumentation beschreibt die Anforderungen, den Aufbau und den finalen Umsetzungsstand von SyncUp.
 
-Sie soll einen Überblick darüber geben, was mit SyncUp geplant ist, welche Funktionen bereits umgesetzt wurden und wie das System aufgebaut ist.
+Sie soll einen Überblick darüber geben, welche Funktionen SyncUp umfasst, wie die Anwendung fachlich aufgebaut ist und welche Bereiche tatsächlich umgesetzt wurden.
 
 ## Aufbau der Spezifikation
 
@@ -32,39 +32,43 @@ Die Spezifikation orientiert sich an den Siedersleben-Bausteinen.
 | E1 | Leseanleitung |
 | E2 | Glossar |
 
-Bereiche, die für SyncUp nicht benötigt werden, werden als „nicht anwendbar“ gekennzeichnet.
+Bereiche, die für SyncUp nicht benötigt werden, werden als „nicht anwendbar“ gekennzeichnet und entsprechend begründet.
 
 ## Lesereihenfolge
 
 Für einen ersten Überblick können zuerst P1 und P2 gelesen werden.
 
-F1 bis F3 beschreiben anschließend die geplanten Abläufe und Funktionen von SyncUp sowie den aktuellen Umsetzungsstand.
+F1 bis F3 beschreiben anschließend die fachlichen Abläufe, Anwendungsfälle und den aktuellen Funktionsumfang von SyncUp.
 
-D1 und D2 beschreiben die verwendeten Daten und deren Beziehungen.
+D1 und D2 beschreiben die verwendeten Datenobjekte und deren Beziehungen.
 
-B1 beschreibt die Benutzeroberfläche. S1 bis S3 behandeln externe Systeme und die Inbetriebnahme.
+B1 beschreibt die Benutzeroberfläche und wichtige Bedienabläufe.
 
-N1 und N2 enthalten zusätzliche Anforderungen und Konzepte, die für mehrere Bereiche der Anwendung wichtig sind.
+S1 bis S3 behandeln Nachbarsysteme, Datenmigration und Inbetriebnahme.
+
+N1 und N2 enthalten zusätzliche Anforderungen und querschnittliche Konzepte, die für mehrere Bereiche der Anwendung relevant sind.
 
 Wichtige Begriffe werden in E2 erklärt.
 
-## Geplanter und aktueller Stand
+## Finaler Umsetzungsstand
 
-In der Spezifikation werden die fachlichen Anforderungen und der aktuelle Umsetzungsstand beschrieben.
+In der Spezifikation werden die fachlichen Anforderungen und der tatsächliche Umsetzungsstand beschrieben.
 
-Für einzelne Funktionen wird angegeben, ob sie umgesetzt, teilweise umgesetzt oder nicht Bestandteil des finalen Funktionsumfangs sind.
+Für einzelne Funktionen wird angegeben, ob sie umgesetzt, nicht umgesetzt oder nicht Bestandteil des finalen Funktionsumfangs sind.
 
-Eine Übersicht über den aktuellen Stand befindet sich in F3.
+Eine Übersicht über den aktuellen Funktionsstand befindet sich in F3.
 
-Die Spezifikation wird mit dem finalen Stand der Implementierung abgeglichen, damit dokumentierte Funktionen und tatsächliches Systemverhalten übereinstimmen.
+Die Spezifikation wurde mit dem finalen Stand der Implementierung abgeglichen, damit dokumentierte Funktionen und tatsächliches Systemverhalten möglichst übereinstimmen.
 
 ## Zusammenhang mit Architektur und Code
 
 Neben der Spezifikation gibt es eine separate Architekturdokumentation nach arc42.
 
-Die Spezifikation beschreibt hauptsächlich, was SyncUp können soll. Die Architekturdokumentation beschreibt, wie das System technisch aufgebaut ist.
+Die Spezifikation beschreibt hauptsächlich, was SyncUp fachlich leisten soll.
 
-Spezifikation, Architektur und Quellcode sollen dabei zusammenpassen.
+Die Architekturdokumentation beschreibt, wie das System technisch aufgebaut ist und wie die einzelnen Komponenten zusammenarbeiten.
+
+Spezifikation, Architektur und Quellcode sollen miteinander konsistent sein.
 
 Wichtige Architekturentscheidungen werden zusätzlich in ADRs dokumentiert.
 
@@ -72,27 +76,34 @@ Wichtige Architekturentscheidungen werden zusätzlich in ADRs dokumentiert.
 
 Die Anleitung zur Installation und zum Start von SyncUp befindet sich in `INSTALL.md` und in S3 „Inbetriebnahme“.
 
-Für die Überprüfung der Funktionen gibt es außerdem eine Testdokumentation.
+Die dokumentierten Testfälle und Testergebnisse befinden sich in `docs/TESTING.md`.
 
-Dadurch kann geprüft werden, ob die bereits umgesetzten Funktionen wie vorgesehen funktionieren.
+Zusätzlich beschreibt `docs/DEMO.md` einen möglichen Ablauf zur Demonstration der wichtigsten Funktionen.
 
 ## Pflege der Dokumentation
 
 Wenn sich wichtige Funktionen oder technische Bestandteile ändern, sollen auch die dazugehörigen Dokumente angepasst werden.
 
-Der aktuelle Stand der Dokumentation ist jeweils durch das angegebene Datum erkennbar.
+Der Stand der jeweiligen Dokumentation ist durch das angegebene Datum erkennbar.
 
 ## Eingesetzte KI-Werkzeuge
 
-Im Projekt wurde ChatGPT unterstützend eingesetzt.
+Im Projekt wurden KI-Werkzeuge unterstützend eingesetzt.
+
+Dazu gehören unter anderem ChatGPT und, sofern tatsächlich verwendet, Codex.
 
 Einsatzbereiche waren insbesondere:
 
-- Unterstützung bei Code-Entwürfen und Refactoring,
-- Fehlersuche und Analyse von Implementierungsproblemen,
-- Überarbeitung und Strukturierung der Dokumentation,
-- Unterstützung bei der Formulierung von Testfällen und technischen Beschreibungen.
+- Unterstützung bei Code-Entwürfen und Refactoring
+- Fehlersuche und Analyse von Implementierungsproblemen
+- Überarbeitung und Strukturierung der Dokumentation
+- Unterstützung bei Architekturentscheidungen
+- Unterstützung bei der Formulierung von Testfällen und technischen Beschreibungen
 
-Die erzeugten Vorschläge wurden durch das Projektteam geprüft, an die vorhandene Implementierung angepasst und durch Builds, Tests und manuelle Funktionsprüfungen validiert.
+Die erzeugten Vorschläge wurden durch das Projektteam geprüft, an die vorhandene Implementierung angepasst und abhängig vom jeweiligen Bereich durch Builds, automatisierte Tests und manuelle Funktionsprüfungen überprüft.
 
-Die endgültige Auswahl und Übernahme von Änderungen erfolgte durch das Projektteam. Jedes Teammitglied soll die Inhalte seines Bereichs verstehen und erklären können.
+Die endgültige Auswahl und Übernahme von Änderungen erfolgte durch das Projektteam.
+
+Die Teammitglieder sollen die übernommenen Inhalte nachvollziehen und im Rahmen der Präsentation sowie des Code Walkthroughs erklären können.
+
+Eine ausführlichere Beschreibung der eingesetzten KI-Werkzeuge befindet sich in der separaten KI-Dokumentation.

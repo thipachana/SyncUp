@@ -6,7 +6,7 @@ Stand: 24.09.2026
 
 In diesem Dokument wird festgehalten, wie die wichtigsten Funktionen von SyncUp geprüft werden.
 
-Dabei werden automatische Tests und manuelle Tests über die Benutzeroberfläche verwendet.
+Dabei werden automatisierte Tests sowie manuelle Tests über die Benutzeroberfläche verwendet.
 
 ## Automatisierte Tests
 

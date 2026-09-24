@@ -6,7 +6,8 @@ Stand: 24.09.2026
 | --- | --- |
 | Benutzer | Enthält Benutzer-ID, Name, E-Mail-Adresse, Passwort-Hash und Rolle. |
 | Kalender | Enthält Kalender-ID, Name, Beschreibung und Besitzer. |
-| Termin | Enthält Termin-ID, Titel, Beschreibung, Datum, Startzeit, Endzeit, Status, den zugehörigen Kalender sowie zugeordnete Teilnehmer. |
-| Terminanfrage | Enthält Terminanfrage-ID, Titel, Suchzeitraum, gewünschte Dauer, Status, Ersteller und zugeordnete Benutzer. |
+| Termin | Enthält Termin-ID, Titel, Beschreibung, Datum, Startzeit, Endzeit, Status, den zugehörigen Kalender sowie gegebenenfalls zugeordnete Teilnehmer. |
+| Terminanfrage | Enthält Terminanfrage-ID, Titel, Suchzeitraum, gewünschte Dauer, Status, Ersteller und zugeordnete Teilnehmer. |
 | Ressource | Enthält Ressourcen-ID, Name, Typ, Kapazität und Verfügbarkeit. |
-| Buchung | Verbindet einen Termin mit einer Ressource. Die Buchungszeit orientiert sich am Zeitraum des zugehörigen Termins; zusätzlich werden Status und Buchungszuordnung gespeichert. |
+| Buchung | Verbindet einen bestehenden Termin mit einer Ressource. Beginn und Ende der Buchung werden aus dem zugehörigen Termin übernommen. Zusätzlich werden die Buchungszuordnung und der Status gespeichert. |
+| Benachrichtigung | Enthält Benachrichtigungs-ID, Empfänger, Nachricht beziehungsweise Inhalt und Zeitpunkt. |

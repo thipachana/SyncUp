@@ -6,15 +6,17 @@ Stand: 24.09.2026
 
 SyncUp soll einfach aufgebaut und ohne lange Einarbeitung nutzbar sein.
 
-Die wichtigsten Funktionen sollen übersichtlich dargestellt werden, damit Benutzer schnell verstehen, wie Termine erstellt, freie Zeitfenster gefunden und Räume gebucht werden können.
+Die wichtigsten Funktionen sollen übersichtlich dargestellt werden, damit Benutzer schnell verstehen, wie Termine erstellt, gemeinsame freie Zeitfenster gefunden und Räume gebucht werden können.
 
-Fehlermeldungen und Rückmeldungen sollen verständlich angezeigt werden.
+Fehlermeldungen, Erfolgsmeldungen und Statusinformationen sollen verständlich angezeigt werden.
 
 ## Performance
 
-Die Anwendung soll bei normaler Nutzung schnell auf Anfragen reagieren.
+Die Anwendung soll bei normaler Nutzung ohne unnötig lange Wartezeiten reagieren.
 
-Das Laden und Speichern von Daten sowie die Berechnung freier Zeitfenster sollen ohne unnötig lange Wartezeiten möglich sein.
+Das Laden und Speichern von Daten sowie die Berechnung gemeinsamer freier Zeitfenster sollen für die im Projekt vorgesehenen Testszenarien ausreichend schnell erfolgen.
+
+Es werden keine festen maximalen Antwortzeiten oder Lastgrenzen zugesichert.
 
 ## Sicherheit
 
@@ -22,11 +24,15 @@ Benutzerdaten und Passwörter sollen geschützt verarbeitet werden.
 
 Passwörter werden nicht im Klartext gespeichert, sondern mit BCrypt gehasht.
 
-Passwörter werden nicht in API-Antworten an das Frontend übertragen.
+Passwörter werden nicht in normalen API-Antworten an das Frontend übertragen.
 
-Persönliche Kalender, Termine und Terminanfragen sind an den angemeldeten Benutzer gebunden. Eigentumsprüfungen verhindern, dass Benutzer persönliche Daten anderer Benutzer verändern.
+Persönliche Kalender, Termine und Terminanfragen sind an den jeweiligen Benutzer beziehungsweise Ersteller gebunden.
 
-Für die Anmeldung wird eine Sitzung verwendet. Zusätzlich ist CSRF-Schutz vorhanden.
+Serverseitige Zugriffs- und Eigentumsprüfungen sollen verhindern, dass Benutzer unberechtigt persönliche Daten anderer Benutzer verändern.
+
+Für die Anmeldung wird eine serverseitige Sitzung verwendet.
+
+Schreibende Anfragen werden zusätzlich durch CSRF-Schutz abgesichert.
 
 Ein erweitertes Rollen- oder Administrationssystem ist nicht Bestandteil des aktuellen Funktionsumfangs.
 
@@ -36,7 +42,19 @@ SyncUp ist in Frontend, Backend und Datenbank aufgeteilt.
 
 Das Frontend wurde mit React umgesetzt, das Backend mit Spring Boot und die Daten werden in PostgreSQL gespeichert.
 
-Durch diese Aufteilung können die einzelnen Bereiche getrennt bearbeitet und erweitert werden.
+Durch diese Trennung können die einzelnen Bereiche getrennt bearbeitet, getestet und erweitert werden.
+
+Die Geschäftslogik wird möglichst zentral im Backend gehalten.
+
+## Konsistenz
+
+Fachliche Regeln sollen unabhängig von der Benutzeroberfläche eingehalten werden.
+
+Dies betrifft insbesondere Raumreservierungen.
+
+Das Backend prüft vor dem Speichern, ob eine Buchung mit bereits vorhandenen Buchungen kollidiert und ob einem Termin bereits ein Raum zugeordnet wurde.
+
+Dadurch soll verhindert werden, dass durch direkte oder parallele Anfragen ungültige Buchungszustände entstehen.
 
 ## Verfügbarkeit
 
@@ -46,4 +64,4 @@ Damit SyncUp verwendet werden kann, müssen Frontend, Backend und PostgreSQL lau
 
 Für die gemeinsame Testumgebung wurde die Anwendung innerhalb des Teams über Tailscale erreichbar gemacht.
 
-Eine dauerhaft öffentlich betriebene Produktivumgebung ist nicht Bestandteil des Projekts.
+Eine dauerhaft öffentlich betriebene Produktivumgebung sowie zugesicherte Verfügbarkeitswerte sind nicht Bestandteil des Projekts.

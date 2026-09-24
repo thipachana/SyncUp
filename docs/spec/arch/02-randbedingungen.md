@@ -25,9 +25,14 @@ Die Entwicklung erfolgt gemeinsam im Team.
 
 Für die Zusammenarbeit und Versionsverwaltung werden Git und GitHub verwendet.
 
-Die Aufgaben sind im Team auf verschiedene Rollen verteilt, zum Beispiel Projektleitung, Softwarearchitektur, Requirements und Implementierung.
+Die Aufgaben sind im Team auf verschiedene Rollen verteilt, unter anderem:
 
-Änderungen werden vor der Übernahme in den gemeinsamen Projektstand geprüft.
+- Projektleitung
+- Softwarearchitektur
+- Requirements
+- Implementierung
+
+Änderungen werden über das gemeinsame Git-Repository zusammengeführt und im Team abgestimmt.
 
 ## Qualitätsziele
 
@@ -37,4 +42,5 @@ Bei der Architektur stehen besonders folgende Ziele im Vordergrund:
 - **Erweiterbarkeit:** Neue Funktionen sollen ergänzt werden können, ohne große Teile des Systems ändern zu müssen.
 - **Übersichtlichkeit:** Frontend, Backend und Datenbank sollen klar voneinander getrennt sein.
 - **Nachvollziehbarkeit:** Der Aufbau der Anwendung soll für alle Teammitglieder verständlich sein.
-- **Sicherheit:** Persönliche Daten und geschützte Funktionen sollen nur angemeldeten Benutzern zugänglich sein.
+- **Sicherheit:** Persönliche Daten und geschützte Funktionen sollen nur angemeldeten beziehungsweise berechtigten Benutzern zugänglich sein.
+- **Konsistenz:** Fachliche Regeln, insbesondere bei Termin- und Raumreservierungen, sollen zentral im Backend geprüft werden.

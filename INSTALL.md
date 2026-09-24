@@ -10,7 +10,7 @@ SyncUp besteht aus:
 - einem Spring-Boot-Backend
 - einer PostgreSQL-Datenbank
 
-Diese Anleitung beschreibt, wie SyncUp lokal auf einem Mac gestartet werden kann.
+Diese Anleitung beschreibt die lokale Installation und Inbetriebnahme auf macOS.
 
 Für gemeinsame Tests im Team kann zusätzlich Tailscale verwendet werden.
 
@@ -25,7 +25,7 @@ Für die lokale Ausführung werden benötigt:
 - ein aktueller Webbrowser
 - Homebrew für die Installation von PostgreSQL auf macOS
 
-Für das Backend wird der Maven Wrapper verwendet. Maven muss deshalb nicht zusätzlich installiert werden.
+Für das Backend wird der Maven Wrapper verwendet. Maven muss daher nicht zusätzlich installiert werden.
 
 Die installierten Versionen können mit folgenden Befehlen geprüft werden:
 
@@ -34,3 +34,4 @@ git --version
 java -version
 node --version
 npm --version
+psql --version

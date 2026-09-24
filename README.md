@@ -4,9 +4,9 @@
 
 SyncUp ist eine Webanwendung zur gemeinsamen Planung von Terminen und Räumen in Teams.
 
-Die Anwendung soll dabei helfen, gemeinsame freie Zeitfenster zu finden, Termine zu erstellen und passende Räume dafür zu reservieren.
+Die Anwendung unterstützt Benutzer dabei, gemeinsame freie Zeitfenster zu finden, gemeinsame Termine zu erstellen und passende Räume dafür zu reservieren.
 
-Zusätzlich können Benutzer private Termine in ihrem eigenen Kalender verwalten.
+Zusätzlich können Benutzer private Termine in ihrem persönlichen Kalender verwalten.
 
 ## Funktionen
 
@@ -20,21 +20,29 @@ Aktuell sind unter anderem folgende Funktionen umgesetzt:
 - gewünschte Termindauer festlegen
 - gemeinsame freie Zeitfenster anhand vorhandener Termine berechnen
 - freien Zeitslot als gemeinsamen Termin übernehmen
-- gemeinsame Termine bei den Teilnehmern anzeigen
+- gemeinsame Termine bei den beteiligten Teilnehmern anzeigen
 - Benachrichtigungen bei neu festgelegten gemeinsamen Terminen
+- Benachrichtigungen löschen
 - vorhandene Räume anzeigen
+- vorhandenen Termin für eine Raumreservierung auswählen
+- zeitbezogene Verfügbarkeit der Räume anzeigen
 - Räume für Termine reservieren
 - Überschneidungen bei Raumreservierungen verhindern
+- parallele Termine in unterschiedlichen freien Räumen zulassen
 - nur einen Raum pro Termin zulassen
 - gebuchten Raum im Kalender anzeigen
-- Raumbuchung beim Löschen eines Termins mit entfernen
+- Raumbuchung beim Löschen eines Termins automatisch mit entfernen
 - Speicherung der Daten in PostgreSQL
+
+Private Termine sind persönliche Kalendereinträge und besitzen keine Teilnehmerauswahl.
+
+Ressourcen werden zentral im System bereitgestellt. Benutzer können vorhandene Räume für bestehende Termine reservieren.
 
 Der genaue Funktionsumfang wird zusätzlich in der Spezifikation unter F3 „Anwendungsfunktionen“ beschrieben.
 
 ## Nicht Bestandteil des aktuellen Funktionsumfangs
 
-Einige ursprünglich geplante Funktionen wurden nicht mehr in den finalen Funktionsumfang aufgenommen.
+Einige ursprünglich geplante Funktionen wurden nicht in den finalen Funktionsumfang aufgenommen.
 
 Dazu gehören unter anderem:
 
@@ -70,7 +78,7 @@ SyncUp besteht aus drei Hauptteilen:
 
 Das Frontend kommuniziert über REST-Schnittstellen mit dem Backend.
 
-Das Backend verarbeitet die Geschäftslogik und greift auf die PostgreSQL-Datenbank zu.
+Das Backend verarbeitet die Geschäftslogik, prüft unter anderem Termin- und Ressourcenregeln und greift auf die PostgreSQL-Datenbank zu.
 
 ## Lokale Installation
 
@@ -92,7 +100,7 @@ Frontend, Backend und PostgreSQL laufen dabei auf einem Rechner im Team.
 
 Die anderen Teammitglieder können über das gemeinsame Tailscale-Netzwerk auf dieselbe laufende Anwendung zugreifen.
 
-Die Datenbank wird dabei nicht direkt freigegeben. Der Zugriff erfolgt über Frontend und Backend.
+Die Datenbank wird dabei nicht direkt freigegeben. Der Zugriff erfolgt ausschließlich über Frontend und Backend.
 
 ## Tests
 
@@ -101,6 +109,18 @@ Informationen zu den durchgeführten Tests befinden sich in:
 `docs/TESTING.md`
 
 Dort werden sowohl automatische Tests als auch manuelle Testfälle beschrieben.
+
+Unter anderem werden folgende Szenarien geprüft:
+
+- Erstellung und Verwaltung von Terminen
+- gemeinsame freie Zeitfenster
+- Erstellung gemeinsamer Termine
+- Benachrichtigungen
+- Raumreservierungen
+- Verhinderung von Doppelbelegungen
+- parallele Nutzung unterschiedlicher Räume
+- Begrenzung auf einen Raum pro Termin
+- Löschen einer Raumreservierung zusammen mit dem zugehörigen Termin
 
 ## Dokumentation
 

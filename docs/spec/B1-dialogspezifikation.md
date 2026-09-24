@@ -1,53 +1,69 @@
-# B1 Dialogspezifikation
+## Dialog „Raum reservieren“
 
-Stand: 23.09.2026
+### Zweck
 
-## Oberfläche und Anmeldung
+Der Dialog unterstützt die Reservierung eines Raumes für einen bereits vorhandenen Termin.
 
-Das bestehende grüne Dashboard mit Hero-Bereich, drei Planungskarten und Monatskalender bleibt erhalten. Home, Mein Kalender und Anmeldung sind auch bei schmalen Fenstern erreichbar.
+### Voraussetzungen
 
-Anmeldung und Registrierung öffnen ein schließbares Dialogfenster mit zwei Reitern. Registrierung benötigt Name, E-Mail und Passwort (mindestens acht Zeichen, höchstens 72 UTF-8-Bytes). Ein eigener Kalender wird erstellt; anschließend meldet die Oberfläche an. Ohne Anmeldung bleibt die Startseite sichtbar, persönliche Daten werden nicht geladen und Schreibaktionen sind gesperrt.
+- Der Benutzer ist angemeldet.
+- Dem Benutzer stehen vorhandene Termine zur Auswahl.
+- Ressourcen wurden zentral im System angelegt.
 
-## Mein Kalender
+### Eingaben und Auswahl
 
-Die Monatsübersicht bietet Vor-/Zurücknavigation. Ein Klick auf einen Tag öffnet die Eingabe von Titel, Beginn, Ende und optional einer Beschreibung.
+Der Benutzer wählt über ein Auswahlfeld einen vorhandenen Termin aus.
 
-Private Termine werden ausschließlich im persönlichen Kalender des angemeldeten Benutzers gespeichert. Für private Termine gibt es keine Teilnehmerauswahl.
+Nach der Auswahl übernimmt SyncUp automatisch:
 
-Eigene Termine erscheinen am passenden Tag und können bearbeitet oder gelöscht werden. Ist einem Termin ein Raum zugeordnet, wird die zugehörige Raumbuchung beim Löschen des Termins ebenfalls entfernt.
+- Datum,
+- Startzeit,
+- Endzeit
 
-Gemeinsame Termine, die aus einer Terminanfrage entstehen, werden ebenfalls im Kalender angezeigt. Ist für einen Termin ein Raum gebucht, wird dieser beim Termin dargestellt.
+des Termins. Der Buchungszeitraum wird daher nicht separat vom Benutzer eingegeben.
 
-## Terminanfragen und Zeitfenster
+### Anzeige der Ressourcen
 
-Die linke Dashboardkarte enthält Titel, Suchzeitraum, gewünschte Termindauer und Teilnehmerauswahl. Der Ersteller nimmt immer teil.
+Für jede Ressource werden mindestens folgende Informationen angezeigt:
 
-Eigene offene Terminanfragen werden angezeigt. „Freie Zeiten“ berechnet die gemeinsamen freien Intervalle der ausgewählten Teilnehmer und zeigt diese in der mittleren Karte an. Ergebnisse sind der jeweiligen Anfrage zugeordnet; alte Antworten dürfen neuere Ergebnisse nicht überschreiben.
+- Name des Raumes,
+- Typ,
+- Kapazität,
+- zeitbezogene Verfügbarkeit.
 
-Wählt der Organisator ein freies Zeitfenster aus, erzeugt SyncUp daraus einen gemeinsamen Termin mit exakt der in der Terminanfrage angegebenen Dauer.
+Die zeitbezogene Verfügbarkeit wird für den Zeitraum des ausgewählten Termins vom Backend ermittelt.
 
-Nach erfolgreicher Terminwahl wird die Terminanfrage als erledigt markiert. Anschließend wird der Bereich zur Raumreservierung geöffnet bzw. fokussiert.
+Mögliche Anzeigen sind:
 
-## Ressourcen
+- **Verfügbar:** Für den Zeitraum des ausgewählten Termins liegt keine überschneidende Buchung vor.
+- **Nicht verfügbar:** Der Raum ist grundsätzlich nicht buchbar oder bereits während dieses Zeitraums belegt.
 
-Die rechte Karte dient zur Reservierung eines Raums für einen bestehenden Termin.
+Ein als „Nicht verfügbar“ markierter Raum kann nicht über die Oberfläche reserviert werden.
 
-Nach der Auswahl eines freien Zeitfensters wird der neu erzeugte Termin für die Raumreservierung vorausgewählt. Beginn und Ende der Buchung werden automatisch aus dem Termin übernommen und können nicht unabhängig verändert werden.
+### Reservierung
 
-Die im System hinterlegten Räume werden zur Auswahl angezeigt. Nur verfügbare Räume können gebucht werden.
+Bei Auswahl von „Raum reservieren“ sendet die Oberfläche den ausgewählten Termin und die Ressource an das Backend.
 
-Ein Raum kann nicht für zwei zeitlich überlappende Termine reserviert werden. Außerdem kann einem Termin nur ein Raum zugeordnet werden.
+Das Backend prüft die Verfügbarkeit unmittelbar vor dem Speichern erneut. Dadurch bleibt die serverseitige Prüfung maßgeblich, auch wenn mehrere Benutzer gleichzeitig versuchen, einen Raum zu reservieren.
 
-Bei einer erfolgreichen Buchung wird der Raum beim zugehörigen Termin im Kalender angezeigt.
+Für einen Termin kann höchstens ein Raum reserviert werden.
 
-Ressourcen werden nicht durch normale Benutzer über die Oberfläche angelegt, sondern zentral im System verwaltet.
+Nach erfolgreicher Reservierung:
 
-## Rückmeldungen und Sitzungswechsel
+- wird eine Erfolgsbestätigung angezeigt,
+- wird die Buchung dem Termin zugeordnet,
+- wird der aktuelle Buchungszustand in der Oberfläche aktualisiert.
 
-Lade-, Validierungs-, Speicher- und Verbindungsfehler werden sichtbar angezeigt. Während eines Speichervorgangs sind erneute Speicherklicks gesperrt. Nach Abmeldung oder Benutzerwechsel werden die bisherigen persönlichen Daten und Formulare verworfen. Eine fehlgeschlagene Abmeldung wird nicht als Erfolg angezeigt.
+### Fehlermeldungen
 
-## Geplante Dialoge
+Der Dialog zeigt insbesondere verständliche Meldungen, wenn:
 
-Profil- und Passwortverwaltung sowie weitergehende Aufgabenfunktionen sind derzeit nicht Bestandteil des umgesetzten Funktionsumfangs.
+- kein gültiger Termin ausgewählt wurde,
+- ein Raum zwischenzeitlich belegt wurde,
+- für den Termin bereits ein Raum reserviert ist,
+- der Termin oder die Ressource nicht gefunden werden kann,
+- ein technischer Fehler auftritt.
 
-Benachrichtigungen für gemeinsame Termine, Terminbearbeitung und das Löschen von Terminen sind umgesetzt.
+### Bezug zu Anwendungsfällen
+
+Der Dialog unterstützt insbesondere **UC4 – Ressource buchen**.

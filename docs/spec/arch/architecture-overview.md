@@ -6,7 +6,7 @@ Stand: 24.09.2026
 
 SyncUp ist eine Webanwendung zur gemeinsamen Planung von Terminen und Räumen.
 
-Die Anwendung unterstützt Benutzer dabei, private Termine zu verwalten, gemeinsame freie Zeitfenster zu finden und für Termine vorhandene Räume zu reservieren.
+Die Anwendung unterstützt Benutzer dabei, private Termine zu verwalten, gemeinsame freie Zeitfenster zu finden, gemeinsame Termine zu erstellen und für bestehende Termine vorhandene Räume zu reservieren.
 
 ## Systemstruktur
 
@@ -16,9 +16,9 @@ SyncUp besteht aus drei Hauptbereichen:
 - Backend
 - Datenbank
 
-Das Frontend stellt die Benutzeroberfläche bereit.
+Das Frontend stellt die Benutzeroberfläche bereit und verarbeitet Benutzereingaben.
 
-Das Backend verarbeitet die Geschäftslogik und stellt REST-Schnittstellen zur Verfügung.
+Das Backend verarbeitet die Geschäftslogik, prüft fachliche Regeln und stellt REST-Schnittstellen zur Verfügung.
 
 Die Datenbank speichert die Daten der Anwendung dauerhaft.
 
@@ -39,17 +39,23 @@ Für SyncUp werden folgende Technologien verwendet:
 
 Zu den wichtigsten fachlichen Bereichen von SyncUp gehören:
 
-- Registrierung und Anmeldung
+- Registrierung, Anmeldung und Abmeldung
 - persönliche Kalenderverwaltung
 - private Terminverwaltung
 - Terminanfragen
 - Teilnehmerzuordnung
+- Festlegung einer gewünschten Termindauer
 - Berechnung gemeinsamer freier Zeitfenster
 - Erstellung gemeinsamer Termine
-- Benachrichtigungen
-- Ressourcenverwaltung
+- Benachrichtigungen anzeigen und löschen
+- Verwaltung vorhandener Ressourcen
+- zeitbezogene Prüfung der Raumverfügbarkeit
 - Raumreservierungen
-- Prüfung von Buchungskonflikten
+- Verhinderung überschneidender Buchungen desselben Raumes
+- parallele Nutzung unterschiedlicher freier Räume
+- Begrenzung auf höchstens einen Raum pro Termin
+- Anzeige gebuchter Räume im Kalender
+- Entfernen einer zugehörigen Raumbuchung beim Löschen eines Termins
 
 ## Kommunikation
 
@@ -60,6 +66,18 @@ Die Daten werden hauptsächlich im JSON-Format übertragen.
 Das Backend greift über Spring Data JPA und Hibernate auf PostgreSQL zu.
 
 Ein direkter Zugriff des Frontends auf die Datenbank findet nicht statt.
+
+Fachliche Regeln werden zentral im Backend geprüft. Dies gilt insbesondere für Termin- und Raumreservierungen.
+
+## Verteilung
+
+SyncUp kann vollständig lokal auf einem Rechner ausgeführt werden.
+
+Für gemeinsame Mehrbenutzertests wird zusätzlich Tailscale verwendet.
+
+Dabei laufen Frontend, Backend und PostgreSQL auf einem Host-Rechner, während weitere Teammitglieder über das gemeinsame Tailscale-Netzwerk auf die Webanwendung zugreifen.
+
+Die Datenbank wird dabei nicht direkt freigegeben.
 
 ## Nicht Bestandteil des aktuellen Funktionsumfangs
 
