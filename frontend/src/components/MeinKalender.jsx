@@ -4,6 +4,7 @@ import { api, errorMessage } from '../api'
 
 function MeinKalender() {
   const { currentUser } = useSession()
+
   const [editing, setEditing] = useState(null)
   const [users, setUsers] = useState([])
   const [participants, setParticipants] = useState([])
@@ -18,6 +19,7 @@ function MeinKalender() {
   const [von, setVon] = useState('')
   const [bis, setBis] = useState('')
   const [termine, setTermine] = useState([])
+  const [buchungen, setBuchungen] = useState([])
   const [hinweis, setHinweis] = useState('')
 
   const year = currentDate.getFullYear()
@@ -33,12 +35,45 @@ function MeinKalender() {
   const daysInMonth = new Date(year, month + 1, 0).getDate()
 
   useEffect(() => {
-    if (!currentUser) return
+    if (!currentUser) {
+      setTermine([])
+      setBuchungen([])
+      setUsers([])
+      setLoading(false)
+      return
+    }
+
     let active = true
-    Promise.all([api('/api/me/termine'), api('/api/benutzer')]).then(([data, people]) => { if (active) { setTermine(data); setUsers(people) } })
-      .catch((error) => { if (active && error.name !== 'AbortError') setLoadError(errorMessage(error)) })
-      .finally(() => { if (active) setLoading(false) })
-    return () => { active = false }
+
+    setLoading(true)
+    setLoadError('')
+
+    Promise.all([
+      api('/api/me/termine'),
+      api('/api/benutzer'),
+      api('/api/buchungen'),
+    ])
+      .then(([data, people, bookings]) => {
+        if (active) {
+          setTermine(data)
+          setUsers(people)
+          setBuchungen(bookings)
+        }
+      })
+      .catch((error) => {
+        if (active && error.name !== 'AbortError') {
+          setLoadError(errorMessage(error))
+        }
+      })
+      .finally(() => {
+        if (active) {
+          setLoading(false)
+        }
+      })
+
+    return () => {
+      active = false
+    }
   }, [currentUser, refresh])
 
   const previousMonth = () => {
@@ -51,142 +86,567 @@ function MeinKalender() {
 
   const saveTermin = async () => {
     if (busy) return
+
     setHinweis('')
-    if (!currentUser) { setHinweis('Bitte anmelden, um Termine zu speichern.'); return }
-    if (!selectedDate || !titel.trim() || !von || !bis || bis <= von) {
-      setHinweis('Bitte Titel und gültige Zeiten angeben. Das Ende muss nach dem Beginn liegen.'); return
+
+    if (!currentUser) {
+      setHinweis('Bitte anmelden, um Termine zu speichern.')
+      return
     }
+
+    if (
+      !selectedDate ||
+      !titel.trim() ||
+      !von ||
+      !bis ||
+      bis <= von
+    ) {
+      setHinweis(
+        'Bitte Titel und gültige Zeiten angeben. Das Ende muss nach dem Beginn liegen.'
+      )
+      return
+    }
+
     setBusy(true)
+
     try {
-      const saved = await api(editing ? `/api/me/termine/${editing}` : '/api/me/termine', { method: editing ? 'PUT' : 'POST', body: {
-        titel: titel.trim(), beschreibung: description, benutzerIds: participants, datum: selectedDate, startzeit: von, endzeit: bis,
-      } })
-      setTermine((previous) => [...previous.filter((t) => t.terminId !== saved.terminId), saved]); setRefresh((v) => v + 1)
-      setTitel(''); setVon(''); setBis(''); setParticipants([]); setDescription(''); setEditing(null); setHinweis(editing ? 'Termin geändert. Betroffene Teilnehmer wurden benachrichtigt.' : 'Termin gespeichert.')
-    } catch (error) { if (error.name !== 'AbortError') setHinweis(errorMessage(error)) }
-    finally { setBusy(false) }
+      const saved = await api(
+        editing
+          ? `/api/me/termine/${editing}`
+          : '/api/me/termine',
+        {
+          method: editing ? 'PUT' : 'POST',
+          body: {
+            titel: titel.trim(),
+            beschreibung: description,
+            benutzerIds: participants,
+            datum: selectedDate,
+            startzeit: von,
+            endzeit: bis,
+          },
+        }
+      )
+
+      setTermine((previous) => [
+        ...previous.filter(
+          (t) => t.terminId !== saved.terminId
+        ),
+        saved,
+      ])
+
+      setRefresh((v) => v + 1)
+
+      setTitel('')
+      setVon('')
+      setBis('')
+      setParticipants([])
+      setDescription('')
+      setEditing(null)
+
+      setHinweis(
+        editing
+          ? 'Termin geändert. Betroffene Teilnehmer wurden benachrichtigt.'
+          : 'Termin gespeichert.'
+      )
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        setHinweis(errorMessage(error))
+      }
+    } finally {
+      setBusy(false)
+    }
   }
+
   const deleteTermin = async (id) => {
     if (busy) return
-    setBusy(true); setHinweis('')
+
+    setBusy(true)
+    setHinweis('')
+
     try {
-      await api(`/api/me/termine/${id}`, { method: 'DELETE' })
-      setTermine((items) => items.filter((item) => item.terminId !== id)); setRefresh((v) => v + 1)
+      await api(`/api/me/termine/${id}`, {
+        method: 'DELETE',
+      })
+
+      setTermine((items) =>
+        items.filter(
+          (item) => item.terminId !== id
+        )
+      )
+
+      setRefresh((v) => v + 1)
       setHinweis('Termin gelöscht.')
-    } catch (error) { if (error.name !== 'AbortError') setHinweis(errorMessage(error)) }
-    finally { setBusy(false) }
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        setHinweis(errorMessage(error))
+      }
+    } finally {
+      setBusy(false)
+    }
   }
 
   const getDateKey = (day) =>
-    `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+    `${year}-${String(month + 1).padStart(
+      2,
+      '0'
+    )}-${String(day).padStart(2, '0')}`
+
+  const getRaumFuerTermin = (terminId) => {
+    const buchung = buchungen.find(
+      (buchung) =>
+        buchung.termin?.terminId === terminId
+    )
+
+    return buchung?.ressource?.name || null
+  }
 
   return (
     <section className="calendar-page">
-      {!currentUser && <p>Bitte anmelden, um deine Termine zu sehen und zu speichern.</p>}
-      {loading && <p role="status">Termine werden geladen …</p>}
-      {loadError && <p role="alert">{loadError}<button type="button" onClick={() => { setLoading(true); setLoadError(''); setRefresh((v) => v + 1) }}>Erneut laden</button></p>}
+
+      {!currentUser && (
+        <p>
+          Bitte anmelden, um deine Termine
+          zu sehen und zu speichern.
+        </p>
+      )}
+
+      {loading && (
+        <p role="status">
+          Termine werden geladen …
+        </p>
+      )}
+
+      {loadError && (
+        <p role="alert">
+          {loadError}
+
+          <button
+            type="button"
+            onClick={() => {
+              setLoading(true)
+              setLoadError('')
+              setRefresh(
+                (v) => v + 1
+              )
+            }}
+          >
+            Erneut laden
+          </button>
+        </p>
+      )}
+
       <div className="calendar-header">
-        <button type="button" onClick={previousMonth} aria-label="Vorheriger Monat">
+
+        <button
+          type="button"
+          onClick={previousMonth}
+          aria-label="Vorheriger Monat"
+        >
           ‹
         </button>
 
         <h2>{monthName}</h2>
 
-        <button type="button" onClick={nextMonth} aria-label="Nächster Monat">
+        <button
+          type="button"
+          onClick={nextMonth}
+          aria-label="Nächster Monat"
+        >
           ›
         </button>
+
       </div>
 
       <div className="month-calendar-grid">
-        {['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'].map((day) => (
-          <strong key={day}>{day}</strong>
+
+        {[
+          'Mo',
+          'Di',
+          'Mi',
+          'Do',
+          'Fr',
+          'Sa',
+          'So',
+        ].map((day) => (
+          <strong key={day}>
+            {day}
+          </strong>
         ))}
 
-        {Array.from({ length: offset }).map((_, index) => (
-          <div key={`empty-${index}`} />
+        {Array.from({
+          length: offset,
+        }).map((_, index) => (
+          <div
+            key={`empty-${index}`}
+          />
         ))}
 
-        {Array.from({ length: daysInMonth }).map((_, index) => {
+        {Array.from({
+          length: daysInMonth,
+        }).map((_, index) => {
           const day = index + 1
-          const dateKey = getDateKey(day)
+          const dateKey =
+            getDateKey(day)
 
           return (
             <button
               key={day}
               type="button"
               className={`calendar-day ${
-                selectedDate === dateKey ? 'selected' : ''
+                selectedDate === dateKey
+                  ? 'selected'
+                  : ''
               }`}
               onClick={() => {
                 setSelectedDate(dateKey)
                 setHinweis('')
               }}
             >
+
               <span>{day}</span>
 
               {termine
-                .filter((termin) => termin.datum === dateKey)
-                .map((termin) => (
-                  <small key={termin.terminId}>
-                    {termin.startzeit?.slice(0, 5)} {termin.titel}
-                  </small>
-                ))}
+                .filter(
+                  (termin) =>
+                    termin.datum ===
+                    dateKey
+                )
+                .map((termin) => {
+                  const raum =
+                    getRaumFuerTermin(
+                      termin.terminId
+                    )
+
+                  return (
+                    <small
+                      key={
+                        termin.terminId
+                      }
+                    >
+                      {termin.startzeit?.slice(
+                        0,
+                        5
+                      )}{' '}
+                      {termin.titel}
+
+                      {raum && (
+                        <>
+                          {' '}
+                          · {raum}
+                        </>
+                      )}
+                    </small>
+                  )
+                })}
+
             </button>
           )
         })}
+
       </div>
 
       {selectedDate && (
         <div className="calendar-form">
-          <h3>{editing ? 'Termin bearbeiten' : `Termin am ${selectedDate}`}</h3>
-          <label htmlFor="calendar-date">Datum</label>
-          <input id="calendar-date" type="date" value={selectedDate} onChange={(e) => { setSelectedDate(e.target.value); if(e.target.value) setCurrentDate(new Date(`${e.target.value}T12:00:00`)) }} />
 
-          <label htmlFor="calendar-title">Titel</label>
-          <input id="calendar-title" maxLength={100}
+          <h3>
+            {editing
+              ? 'Termin bearbeiten'
+              : `Termin am ${selectedDate}`}
+          </h3>
+
+          <label htmlFor="calendar-date">
+            Datum
+          </label>
+
+          <input
+            id="calendar-date"
+            type="date"
+            value={selectedDate}
+            onChange={(e) => {
+              setSelectedDate(
+                e.target.value
+              )
+
+              if (e.target.value) {
+                setCurrentDate(
+                  new Date(
+                    `${e.target.value}T12:00:00`
+                  )
+                )
+              }
+            }}
+          />
+
+          <label htmlFor="calendar-title">
+            Titel
+          </label>
+
+          <input
+            id="calendar-title"
+            maxLength={100}
             placeholder="Titel"
             value={titel}
-            onChange={(e) => setTitel(e.target.value)}
+            onChange={(e) =>
+              setTitel(
+                e.target.value
+              )
+            }
           />
 
-          <label htmlFor="calendar-start">Von</label>
-          <input id="calendar-start"
+          <label htmlFor="calendar-start">
+            Von
+          </label>
+
+          <input
+            id="calendar-start"
             type="time"
             value={von}
-            onChange={(e) => setVon(e.target.value)}
+            onChange={(e) =>
+              setVon(
+                e.target.value
+              )
+            }
           />
 
-          <label htmlFor="calendar-end">Bis</label>
-          <input id="calendar-end"
+          <label htmlFor="calendar-end">
+            Bis
+          </label>
+
+          <input
+            id="calendar-end"
             type="time"
             value={bis}
-            onChange={(e) => setBis(e.target.value)}
+            onChange={(e) =>
+              setBis(
+                e.target.value
+              )
+            }
           />
 
-          <label htmlFor="calendar-description">Beschreibung</label>
-          <input id="calendar-description" maxLength={255} value={description} onChange={(e) => setDescription(e.target.value)} />
-          <fieldset disabled={busy}><legend>Teilnehmer (du bist automatisch dabei)</legend>
-            {users.filter((u) => u.benutzerId !== currentUser?.benutzerId).map((u) => <label key={u.benutzerId} style={{display:'block'}}>
-              <input type="checkbox" checked={participants.includes(u.benutzerId)} onChange={(e) => setParticipants((ids) => e.target.checked ? [...ids,u.benutzerId] : ids.filter((id) => id !== u.benutzerId))} /> {u.name}
-            </label>)}
+          <label htmlFor="calendar-description">
+            Beschreibung
+          </label>
+
+          <input
+            id="calendar-description"
+            maxLength={255}
+            value={description}
+            onChange={(e) =>
+              setDescription(
+                e.target.value
+              )
+            }
+          />
+
+          <fieldset disabled={busy}>
+
+            <legend>
+              Teilnehmer
+              (du bist automatisch dabei)
+            </legend>
+
+            {users
+              .filter(
+                (u) =>
+                  u.benutzerId !==
+                  currentUser?.benutzerId
+              )
+              .map((u) => (
+                <label
+                  key={u.benutzerId}
+                  style={{
+                    display: 'block',
+                  }}
+                >
+
+                  <input
+                    type="checkbox"
+                    checked={participants.includes(
+                      u.benutzerId
+                    )}
+                    onChange={(e) =>
+                      setParticipants(
+                        (ids) =>
+                          e.target.checked
+                            ? [
+                                ...ids,
+                                u.benutzerId,
+                              ]
+                            : ids.filter(
+                                (id) =>
+                                  id !==
+                                  u.benutzerId
+                              )
+                      )
+                    }
+                  />
+
+                  {' '}
+                  {u.name}
+
+                </label>
+              ))}
+
           </fieldset>
-          {editing && <button type="button" disabled={busy} onClick={() => {setEditing(null);setTitel('');setVon('');setBis('');setParticipants([]);setDescription('')}}>Bearbeiten abbrechen</button>}
+
+          {editing && (
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => {
+                setEditing(null)
+                setTitel('')
+                setVon('')
+                setBis('')
+                setParticipants([])
+                setDescription('')
+              }}
+            >
+              Bearbeiten abbrechen
+            </button>
+          )}
+
           {hinweis && (
             <div className="calendar-message">
               {hinweis}
             </div>
           )}
 
-          <button type="button" disabled={busy || !currentUser} onClick={saveTermin}>
-            {busy ? 'Bitte warten …' : editing ? 'Änderungen speichern' : 'Termin speichern'}
+          <button
+            type="button"
+            disabled={
+              busy ||
+              !currentUser
+            }
+            onClick={saveTermin}
+          >
+            {busy
+              ? 'Bitte warten …'
+              : editing
+                ? 'Änderungen speichern'
+                : 'Termin speichern'}
           </button>
-          {termine.filter((term) => term.datum === selectedDate).map((term) => <article key={term.terminId} className="request-item">
-            <strong>{term.titel}</strong><p>{term.startzeit.slice(0, 5)} – {term.endzeit.slice(0, 5)}</p>
-            {term.kalender?.besitzer?.benutzerId === currentUser?.benutzerId && <button type="button" disabled={busy} onClick={() => {setEditing(term.terminId);setTitel(term.titel);setVon(term.startzeit);setBis(term.endzeit);setDescription(term.beschreibung || '');setParticipants((term.teilnehmer || []).map((u) => u.benutzerId));setHinweis('')}}>Bearbeiten</button>}
-            <button hidden={term.kalender?.besitzer?.benutzerId !== currentUser?.benutzerId} type="button" className="delete-button" disabled={busy} onClick={() => deleteTermin(term.terminId)}>Termin löschen</button>
-          </article>)}
+
+          {termine
+            .filter(
+              (term) =>
+                term.datum ===
+                selectedDate
+            )
+            .map((term) => {
+              const raum =
+                getRaumFuerTermin(
+                  term.terminId
+                )
+
+              return (
+                <article
+                  key={term.terminId}
+                  className="request-item"
+                >
+
+                  <strong>
+                    {term.titel}
+                  </strong>
+
+                  <p>
+                    {term.startzeit.slice(
+                      0,
+                      5
+                    )}
+                    {' – '}
+                    {term.endzeit.slice(
+                      0,
+                      5
+                    )}
+                  </p>
+
+                  {raum && (
+                    <p>
+                      📍 {raum}
+                    </p>
+                  )}
+
+                  {term.beschreibung && (
+                    <p>
+                      {term.beschreibung}
+                    </p>
+                  )}
+
+                  {term.kalender
+                    ?.besitzer
+                    ?.benutzerId ===
+                    currentUser
+                      ?.benutzerId && (
+                    <button
+                      type="button"
+                      disabled={busy}
+                      onClick={() => {
+                        setEditing(
+                          term.terminId
+                        )
+
+                        setTitel(
+                          term.titel
+                        )
+
+                        setVon(
+                          term.startzeit
+                        )
+
+                        setBis(
+                          term.endzeit
+                        )
+
+                        setDescription(
+                          term.beschreibung ||
+                            ''
+                        )
+
+                        setParticipants(
+                          (
+                            term.teilnehmer ||
+                            []
+                          ).map(
+                            (u) =>
+                              u.benutzerId
+                          )
+                        )
+
+                        setHinweis('')
+                      }}
+                    >
+                      Bearbeiten
+                    </button>
+                  )}
+
+                  <button
+                    hidden={
+                      term.kalender
+                        ?.besitzer
+                        ?.benutzerId !==
+                      currentUser
+                        ?.benutzerId
+                    }
+                    type="button"
+                    className="delete-button"
+                    disabled={busy}
+                    onClick={() =>
+                      deleteTermin(
+                        term.terminId
+                      )
+                    }
+                  >
+                    Termin löschen
+                  </button>
+
+                </article>
+              )
+            })}
+
         </div>
       )}
+
     </section>
   )
 }
